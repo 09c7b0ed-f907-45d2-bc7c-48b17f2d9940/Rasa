@@ -1,0 +1,9 @@
+version: "3.1"
+
+forms:
+  create_plot_form:
+    required_slots:
+    - plot_type
+    - selected_value
+    - nat_value
+    - real_diff

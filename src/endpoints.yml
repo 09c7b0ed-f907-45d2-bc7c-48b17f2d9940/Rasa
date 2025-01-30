@@ -1,0 +1,10 @@
+action_endpoint:
+  url: ${ACTION_ENDPOINT_URL}
+tracker_store:
+  type: ${TRACKER_STORE_TYPE}
+  url: ${TRACKER_STORE_URL}
+  db: ${TRACKER_STORE_DB}
+lock_store:
+  type: ${LOCK_STORE_TYPE}
+  url: ${LOCK_STORE_URL}
+  db: ${LOCK_STORE_DB}

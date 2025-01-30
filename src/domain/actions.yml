@@ -1,0 +1,24 @@
+version: "3.1"
+
+actions:
+- action_change_plottype
+- action_change_selectedvalue
+- action_prefill_slots
+- action_variable_ttest
+- action_toggle_national_value
+- action_find_predictors
+- action_global_predictions
+- action_initialise
+- action_explore_effects
+- action_dnt_guideline
+- utter_submit_create_plot_form
+- action_init
+- utter_greet
+- utter_cause_or_effect
+- utter_new_selected_value
+- utter_ask_statistical_test
+- utter_ask_build_model
+- utter_ask_causes_or_guidelines
+- action_dysphagia_guideline
+- action_anticoag_guideline
+- action_default_fallback

@@ -1,0 +1,38 @@
+version: "3.1"
+
+slots:
+  plot_type:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: plot_type
+
+  selected_value:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: selected_value
+
+  nat_value:
+    type: bool
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: nat_valuesession_config:
+
+  real_diff:
+    type: bool
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: real_diff
+
+  fallback_triggered:
+    type: bool
+    initial_value: false
+    mappings:
+      - type: from_intent
+        value: true
+        intent: nlu_fallback

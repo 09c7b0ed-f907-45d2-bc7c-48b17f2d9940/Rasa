@@ -1,0 +1,20 @@
+services:
+  devcontainer:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ../..:/workspaces:cached   
+    depends_on:
+      - redis
+    ports:
+      - "5005:5005" #test
+
+  redis:
+    image: redis:alpine
+    volumes:
+      - data:/data
+    command: ["redis-server", "--save", "20", "1", "--loglevel", "warning"]
+
+volumes:
+  data:

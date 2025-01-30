@@ -1,0 +1,16 @@
+version: "3.1"
+
+intents:
+  - greet
+  - goodbye
+  - affirm
+  - reject
+  - init
+  - intent_create_plot
+  - request_create_plot_form
+  - intent_askttest
+  - intent_askpredictors
+  - intent_shownatvalue
+  - both
+  - intent_askeffects
+  - intent_guideline

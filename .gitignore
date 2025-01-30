@@ -1,1 +1,28 @@
-node_modules
+# Whitelist pattern https://jasonstitt.com/gitignore-whitelisting-patterns
+*
+!*/
+
+# Add meta
+!LICENSE
+!README.md
+
+# Add git & GitHub
+!.git
+!.gitignore
+!.github
+
+# Add Devcontainer
+!.devcontainer/devcontainer.json
+!.devcontainer/docker-compose.yml
+!.devcontainer/Dockerfile
+
+# Add Devtools
+!envgen.sh
+!envgen.config
+
+# Add config, credentials, and endpoints files along with domain and data folders from source
+!src/config.yml
+!src/credentials.yml
+!src/endpoints.yml
+!src/domain/**
+!src/data/**
