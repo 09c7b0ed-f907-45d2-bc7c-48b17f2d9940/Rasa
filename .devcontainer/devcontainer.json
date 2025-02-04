@@ -1,0 +1,10 @@
+{
+	"name": "Rasa Dev Container",
+	"dockerComposeFile": "docker-compose.yml",
+	"service": "devcontainer",
+    "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+	"remoteUser": "root",
+	"forwardPorts": [
+		5055
+	]
+}

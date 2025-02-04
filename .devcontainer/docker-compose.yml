@@ -1,0 +1,9 @@
+services:
+  devcontainer:
+    build: 
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    volumes:
+      - ../..:/workspaces:cached   
+    ports:
+      - "5055:5055"

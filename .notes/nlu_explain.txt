@@ -1,9 +1,0 @@
-Regex Patterns:
-    Elongated Affirmations:
-        yes{2,} matches "yess", "yesss", etc.
-        y{2,} matches "yy", "yyy", etc.
-        sure{2,} matches "suree", "sureee", etc.
-    Elongated Rejections:
-        no{2,} matches "noo", "nooo", etc.
-        never{2,} matches "neverr", "neverrr", etc.
-        dont{2,} matches "dontt", "donttt", etc.

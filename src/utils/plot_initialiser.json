@@ -1,0 +1,20 @@
+{
+  "visualization": {
+    "type": "line",
+    "title": "Timeline of Door-to-needle Time",
+    "variable": "",
+    "data": {
+      "x": "Time",
+      "y": "DNT"
+    },
+    "timeRange": ["", "", "", ""],
+    "filters": [],
+    "options": {
+      "axes": {
+        "xAxisLabel": "Age",
+        "yAxisLabel": "Income"
+      },
+      "legend": true
+    }
+  }
+}
