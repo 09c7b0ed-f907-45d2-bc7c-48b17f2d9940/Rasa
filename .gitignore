@@ -9,14 +9,19 @@
 # Add git & GitHub
 !.git
 !.gitignore
-!.github
+!.github/**
 
 # Add Devcontainer
 !.devcontainer/devcontainer.json
 !.devcontainer/docker-compose.yml
 !.devcontainer/Dockerfile
 
+# Add Docker
+!.dockerignore
+!Dockerfile
+
 # Add Devtools
+!.vscode/**
 !envgen.sh
 !envgen.config
 

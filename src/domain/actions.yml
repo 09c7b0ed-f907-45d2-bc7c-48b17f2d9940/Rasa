@@ -22,3 +22,4 @@ actions:
 - action_dysphagia_guideline
 - action_anticoag_guideline
 - action_default_fallback
+- action_test_apis

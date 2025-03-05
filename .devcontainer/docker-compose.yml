@@ -1,14 +1,18 @@
 services:
-  devcontainer:
+  rasa:
     build: 
-      context: .
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
     volumes:
-      - ../..:/workspaces:cached   
+      - ..:/workspace:cached
     depends_on:
       - redis
     ports:
-      - "5005:5005" #test
+      - "5005:5005"
+    env_file:
+      - .env
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   redis:
     image: redis:alpine

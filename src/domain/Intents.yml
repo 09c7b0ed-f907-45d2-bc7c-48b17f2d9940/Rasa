@@ -14,3 +14,4 @@ intents:
   - both
   - intent_askeffects
   - intent_guideline
+  - test_apis

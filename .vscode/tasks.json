@@ -1,0 +1,26 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Rasa Train",
+            "type": "shell",
+            "command": "cd src && rasa train -d domain/",
+            "group": "build",
+            "problemMatcher": []
+        },
+        {
+            "label": "Rasa Shell",
+            "type": "shell",
+            "command": "cd src && rasa shell",
+            "group": "test",
+            "problemMatcher": []
+        },
+        {
+            "label": "Rasa Run",
+            "type": "shell",
+            "command": "cd src && rasa run",
+            "group": "test",
+            "problemMatcher": []
+        }
+    ]
+}

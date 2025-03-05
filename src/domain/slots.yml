@@ -20,7 +20,7 @@ slots:
     influence_conversation: true
     mappings:
       - type: from_entity
-        entity: nat_valuesession_config:
+        entity: nat_valuesession_config
 
   real_diff:
     type: bool

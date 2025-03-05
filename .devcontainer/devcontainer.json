@@ -1,20 +1,7 @@
 {
-	"name": "Rasa Dev Container",
+	"name": "Rasa",
 	"dockerComposeFile": "docker-compose.yml",
-	"service": "devcontainer",
-    "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
-	"customizations": {
-		"vscode": {
-			"extensions": [
-			],
-			"settings": {
-				"terminal.integrated.defaultProfile.linux": "bash"
-			}
-		}
-	},
-	"postStartCommand": "sh envgen.sh -d src/", 
-	"remoteUser": "root",
-	"forwardPorts": [
-		5005
-	]
+	"service": "rasa",
+	"workspaceFolder": "/workspace",
+	"postStartCommand": "sh envgen.sh -d src/"
 }

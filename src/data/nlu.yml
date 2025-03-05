@@ -1,6 +1,15 @@
 version: "3.1"
 
 nlu:
+- intent: test_apis
+  examples: |
+    - test
+    - test api
+    - test connection
+    - test the api
+    - test the connection
+    - test the connection to the api
+
 - intent: greet
   examples: |
     - hey
