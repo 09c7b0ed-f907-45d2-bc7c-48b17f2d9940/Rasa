@@ -22,10 +22,15 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Set lowercase repository name
+        run: |
+          REPO_NAME=${{ github.repository }} 
+          echo "REPO_NAME_LC=${REPO_NAME,,}" >>${GITHUB_ENV}
+
       - name: Build Docker image with Rasa model
         run: |
-          docker build -t ghcr.io/${{ github.repository }}/rasa-image:latest .
-        
+          docker build -t ghcr.io/$REPO_NAME_LC:latest .
+
       - name: Push Docker image to GitHub Container Registry
         run: |
-          docker push ghcr.io/${{ github.repository }}/rasa-image:latest
+          docker push ghcr.io/$REPO_NAME_LC:latest
