@@ -1,12 +1,18 @@
 FROM rasa/rasa-sdk:3.6.2
 
-WORKDIR /app
+USER root
 
-COPY requirements.txt ./
+COPY requirements.txt .
+
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . .
+WORKDIR /app
+
+COPY src/ .
 
 EXPOSE 5055
 
-CMD ["python", "-m", "rasa_sdk", "--actions", "actions"]
+USER 1001
+
+ENTRYPOINT ["python", "-m", "rasa_sdk", "--actions", "actions"]
+CMD [""]

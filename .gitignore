@@ -3,29 +3,31 @@
 !*/
 
 # Add meta
-!LICENSE
-!README.md
+!/LICENSE
+!/README.md
 
 # Add git & GitHub
-!.git
-!.gitignore
-!.github
+!/.git
+!/.gitignore
+!/.github/**
 
 # Add Devcontainer
-!.devcontainer/devcontainer.json
-!.devcontainer/docker-compose.yml
-!.devcontainer/Dockerfile
+!/.devcontainer/devcontainer.json
+!/.devcontainer/docker-compose.yml
+!/.devcontainer/Dockerfile
+
+# Add vscode
+!/.vscode/tasks.json
 
 # Add Docker
-!.dockerignore
-!Dockerfile
+!/.dockerignore
+!/Dockerfile
 
 # Add Devtools
-!envgen.sh
-!envgen.config
-!requirements.txt
+!/envgen.sh
+!/envgen.config
+!/requirements.txt
 
 # Add source
-!src/actions.py
-!src/utils/**
-__pycache__/
+!/src/*
+!/src/utils/*

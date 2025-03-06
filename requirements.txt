@@ -3,3 +3,6 @@ pandas==2.2.3
 scipy==1.15.1
 scikit-learn==1.6.1
 shap==0.46.0
+hvac==2.3.0
+gql==3.5.1
+requests==2.32.3

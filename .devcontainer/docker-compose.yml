@@ -1,9 +1,11 @@
 services:
-  devcontainer:
-    build: 
+  action:
+    build:
       context: ..
       dockerfile: .devcontainer/Dockerfile
     volumes:
-      - ../..:/workspaces:cached   
+      - ..:/workspace:cached
     ports:
       - "5055:5055"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

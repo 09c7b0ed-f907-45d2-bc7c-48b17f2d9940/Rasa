@@ -1,4 +1,10 @@
-README.md
-LICENSE
-.git
-.gitignore
+# Whitelist pattern https://jasonstitt.com/gitignore-whitelisting-patterns
+*
+!*/
+
+# Add requirements.txt
+!/requirements.txt
+
+# Add source
+!/src/*
+!/src/utils/*
