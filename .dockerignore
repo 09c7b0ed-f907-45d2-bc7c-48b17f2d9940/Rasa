@@ -1,9 +1,10 @@
 # Whitelist pattern https://jasonstitt.com/gitignore-whitelisting-patterns
 *
+!*/
 
 # Add config, credentials, and endpoints files along with domain and data folders from source
-!src/config.yml
-!src/credentials.yml
-!src/endpoints.yml
-!src/domain/**
-!src/data/**
+!/src/config.yml
+!/src/credentials.yml
+!/src/endpoints.yml
+!/src/domain/**
+!/src/data/**

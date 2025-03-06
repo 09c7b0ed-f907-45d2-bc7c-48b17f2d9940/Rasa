@@ -3,31 +3,31 @@
 !*/
 
 # Add meta
-!LICENSE
-!README.md
+!/LICENSE
+!/README.md
 
 # Add git & GitHub
-!.git
-!.gitignore
-!.github/**
+!/.git
+!/.gitignore
+!/.github/**
 
 # Add Devcontainer
-!.devcontainer/devcontainer.json
-!.devcontainer/docker-compose.yml
-!.devcontainer/Dockerfile
+!/.devcontainer/devcontainer.json
+!/.devcontainer/docker-compose.yml
+!/.devcontainer/Dockerfile
 
 # Add Docker
-!.dockerignore
-!Dockerfile
+!/.dockerignore
+!/Dockerfile
 
 # Add Devtools
-!.vscode/**
-!envgen.sh
-!envgen.config
+!/.vscode/**
+!/envgen.sh
+!/envgen.config
 
 # Add config, credentials, and endpoints files along with domain and data folders from source
-!src/config.yml
-!src/credentials.yml
-!src/endpoints.yml
-!src/domain/**
-!src/data/**
+!/src/config.yml
+!/src/credentials.yml
+!/src/endpoints.yml
+!/src/domain/**
+!/src/data/**
