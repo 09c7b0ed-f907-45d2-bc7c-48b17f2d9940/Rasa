@@ -15,4 +15,3 @@ EXPOSE 5055
 USER 1001
 
 ENTRYPOINT ["python", "-m", "rasa_sdk", "--actions", "actions"]
-CMD [""]
