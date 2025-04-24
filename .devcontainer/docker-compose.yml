@@ -4,8 +4,9 @@ services:
       context: ..
       dockerfile: .devcontainer/Dockerfile
     volumes:
-      - ..:/workspace:cached
+      - ..:/workspace
     depends_on:
+      - duckling
       - redis
     ports:
       - "5005:5005"
@@ -16,9 +17,7 @@ services:
 
   redis:
     image: redis:alpine
-    volumes:
-      - data:/data
     command: ["redis-server", "--save", "20", "1", "--loglevel", "warning"]
 
-volumes:
-  data:
+  duckling:
+    image: rasa/duckling:latest

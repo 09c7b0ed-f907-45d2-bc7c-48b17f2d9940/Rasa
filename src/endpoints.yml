@@ -5,6 +5,10 @@ tracker_store:
   url: ${TRACKER_STORE_URL}
   db: ${TRACKER_STORE_DB}
 lock_store:
-  type: ${LOCK_STORE_TYPE}
+  type: redis
   url: ${LOCK_STORE_URL}
   db: ${LOCK_STORE_DB}
+cors:
+  enabled: true
+  allowed_origins:
+    - "*"

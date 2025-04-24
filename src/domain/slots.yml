@@ -1,38 +1,47 @@
-version: "3.1"
+#version: "3.1"
 
-slots:
-  plot_type:
-    type: text
-    influence_conversation: true
-    mappings:
-      - type: from_entity
-        entity: plot_type
-
-  selected_value:
-    type: text
-    influence_conversation: true
-    mappings:
-      - type: from_entity
-        entity: selected_value
-
-  nat_value:
-    type: bool
-    influence_conversation: true
-    mappings:
-      - type: from_entity
-        entity: nat_valuesession_config
-
-  real_diff:
-    type: bool
-    influence_conversation: true
-    mappings:
-      - type: from_entity
-        entity: real_diff
-
-  fallback_triggered:
-    type: bool
-    initial_value: false
-    mappings:
-      - type: from_intent
-        value: true
-        intent: nlu_fallback
+#slots:
+#  start:
+#    type: any
+#    mappings:
+#    - type: from_entity
+#      entity: time
+#      role: start
+#  end:
+#    type: any
+#    mappings:
+#    - type: from_entity
+#      entity: time
+#      role: end
+#  single:
+#    type: any
+#    mappings:
+#    - type: from_entity
+#      entity: time
+#      role: single
+#  scale:
+#    type: categorical
+#    values:
+#      - weakly
+#      - monthly
+#      - quaterly
+#      - biannually
+#      - annually
+#    mappings:
+#    - type: from_entity
+#      entity: scale
+#  sex:
+#    type: categorical
+#    values:
+#      - male
+#      - female
+#    mappings:
+#    - type: from_entity
+#      entity: sex
+#  age:
+#    type: float    
+#    min_value: 0
+#    max_value: 150
+#    mappings:
+#    - type: from_entity
+#      entity: age

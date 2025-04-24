@@ -1,45 +1,18 @@
 version: "3.1"
 
 rules:
-  - rule: activate form loop
-    steps:
-      - intent: intent_create_plot
-      - action: create_plot_form
-      - active_loop: create_plot_form
+- rule: Query DTN data
+  steps:
+    - intent: get_dtn
+    - action: action_get_dtn
 
-  - rule: submit form
-    condition:
-      - active_loop: create_plot_form
-    steps:
-      - action: create_plot_form
-      - active_loop: null
-      - slot_was_set:
-          - requested_slot: null
-      - action: action_change_plottype
-      - action: action_change_selectedvalue
+- rule: test apis
+  steps:
+  - intent: test_apis
+  - action: action_test_apis
 
-  - rule: Activate fallback
-    steps:
-      - intent: nlu_fallback
-      - action: action_default_fallback
-
-  - rule: test apis
-    steps:
-      - intent: test_apis
-      - action: action_test_apis
-
-#- rule: set plot type
+#rules:
+#- rule: get slots
 #  steps:
-#    - intent: intent_create_plot
-#    - slot_was_set:
-#      - plot_type: line
-#    - action: utter_did_that_help
-#    - action: action_change_plottype
-
-#- rule: set selected value
-#  steps:
-#    - intent: intent_create_plot
-#    - slot_was_set:
-#        - selected_value: age
-#    - action: utter_happy
-#    - action: action_change_selectedvalue
+#  - intent: get_slots
+#  - action: action_get_all_slots

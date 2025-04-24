@@ -18,7 +18,7 @@
         {
             "label": "Rasa Run",
             "type": "shell",
-            "command": "cd src && rasa run",
+            "command": "cd src && rasa run --enable-api --cors '*'",
             "group": "test",
             "problemMatcher": []
         }

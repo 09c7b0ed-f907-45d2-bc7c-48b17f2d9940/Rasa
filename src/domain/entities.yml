@@ -1,7 +1,19 @@
 version: "3.1"
 
-entities:
-  - selected_value
-  - plot_type
-  - nat_value
-  - real_diff
+#entities:
+#  - metric
+#  - gender
+#  - age_group
+#  - group_by
+#  - start_date
+#  - end_date
+
+#entities:
+#   - scale
+#   - sex
+#   - age
+#   - time:
+#       roles:
+#       - start
+#       - end
+#       - single
