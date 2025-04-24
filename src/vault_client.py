@@ -1,20 +1,20 @@
-import os
-from hvac import Client
-from dotenv import load_dotenv
+from typing import Any
 
-load_dotenv()
+from hvac import Client as VaultHVACClient
+
 
 class VaultClient:
-    def __init__(self, vault_address: str, vault_token: str):
-        self.vault_address = vault_address
-        self.vault_token = vault_token
-        self.client = Client(url=self.vault_address, token=self.vault_token)
+    def __init__(self, vault_address: str, vault_token: str) -> None:
+        self.vault_address: str = vault_address
+        self.vault_token: str = vault_token
+        self.client: VaultHVACClient = VaultHVACClient(url=self.vault_address, token=self.vault_token)
 
-    def get_secret(self, path: str, key: str):
+    def get_secret(self, path: str, key: str) -> str | None:
         try:
-            secret = self.client.secrets.kv.v2.read_secret_version(path=f"tokens/{key}")
-            token = secret['data']['data']['token']
-            return token
+            secret: dict[str, Any] = self.client.secrets.kv.v2.read_secret_version(  # type: ignore
+                path=f"{path}/{key}"
+            )
+            return secret["data"]["data"]["token"]  # type: ignore
         except Exception as e:
             print(f"Error retrieving secret from path {path}: {e}")
             return None

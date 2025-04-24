@@ -9,3 +9,21 @@ services:
       - "5055:5055"
     extra_hosts:
       - "host.docker.internal:host-gateway"
+
+#  ollama:
+#    image: ollama/ollama
+#    container_name: ollama
+#    ports:
+#      - "11434:11434"
+#    volumes:
+#      - ollama:/root/.ollama
+#    command: >
+#      sh -c "
+#      ollama serve &
+#      sleep 3 &&
+#      ollama pull openhermes &&
+#      tail -f /dev/null
+#      "
+
+#volumes:
+#  ollama:
