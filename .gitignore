@@ -30,4 +30,4 @@
 
 # Add source
 !/src/*
-!/src/utils/*
+!/src/models/*
