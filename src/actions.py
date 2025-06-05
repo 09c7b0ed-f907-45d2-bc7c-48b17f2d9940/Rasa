@@ -1,7 +1,6 @@
 import logging
 from typing import Any
 
-from chart_converter import convert_graphql_to_charts
 from pydantic import ValidationError
 from rasa_sdk import Action, Tracker  # type: ignore
 from rasa_sdk.executor import CollectingDispatcher  # type: ignore
@@ -18,6 +17,7 @@ from graphql_builder import (
     build_query,
 )
 from graphql_proxy_client import GraphQLProxyClient
+from models.chart_converter import convert_graphql_to_charts
 from models.graphql_result import Welcome
 
 logger = logging.getLogger(__name__)

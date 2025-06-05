@@ -499,8 +499,8 @@ if __name__ == "__main__":
 
     queryComplex = build_query(metrics, filters, groupBy=Group.FirstContactPlace, generalStats=True)
 
-    queryMinimal = build_query([MetricBuilder(Metric.Age)])
-
     print(queryComplex)
+
+    queryMinimal = build_query([MetricBuilder(Metric.Age)])
 
     # print(queryMinimal)
