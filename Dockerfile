@@ -1,6 +1,7 @@
 FROM rasa/rasa:3.6.21
 
 ENV RASA_TELEMETRY_ENABLED=false
+ENV DUCKLING_ENDPOINT_URL=http://duckling:8000
 
 USER root
 
