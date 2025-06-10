@@ -22,7 +22,7 @@ pipeline:
   epochs: 100
   constrain_similarities: true
 - name: "DucklingEntityExtractor"
-  url: ${DUCKLING_ENDPOINT_URL}
+  url: http://duckling:8000
   dimensions: ["time"]
 - name: FallbackClassifier
   threshold: 0.3
