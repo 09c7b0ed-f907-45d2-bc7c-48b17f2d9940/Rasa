@@ -25,7 +25,10 @@ class GraphQLProxyClient:
         self.graphql_url = graphql_url
 
     def query(self, query_str: str, session_token: str, variables: Optional[Dict[str, Any]] = None) -> Optional[Dict[str, Any]]:
-        headers = {"Content-Type": "application/json", "Cookie": f"next-auth.session-token={session_token}"}
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {session_token}",
+        }
 
         proxy_payload: ProxyRequestPayload = {
             "operation": "query",
