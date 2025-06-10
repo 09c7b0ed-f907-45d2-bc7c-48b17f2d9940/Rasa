@@ -1,3 +1,4 @@
+import logging
 from typing import Any, Dict, Optional, TypedDict
 
 import requests
@@ -13,6 +14,9 @@ class ProxyRequestPayload(TypedDict):
     target: str
     url: str
     payload: GraphQLPayload
+
+
+logger = logging.getLogger(__name__)
 
 
 class GraphQLProxyClient:
@@ -36,9 +40,9 @@ class GraphQLProxyClient:
             if response.status_code == 200:
                 return response.json()
             else:
-                print(f"[GraphQLProxyClient] Error {response.status_code}: {response.text}")
+                logger.error(f"[GraphQLProxyClient] Error {response.status_code}: {response.text}")
                 return None
 
         except Exception as e:
-            print(f"[GraphQLProxyClient] Request failed: {e}")
+            logger.error(f"[GraphQLProxyClient] Request failed: {e}")
             return None
