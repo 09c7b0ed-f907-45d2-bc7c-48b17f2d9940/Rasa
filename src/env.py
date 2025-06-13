@@ -1,14 +1,21 @@
 import os
+from typing import Tuple, overload
 
 from dotenv import load_dotenv
 
 _loaded = False
 
 
-def require_all_env(*keys: str, force: bool = False) -> tuple[str, ...]:
+@overload
+def require_all_env(key: str) -> str: ...
+@overload
+def require_all_env(*keys: str) -> Tuple[str, ...]: ...
+
+
+def require_all_env(*keys: str) -> str | Tuple[str, ...]:  # type: ignore
     global _loaded
-    if not _loaded or force:
-        load_dotenv(override=force)
+    if not _loaded:
+        load_dotenv(override=True)
         _loaded = True
 
     values: list[str] = []
@@ -23,27 +30,28 @@ def require_all_env(*keys: str, force: bool = False) -> tuple[str, ...]:
 
     if missing:
         raise OSError(f"Missing required environment variable(s): {', '.join(missing)}")
-    else:
-        return tuple(v for v in values)
+
+    return tuple(values) if len(values) > 1 else values[0]
 
 
-def require_any_env(*keys: str, force: bool = False) -> tuple[str, ...]:
-    """
-    Require at least one of the given environment variables to be present.
-    Returns a tuple of all present values (in order of keys).
-    Raises OSError if none are present.
-    """
+@overload
+def require_any_env(key: str) -> str | None: ...
+@overload
+def require_any_env(*keys: str) -> Tuple[str | None, ...]: ...
+
+
+def require_any_env(*keys: str) -> str | None | Tuple[str | None, ...]:  # type: ignore
     global _loaded
-    if not _loaded or force:
-        load_dotenv(override=force)
+    if not _loaded:
+        load_dotenv(override=True)
         _loaded = True
 
-    values: list[str] = []
+    values: list[str | None] = []
     for key in keys:
         val = os.getenv(key)
-        if val is not None:
-            values.append(val)
+        values.append(val)
 
-    if not values:
+    if all(v is None for v in values):
         raise OSError(f"At least one of the required environment variables must be set: {', '.join(keys)}")
-    return tuple(values)
+
+    return tuple(values) if len(values) > 1 else values[0]

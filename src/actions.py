@@ -141,10 +141,10 @@ class ActionBuildLLMQuery(Action):
             logger.warning("No user query found in tracker.")
             return []
 
-        try:
-            llm_model, _ = env.require_all_env("LLM_MODEL")
-            llm_api_url, openai_api_key = env.require_any_env("LLM_API_URL", "OPENAI_API_KEY")
+        llm_model: str = env.require_all_env("LLM_MODEL")
+        llm_api_url, openai_api_key = env.require_any_env("LLM_API_URL", "OPENAI_API_KEY")
 
+        try:
             parser = (
                 QP_Client.QueryParserClient(
                     llm_model=llm_model,
