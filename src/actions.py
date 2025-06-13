@@ -5,9 +5,9 @@ from rasa_sdk import Action, Tracker  # type: ignore
 from rasa_sdk.executor import CollectingDispatcher  # type: ignore
 from rasa_sdk.types import DomainDict  # type: ignore
 
-import env
 import src.graphql.graphql_proxy_client as GQL_Client
 import src.instructor.query_parser_client as QP_Client
+from src import env
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)

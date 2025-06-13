@@ -8,10 +8,10 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 WORKDIR /app
 
-COPY src/ .
+COPY src/ ./src
 
 EXPOSE 5055
 
 USER 1001
 
-ENTRYPOINT ["python", "-m", "rasa_sdk", "--actions", "actions"]
+ENTRYPOINT ["python", "-m", "rasa_sdk", "--actions", "src.actions"]
