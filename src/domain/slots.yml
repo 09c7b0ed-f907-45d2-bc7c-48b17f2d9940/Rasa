@@ -1,47 +1,62 @@
-#version: "3.1"
+version: "3.1"
 
-#slots:
-#  start:
-#    type: any
-#    mappings:
-#    - type: from_entity
-#      entity: time
-#      role: start
-#  end:
-#    type: any
-#    mappings:
-#    - type: from_entity
-#      entity: time
-#      role: end
-#  single:
-#    type: any
-#    mappings:
-#    - type: from_entity
-#      entity: time
-#      role: single
-#  scale:
-#    type: categorical
-#    values:
-#      - weakly
-#      - monthly
-#      - quaterly
-#      - biannually
-#      - annually
-#    mappings:
-#    - type: from_entity
-#      entity: scale
-#  sex:
-#    type: categorical
-#    values:
-#      - male
-#      - female
-#    mappings:
-#    - type: from_entity
-#      entity: sex
-#  age:
-#    type: float    
-#    min_value: 0
-#    max_value: 150
-#    mappings:
-#    - type: from_entity
-#      entity: age
+slots:
+  age_min:
+    type: float
+    influence_conversation: true
+    mappings:
+      - type: custom
+
+  age_max:
+    type: float
+    influence_conversation: true
+    mappings:
+      - type: custom
+
+  nihss_min:
+    type: float
+    influence_conversation: true
+    mappings:
+      - type: custom
+
+  nihss_max:
+    type: float
+    influence_conversation: true
+    mappings:
+      - type: custom
+
+  discharge_date_min:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: custom
+
+  discharge_date_max:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: custom
+
+  sex:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: custom
+
+  stroke_type:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: custom
+
+  thrombectomy:
+    type: bool
+    influence_conversation: true
+    mappings:
+      - type: custom
+
+  thrombolysis:
+    type: bool
+    influence_conversation: true
+    mappings:
+      - type: custom

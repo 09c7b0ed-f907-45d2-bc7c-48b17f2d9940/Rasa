@@ -1,19 +1,10 @@
 version: "3.1"
 
-#entities:
-#  - metric
-#  - gender
-#  - age_group
-#  - group_by
-#  - start_date
-#  - end_date
-
-#entities:
-#   - scale
-#   - sex
-#   - age
-#   - time:
-#       roles:
-#       - start
-#       - end
-#       - single
+entities:
+  - sex
+  - age_min
+  - age_max
+  - nihss_min
+  - nihss_max
+  - discharge_date_min
+  - discharge_date_max

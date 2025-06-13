@@ -1,18 +1,22 @@
 version: "3.1"
 
 rules:
-- rule: Query DTN data
+- rule: queries
   steps:
-    - intent: get_dtn
-    - action: action_get_dtn
+    - intent: patient_query
+    - action: action_route_query
 
-- rule: test apis
+- rule: Greet
   steps:
-  - intent: test_apis
-  - action: action_test_apis
+    - intent: greet
+    - action: utter_greet
 
-#rules:
-#- rule: get slots
-#  steps:
-#  - intent: get_slots
-#  - action: action_get_all_slots
+- rule: goodbye
+  steps:
+    - intent: goodbye
+    - action: utter_goodbye
+
+- rule: fallback
+  steps:
+    - intent: nlu_fallback
+    - action: utter_default

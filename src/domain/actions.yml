@@ -1,6 +1,6 @@
 version: "3.1"
 
 actions:
-- action_test_apis
-- action_get_dtn
-#- action_get_all_slots
+  - action_route_query
+  - action_build_structured_query
+  - action_build_llm_query

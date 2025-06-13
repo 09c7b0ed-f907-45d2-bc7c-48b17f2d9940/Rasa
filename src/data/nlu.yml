@@ -3,35 +3,99 @@ version: "3.1"
 nlu:
 - intent: greet
   examples: |
-    - hey
-    - hello
     - hi
-  
-- intent: test_apis
-  examples: |
-    - test api
-    - can i reach the apis?
+    - hello
+    - hey there
+    - good morning
+    - good afternoon
 
-- intent: get_dtn
+- intent: goodbye
   examples: |
-    - Show me the DTN for all hospitals
+    - bye
+    - goodbye
+    - see you later
 
-#- intent: set_filter
-#  examples: |
-#    - on [1st of february]{"entity": "time", "role": "single"}
-#    - on [7/9/24]{"entity": "time", "role": "single"}
-#    - from the [5th of june]{"entity": "time", "role": "start"}
-#    - from [yesterday]{"entity": "time", "role": "start"}
-#    - to [14st of may]{"entity": "time", "role": "end"}
-#    - to [4/11/25]{"entity": "time", "role": "end"}
-#    - scale [months]{"entity": "scale"}
-#    - scale [quarters]{"entity": "scale"}
-#    - sex [women]{"entity": "sex"}
-#    - sex [men]{"entity": "sex"}
-#    - age [58]{"entity": "age"}
-#    - age [25]{"entity": "age"}
-
-- intent: get_slots
+- intent: patient_query
   examples: |
-    -  slots
+    - Show male patients
+    - Show female patients
+    - Show males aged 40 to 60
+    - Show females aged 30 to 50 with NIHSS < 6
+    - Show all patients discharged after 2022-01-01
+    - Show patients with NIHSS greater than 4
+    - Show patients discharged between 2023-01-01 and 2024-01-01
+    - Show females with age above 45 and NIHSS score under 10
+    - Show patients aged from 50 to 70
+    - Show all female patients with discharge date after 2023-06-01
+    - Patients with NIHSS >= 8 and age <= 60
+    - Male patients with age range 30 to 50 and discharge before 2023-12-31
+    - Discharged patients older than 65 with NIHSS greater than 2
+    - Age under 40 with discharge after 2022-10-01- intent: patient_query
+    - Show patients with NIHSS over 4
+    - NIHSS >= 8
+    - Find patients with NIHSS <= 3
+    - Show female patients with NIHSS equal to 5
+    - Age between 40 and 60
+    - Aged 50 to 70
+    - Patients younger than 35
+    - Patients aged over 75
+    - Show patients discharged before 2023-01-01
+    - Show patients discharged after January 1, 2023
+    - Show females without thrombectomy
+    - Male patients who had a thrombectomy
+    - Patients that received thrombolysis
+    - Stroke type is ischemic
+    - Exclude undetermined strokes
+    - Only include hemorrhagic strokes
+    - Admission NIHSS less than or equal to 6
+    - NIHSS score more than 10
     
+- synonym: NIHSS
+  examples: |
+    - admission nihss
+    - score
+    - nihss score
+
+- synonym: ">="
+  examples: |
+    - over
+    - at least
+    - greater than or equal to
+
+- synonym: "<="
+  examples: |
+    - under
+    - up to
+    - less than or equal to
+
+- synonym: Male
+  examples: |
+    - man
+    - men
+    - masculine
+
+- synonym: Female
+  examples: |
+    - woman
+    - women
+    - feminine
+
+- synonym: ischemic
+  examples: |
+    - clot stroke
+    - blocked artery
+    - ischemic stroke
+
+- synonym: hemorrhagic
+  examples: |
+    - bleeding stroke
+    - hemorrhagic stroke
+
+- synonym: undetermined
+  examples: |
+    - unknown
+    - not sure
+  
+- intent: nlu_fallback
+  examples: |
+    - [EMPTY]

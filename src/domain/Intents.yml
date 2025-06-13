@@ -1,6 +1,7 @@
 version: "3.1"
 
 intents:
-- greet
-- test_apis
-- get_dtn
+  - patient_query
+  - greet
+  - goodbye
+  - nlu_fallback
