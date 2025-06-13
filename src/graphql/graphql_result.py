@@ -29,8 +29,8 @@ class GroupedBy(BaseModel):
 class D1(BaseModel):
     edges: List[int]
     case_count: List[int] = Field(..., alias="caseCount")
-    percents: List[float]
-    normalized_percents: List[float] = Field(..., alias="normalizedPercents")
+    percents: List[Optional[float]]
+    normalized_percents: List[Optional[float]] = Field(..., alias="normalizedPercents")
 
     model_config = ConfigDict(populate_by_name=True)
 

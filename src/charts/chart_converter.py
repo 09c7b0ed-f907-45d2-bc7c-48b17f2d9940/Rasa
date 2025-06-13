@@ -1,7 +1,8 @@
 from typing import Any, Dict, List, Optional, Union
 
+from src.graphql.graphql_result import Kpi1, Metric, Welcome
+
 from .box_plot import BoxPlot, BoxPlotSeries
-from .graphql_result import Kpi1, Metric, Welcome
 from .line_plot import LinePlot, LinePlotSeries
 
 

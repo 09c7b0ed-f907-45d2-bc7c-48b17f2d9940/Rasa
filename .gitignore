@@ -30,4 +30,6 @@
 
 # Add source
 !/src/*
-!/src/models/*
+!/src/charts/*
+!/src/graphql/*
+!/src/instructor/*

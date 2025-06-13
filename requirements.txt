@@ -10,6 +10,7 @@ requests==2.32.3
 dotenv==0.9.9
 requests_toolbelt==1.0.0
 graphql_query
+instructor[ollama]
 
 # Typing + linting tools
 mypy==1.15.0
