@@ -1,22 +1,30 @@
 from typing import Any, Dict, List, Optional, Union
 
-from src.graphql.graphql_result import Kpi1, Metric, Welcome
+from src.graphql.graphql_result import Kpi1, Metric, MetricsQueryResponse
 
 from .box_plot import BoxPlot, BoxPlotSeries
 from .line_plot import LinePlot, LinePlotSeries
 
 
-def extract_metrics(data: Welcome) -> Dict[str, Metric]:
+def extract_metrics(response: Union[MetricsQueryResponse, Dict[str, Any]]) -> Dict[str, Metric]:
     metrics: Dict[str, Metric] = {}
-    get_metrics = data.data.get_metrics
-    for attr in dir(get_metrics):
-        if attr.startswith("metric_"):
-            metric_obj = getattr(get_metrics, attr)
-            if isinstance(metric_obj, Metric):
-                metrics[attr] = metric_obj
-    # Also include any extra metrics (from extra="allow") TEST IF WORKS, MAYBE REPLACE ABOVE WITH THIS
-    for k, v in get_metrics.__dict__.items():
-        if k.startswith("metric_") and isinstance(v, Metric):
+
+    # Accept both Pydantic model and dict
+    if isinstance(response, dict):
+        data = response.get("data") or response.get("result", {})
+        get_metrics = data.get("get_metrics") or data.get("getMetrics")
+        if not get_metrics:
+            return {}
+        metrics_dict = get_metrics.get("metrics", {})
+        # If values are dicts, parse them as Metric
+        for k, v in metrics_dict.items():
+            metrics[k] = v if isinstance(v, Metric) else Metric.model_validate(v)
+        return metrics
+
+    # If it's a Pydantic model
+    get_metrics = response.data.get_metrics
+    if hasattr(get_metrics, "metrics") and get_metrics.metrics:
+        for k, v in get_metrics.metrics.items():
             metrics[k] = v
     return metrics
 
@@ -78,9 +86,8 @@ def build_box_plot(metric_id: str, metric: Metric) -> Optional[BoxPlot]:
     return None
 
 
-def convert_graphql_to_charts(result: Dict[str, Any]) -> List[Dict[str, Any]]:
-    welcome = Welcome.model_validate(result)
-    metrics = extract_metrics(welcome)
+def convert_graphql_to_charts(result: Union[MetricsQueryResponse, Dict[str, Any]]) -> List[Dict[str, Any]]:
+    metrics = extract_metrics(result)
     charts: List[Union[LinePlot, BoxPlot]] = []
     for metric_key, metric in metrics.items():
         metric_id = metric_id_from_key(metric_key)

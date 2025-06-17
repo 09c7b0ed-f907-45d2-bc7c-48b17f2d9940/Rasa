@@ -1,4 +1,4 @@
-from typing import List, Literal, Union
+from typing import List, Literal, Optional, Union
 
 from pydantic import BaseModel, Field
 
@@ -168,3 +168,9 @@ class LogicalFilter(BaseModel):
 
 
 LogicalFilter.model_rebuild()
+
+
+class FilterResponse(BaseModel):
+    logicalFilter: Optional[LogicalFilter]
+
+    # response: str | None

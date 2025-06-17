@@ -1,12 +1,14 @@
 import logging
-from typing import Any, Optional, Tuple
+from typing import Optional
 
 from openai import OpenAI
 
 import instructor
-import src.instructor.metric_prompt as filter_prompt
+import src.instructor.filter_models as filter_models
+import src.instructor.filter_prompt as filter_prompt
+import src.instructor.metric_models as metric_models
 import src.instructor.metric_prompt as metric_prompt
-from src.instructor.filter_models import LogicalFilter
+import src.instructor.models as models
 
 logger = logging.getLogger(__name__)
 
@@ -57,24 +59,21 @@ class QueryParserClient:
         else:
             raise ValueError("Must provide either (llm_api_url and llm_model) for Ollama or (openai_api_key and llm_model) for OpenAI.")
 
-        def log_completion_kwargs(*args: Any) -> None:
-            logger.info(f"Function called with args: {args}")
+        # def log_completion_kwargs(*args: Any) -> None:
+        #    logger.info(f"Function called with args: {args}")
 
-        self.client.on("completion:kwargs", log_completion_kwargs)
-        self.client.on("completion:error", lambda exception: logger.error(f"An exception occurred: {str(exception)}"))
-        self.client.on("parse:error", lambda exception: logger.error(f"An exception occurred: {str(exception)}"))
-        self.client.on("completion:response", lambda response: logger.info(f"LLM response: {response}"))
-        self.client.on("completion:last_attempt", lambda attempt: logger.info(f"LLM last attempt: {attempt}"))
+        # self.client.on("completion:kwargs", log_completion_kwargs)
+        # self.client.on("completion:error", lambda exception: logger.error(f"An exception occurred: {str(exception)}"))
+        # self.client.on("parse:error", lambda exception: logger.error(f"An exception occurred: {str(exception)}"))
+        # self.client.on("completion:response", lambda response: logger.info(f"LLM response: {response}"))
+        # self.client.on("completion:last_attempt", lambda attempt: logger.info(f"LLM last attempt: {attempt}"))
 
-    def parse(self, query: str) -> Tuple[Optional[LogicalFilter], Optional[metric_prompt.MetricsRequest]]:
-        """
-        Parse a query string into LogicalFilter and MetricsRequest objects.
-        Returns a tuple: (LogicalFilter or None, MetricsRequest or None)
-        """
-        response: Tuple[Optional[LogicalFilter], Optional[metric_prompt.MetricsRequest]] = (
-            self.client.chat.completions.create(
+    def parse(self, query: str):
+        return models.MetricCalculatorResponse(
+            FilterResponse=self.client.chat.completions.create(
                 model=self.llm_model,
-                response_model=LogicalFilter,
+                max_retries=5,
+                response_model=filter_models.FilterResponse,
                 messages=[
                     {
                         "role": "system",
@@ -86,9 +85,10 @@ class QueryParserClient:
                     },
                 ],
             ),
-            self.client.chat.completions.create(
+            MetricResponse=self.client.chat.completions.create(
                 model=self.llm_model,
-                response_model=metric_prompt.MetricsRequest,
+                max_retries=5,
+                response_model=metric_models.MetricResponse,
                 messages=[
                     {
                         "role": "system",
@@ -101,4 +101,3 @@ class QueryParserClient:
                 ],
             ),
         )
-        return response

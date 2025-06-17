@@ -3,6 +3,8 @@ from typing import Any, Dict, Optional, TypedDict
 
 import requests
 
+import src.graphql.graphql_result as gqlr
+
 
 class GraphQLPayload(TypedDict):
     query: str
@@ -24,7 +26,7 @@ class GraphQLProxyClient:
         self.proxy_url = proxy_url
         self.graphql_url = graphql_url
 
-    def query(self, query_str: str, session_token: str, variables: Optional[Dict[str, Any]] = None) -> Optional[Dict[str, Any]]:
+    def query(self, query_str: str, session_token: str, variables: Optional[Dict[str, Any]] = None) -> gqlr.MetricsQueryResponse | None:
         headers = {
             "Content-Type": "application/json",
             "Authorization": f"Bearer {session_token}",

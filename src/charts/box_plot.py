@@ -12,7 +12,7 @@ class BoxPlotSeries(BaseModel):
     max: Optional[float]
     mean: Optional[float] = None
     ci_mean: Optional[List[float]] = None
-    ci_median: Optional[List[int]] = None
+    ci_median: Optional[List[float]] = None
 
 
 class BoxPlot(BaseModel):

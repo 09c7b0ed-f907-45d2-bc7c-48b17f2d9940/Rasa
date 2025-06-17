@@ -158,8 +158,8 @@ class GroupProperty(AliasEnum):
 
 class Distribution(BaseModel):
     bin_count: int = Field(
-        ...,
-        description="Number of bins for the distribution. Must be a positive integer.",
+        100,
+        description="Number of bins for the distribution. Must be a positive integer. Default should be the upper value devided by 100 and floored",
         examples=[1, 5, 10],
     )
     lower: int = Field(
@@ -202,12 +202,12 @@ class Metric(BaseModel):
 
     distribution: Optional[Distribution] = Field(
         None,
-        description=("Defines parameters for computing a histogram or similar distribution-based visualization. Useful when visualizing metrics like 'AGE' or 'DTN' over a defined range and number of bins. Only applicable to numeric metrics."),
+        description=("Defines parameters for computing a histogram or similar distribution-based visualization. Useful when visualizing metrics like 'AGE' or 'DTN' over a defined range and number of bins."),
         examples=[{"bin_count": 10, "lower": 0, "upper": 120}],
     )
 
 
-class MetricsRequest(BaseModel):
+class MetricsCollection(BaseModel):
     metrics: List[Metric] = Field(
         ...,
         description="A list of metrics to compute or analyze.",
@@ -235,3 +235,9 @@ class MetricsRequest(BaseModel):
         description="Optional grouping of metrics by a categorical property.",
         examples=["FIRST_CONTACT_PLACE", "EMS_PRENOTIFICATION"],
     )
+
+
+class MetricResponse(BaseModel):
+    metricsCollection: Optional[MetricsCollection]
+
+    # response: str | None

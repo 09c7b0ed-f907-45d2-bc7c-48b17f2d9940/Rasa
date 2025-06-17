@@ -4,9 +4,9 @@
         {
             "label": "Start Rasa Actions",
             "type": "shell",
-            "command": "python -m rasa_sdk --actions actions",
+            "command": "python -m rasa_sdk --actions src.actions",
             "options": {
-                "cwd": "${workspaceFolder}/src"
+                "cwd": "${workspaceFolder}"
             },
             "problemMatcher": [],
             "group": {

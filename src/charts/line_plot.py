@@ -12,7 +12,7 @@ class LinePlot(BaseModel):
     chartTitle: str
     xAxisLabel: str
     yAxisLabel: str
-    bins: List[int]
+    bins: List[float]
     series: List[LinePlotSeries]
     grouped: bool = True
     sourceMetricId: Optional[str] = None

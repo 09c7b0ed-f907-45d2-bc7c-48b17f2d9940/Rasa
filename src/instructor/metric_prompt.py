@@ -1,16 +1,16 @@
 from typing import Dict
 
-from src.instructor.metric_models import KPI, Distribution, GroupProperty, Metric, MetricsRequest
+from src.instructor.metric_models import KPI, Distribution, GroupProperty, Metric, MetricsCollection
 
 
-def get_examples() -> Dict[str, MetricsRequest]:
+def get_examples() -> Dict[str, MetricsCollection]:
     return {
-        "Show a line graph for DTN and DIDO for male and female patients between 40 and 60": MetricsRequest(
+        "Show a line graph for DTN and DIDO for male and female patients between 40 and 60": MetricsCollection(
             metrics=[
                 Metric(
                     kpi=KPI.Dtn,
                     distribution=Distribution(
-                        bin_count=1,
+                        bin_count=100,
                         lower=0,
                         upper=100,
                     ),
@@ -19,7 +19,7 @@ def get_examples() -> Dict[str, MetricsRequest]:
                 Metric(
                     kpi=KPI.Dido,
                     distribution=Distribution(
-                        bin_count=1,
+                        bin_count=100,
                         lower=0,
                         upper=100,
                     ),
@@ -28,26 +28,26 @@ def get_examples() -> Dict[str, MetricsRequest]:
             ],
             group_by=None,
         ),
-        "Give me a chart of the age of patients gruped by initial point of contact, but Exclude ischemic stroke patients": MetricsRequest(
+        "Give me a chart of the age of patients gruped by initial point of contact, but Exclude ischemic stroke patients, between the age of 20 to 90": MetricsCollection(
             metrics=[
                 Metric(
                     kpi=KPI.Age,
                     distribution=Distribution(
-                        bin_count=1,
-                        lower=0,
-                        upper=120,
+                        bin_count=70,
+                        lower=20,
+                        upper=90,
                     ),
                     stats=None,
                 ),
             ],
             group_by=GroupProperty.FirstContactPlace,
         ),
-        "Duration at referring hospital for patients with NIHSS >= 5 who received thrombolysis, between March 4th, 2023 and July 5th, 2024": MetricsRequest(
+        "Duration at referring hospital for patients with NIHSS >= 5 who received thrombolysis, between March 4th, 2023 and July 5th, 2024": MetricsCollection(
             metrics=[
                 Metric(
                     kpi=KPI.Dido,
                     distribution=Distribution(
-                        bin_count=1,
+                        bin_count=120,
                         lower=0,
                         upper=120,
                     ),
@@ -72,7 +72,12 @@ Metrics may include distribution histograms and summary statistics.
 
 Field descriptions:
 - `kpi`: The metric or key performance indicator to visualize (e.g., AGE, DTN, DIDO).
-- `distribution`: Optional. Define `bin_count`, `lower`, and `upper` for histogram buckets.
+- `distribution`: Optional. Define `bin_count`, `lower`, and `upper` for histogram buckets. Be mindful on which distribution ranges fit to what metrics:
+  - DTN and DIDO are typically between 0 and 100 minutes with bin count 100.
+  - Age is usually between 0 and 120 years with bin count 120.
+  - MRS is typically between 0 and 6 with bin count 6.
+  - NIHSS is usually between 0 and 42 with bin count 42.
+  - bin_count should high enough to capture the distribution accurately and a clean fraction of upper limit. But sometimes if values are discrete like MRS it's best to just set bin_count equal to upper limit
 - `stats`: Optional. If true, return summary statistics such as mean, min, max, interquartile range etc.
 - `group_by`: Optional. Used to segment the metric by a categorical property (e.g., ARRIVAL_MODE, SEX).
 

@@ -1,6 +1,6 @@
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 # -----------------------------
 # Base Components
@@ -27,7 +27,7 @@ class GroupedBy(BaseModel):
 
 
 class D1(BaseModel):
-    edges: List[int]
+    edges: List[float]
     case_count: List[int] = Field(..., alias="caseCount")
     percents: List[Optional[float]]
     normalized_percents: List[Optional[float]] = Field(..., alias="normalizedPercents")
@@ -46,13 +46,13 @@ class Kpi1(BaseModel):
     normalized_percents: Optional[List[float]] = Field(default=None, alias="normalizedPercents")
     cohort_size: Optional[int] = Field(default=None, alias="cohortSize")
     normalized_cohort_size: Optional[List[int]] = Field(default=None, alias="normalizedCohortSize")
-    median: Optional[int] = None
+    median: Optional[float] = None
     mean: Optional[float] = None
     variance: Optional[float] = None
     confidence_interval_mean: Optional[List[float]] = Field(default=None, alias="confidenceIntervalMean")
-    confidence_interval_median: Optional[List[int]] = Field(default=None, alias="confidenceIntervalMedian")
-    interquartile_range: Optional[int] = Field(default=None, alias="interquartileRange")
-    quartiles: Optional[List[int]] = None
+    confidence_interval_median: Optional[List[float]] = Field(default=None, alias="confidenceIntervalMedian")
+    interquartile_range: Optional[float] = Field(default=None, alias="interquartileRange")
+    quartiles: Optional[List[float]] = None
     d1: Optional[D1] = None
 
     model_config = ConfigDict(populate_by_name=True)
@@ -78,14 +78,27 @@ class Metric(BaseModel):
 
 class GetMetrics(BaseModel):
     general_stats_group: Optional[List[GeneralStatsGroup]] = Field(default=None, alias="generalStatsGroup")
+    metrics: Optional[Dict[str, Metric]] = Field(default=None, alias="metrics")
 
-    # Known metrics for autocomplete + type hints
-    metric_AGE: Optional[Metric] = None
-    metric_DTN: Optional[Metric] = None
-    metric_DTI: Optional[Metric] = None
-
-    # Accept any additional metrics
     model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    # metric_AGE: Optional[Metric] = None
+    # metric_DTN: Optional[Metric] = None
+    # metric_DTI: Optional[Metric] = None
+
+    @model_validator(mode="before")
+    def collect_metrics(cls, values: Dict[str, Any]) -> Dict[str, Any]:
+        metrics = {}
+        keys_to_remove: List[str] = []
+        for k, v in values.items():
+            if k.startswith("metric_"):
+                metrics[k] = v
+                keys_to_remove.append(k)
+        for k in keys_to_remove:
+            values.pop(k)
+        if metrics:
+            values["metrics"] = metrics
+        return values
 
 
 class Data(BaseModel):
@@ -94,7 +107,7 @@ class Data(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
 
-class Welcome(BaseModel):
+class MetricsQueryResponse(BaseModel):
     data: Data
     errors: Optional[List[Dict[str, Any]]] = None  # GraphQL typically uses structured errors
 

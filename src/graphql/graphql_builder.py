@@ -2,7 +2,7 @@
 from abc import ABC, abstractmethod
 from enum import Enum
 
-from graphql_query import Argument, Field, Fragment, InlineFragment, Operation, Query
+from graphql_query import Argument, Field, Fragment, InlineFragment, Operation, Query  # type: ignore
 
 # -----------------------------
 # Enums
