@@ -1,0 +1,18 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug Rasa Actions (debugpy)",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "rasa_sdk",
+            "args": [
+                "--actions",
+                "src.actions"
+            ],
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "justMyCode": false
+        }
+    ]
+}

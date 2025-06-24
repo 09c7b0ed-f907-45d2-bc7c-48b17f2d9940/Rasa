@@ -1,10 +1,20 @@
 from enum import Enum
-from typing import Set
+from typing import Set, Type, TypeVar
+
+T = TypeVar("T", bound="AliasEnum")
 
 
 class AliasEnum(str, Enum):
     _value_: str
     _aliases: Set[str]
+
+    @property
+    def value(self) -> str:
+        return self._value_
+
+    @property
+    def aliases(self) -> Set[str]:
+        return self._aliases
 
     def __new__(cls, value: str, *aliases: str):
         obj = str.__new__(cls, value)
@@ -22,7 +32,7 @@ class AliasEnum(str, Enum):
         raise ValueError(f"Invalid value '{value}' for {cls.__name__}")
 
     @classmethod
-    def from_value(cls, value: str) -> "AliasEnum":
+    def from_value(cls: Type[T], value: str) -> T:
         return cls(value)
 
     @classmethod

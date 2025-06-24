@@ -82,10 +82,6 @@ class GetMetrics(BaseModel):
 
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    # metric_AGE: Optional[Metric] = None
-    # metric_DTN: Optional[Metric] = None
-    # metric_DTI: Optional[Metric] = None
-
     @model_validator(mode="before")
     def collect_metrics(cls, values: Dict[str, Any]) -> Dict[str, Any]:
         metrics = {}

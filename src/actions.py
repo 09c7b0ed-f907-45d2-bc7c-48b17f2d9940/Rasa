@@ -11,17 +11,63 @@ import src.graphql.graphql_proxy_client as GQLPC
 import src.graphql.instructor_to_graphql as ITG
 import src.instructor.query_parser_client as QPC
 from src import env
+from src.charts.chart_converter import convert_graphql_to_charts
+from src.cli.cli_token_parser import parse_cli_to_metric_response
+from src.graphql.graphql_result import MetricsQueryResponse
+from src.instructor.models import MetricCalculatorResponse
 
-logging.basicConfig(level=logging.DEBUG)
+LOG_LEVEL = env.require_any_env("LOGLEVEL") or "INFO"
+
+# Remove all handlers associated with the root logger
+root_logger = logging.getLogger()
+for handler in root_logger.handlers[:]:
+    root_logger.removeHandler(handler)
+
+# Add a StreamHandler with the correct level and formatter
+handler = logging.StreamHandler()
+handler.setLevel(LOG_LEVEL)
+
+
+class ColorFormatter(logging.Formatter):
+    COLORS = {
+        "DEBUG": "\033[36m",  # Cyan
+        "INFO": "\033[32m",  # Green
+        "WARNING": "\033[33m",  # Yellow
+        "ERROR": "\033[31m",  # Red
+        "CRITICAL": "\033[41m",  # Red background
+    }
+    GREY = "\033[90m"
+    RESET = "\033[0m"
+
+    def format(self, record: logging.LogRecord) -> str:
+        # Color levelname
+        levelname = record.levelname
+        if levelname in self.COLORS:
+            record.levelname = f"{self.COLORS[levelname]}{levelname}{self.RESET}"
+        # Color asctime and name grey
+        record.name = f"{self.GREY}{record.name}{self.RESET}"
+        # Add clickable file:line link (works in some terminals/IDEs)
+        record.link = f"\033[34m{record.pathname}:{record.lineno}\033[0m"
+        return super().format(record)
+
+
+formatter = ColorFormatter("%(asctime)s %(levelname)-16s %(name)-32s [%(link)s] \n%(message)s\n")
+handler.setFormatter(formatter)
+root_logger.addHandler(handler)
+root_logger.setLevel(LOG_LEVEL)
+
 logger = logging.getLogger(__name__)
+logger.setLevel(LOG_LEVEL)
+
+logger.info(f"Logger level is: {logging.getLevelName(logger.level)}")
+
 WEBAPP_PROXY_URL, GRAPHQL_API_URL = env.require_all_env("WEBAPP_PROXY_URL", "GRAPHQL_API_URL")
 gqlpc = GQLPC.GraphQLProxyClient(WEBAPP_PROXY_URL, GRAPHQL_API_URL)
 
 
-# === ROUTER ===
-class ActionRouteQuery(Action):
+class ActionBuildCLIQuery(Action):
     def name(self) -> str:
-        return "action_route_query"
+        return "action_cli_query"
 
     async def run(
         self,
@@ -29,12 +75,42 @@ class ActionRouteQuery(Action):
         tracker: Tracker,
         domain: DomainDict,
     ) -> list[dict[str, Any]]:
-        return await ActionBuildLLMQuery().run(dispatcher, tracker, domain)
+        user_query = tracker.latest_message.get("text", "")
+
+        try:
+            # Parse CLI string into Pydantic model
+            parsed: MetricCalculatorResponse = parse_cli_to_metric_response(user_query)
+            logger.debug("Parsed MetricCalculatorResponse:\n%s", parsed.model_dump_json(indent=2))
+
+            # Convert to GraphQL
+            gql_query: str = ITG.Build_query_from_instructor_models(parsed)
+            logger.debug("Generated GraphQL query:\n%s", gql_query)
+
+            # Execute query
+            result = gqlpc.query(gql_query, tracker.sender_id)
+            if not result:
+                dispatcher.utter_message(text="No results found.")
+                return []
+            logger.debug("GraphQL result:\n%s", result.model_dump_json(indent=2))
+
+            # Convert to chart-friendly format
+            converted = convert_graphql_to_charts(result)
+            logger.debug("Converted charts:\n%s", converted.model_dump_json(indent=2))
+
+            dispatcher.utter_message(json_message=converted.model_dump())
+            dispatcher.utter_message(text="Query successful. Charts generated.")
+
+        except Exception as e:
+            dispatcher.utter_message(text=f"❌ Error processing query: {e}")
+            traceback.print_exc()
+            return []
+
+        return []
 
 
 class ActionBuildLLMQuery(Action):
     def name(self) -> str:
-        return "action_build_llm_query"
+        return "action_nl_query"
 
     async def run(
         self,
@@ -73,9 +149,6 @@ class ActionBuildLLMQuery(Action):
                 return []
 
             try:
-                from src.charts.chart_converter import convert_graphql_to_charts
-                from src.graphql.graphql_result import MetricsQueryResponse
-
                 logger.info("Parsing GraphQL result:\n%s", json.dumps(result, indent=2))
                 parsed = MetricsQueryResponse.model_validate(result)
                 logger.info("Parsed result: %s", parsed.model_dump_json(indent=2))

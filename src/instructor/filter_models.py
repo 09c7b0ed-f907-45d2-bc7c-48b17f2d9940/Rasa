@@ -8,12 +8,12 @@ from src.instructor.base_models import AliasEnum
 
 
 class ComparisonProperty(AliasEnum):
-    GreaterOrEqual = ("GE", "greater than or equal", "at least", "no less than", "≥", "=>")
-    LessOrEqual = ("LE", "less than or equal", "at most", "no more than", "≤", "<=")
-    LessThan = ("LT", "less than", "fewer than", "<", "below")
-    GreaterThan = ("GT", "greater than", "more than", ">", "above")
-    Equal = ("EQ", "equal to", "equals", "==", "is")
-    NotEqual = ("NE", "not equal to", "not equals", "!=", "is not")
+    GreaterOrEqual = ("GE", "≥", "=>", ">=", "greater than or equal", "at least", "no less than")
+    LessOrEqual = ("LE", "≤", "<=", "=<", "less than or equal", "at most", "no more than")
+    LessThan = ("LT", "<", "less than", "fewer than", "below")
+    GreaterThan = ("GT", ">", "greater than", "more than", "above")
+    Equal = ("EQ", "==", "=", "equal to", "equals", "is")
+    NotEqual = ("NE", "!=", "=!", "!!", "not equal to", "not equals", "is not")
 
 
 class AgeFilter(BaseModel):

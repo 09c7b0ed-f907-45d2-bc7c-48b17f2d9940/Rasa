@@ -43,7 +43,7 @@ class GraphQLProxyClient:
             response = requests.post(self.proxy_url, headers=headers, json=proxy_payload)
 
             if response.status_code == 200:
-                return response.json()
+                return gqlr.MetricsQueryResponse.model_validate(response.json())
             else:
                 logger.error(f"[GraphQLProxyClient] Error {response.status_code}: {response.text}")
                 return None

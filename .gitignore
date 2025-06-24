@@ -18,6 +18,7 @@
 
 # Add vscode
 !/.vscode/tasks.json
+!/.vscode/launch.json
 
 # Add Docker
 !/.dockerignore
@@ -33,3 +34,4 @@
 !/src/charts/*
 !/src/graphql/*
 !/src/instructor/*
+!/src/cli/*

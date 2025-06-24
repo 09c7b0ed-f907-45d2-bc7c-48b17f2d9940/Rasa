@@ -1,29 +1,18 @@
-from typing import Any, Dict, List, Optional, Union
+import logging
+from typing import Dict, List, Optional
 
+from src.charts.box_plot import BoxPlot, BoxPlotSeries
+from src.charts.line_plot import LinePlot, LinePlotSeries
+from src.charts.plots import PlotCollection
 from src.graphql.graphql_result import Kpi1, Metric, MetricsQueryResponse
 
-from .box_plot import BoxPlot, BoxPlotSeries
-from .line_plot import LinePlot, LinePlotSeries
+logger = logging.getLogger()
 
 
-def extract_metrics(response: Union[MetricsQueryResponse, Dict[str, Any]]) -> Dict[str, Metric]:
+def extract_metrics(response: MetricsQueryResponse) -> Dict[str, Metric]:
     metrics: Dict[str, Metric] = {}
-
-    # Accept both Pydantic model and dict
-    if isinstance(response, dict):
-        data = response.get("data") or response.get("result", {})
-        get_metrics = data.get("get_metrics") or data.get("getMetrics")
-        if not get_metrics:
-            return {}
-        metrics_dict = get_metrics.get("metrics", {})
-        # If values are dicts, parse them as Metric
-        for k, v in metrics_dict.items():
-            metrics[k] = v if isinstance(v, Metric) else Metric.model_validate(v)
-        return metrics
-
-    # If it's a Pydantic model
     get_metrics = response.data.get_metrics
-    if hasattr(get_metrics, "metrics") and get_metrics.metrics:
+    if get_metrics.metrics:
         for k, v in get_metrics.metrics.items():
             metrics[k] = v
     return metrics
@@ -86,16 +75,21 @@ def build_box_plot(metric_id: str, metric: Metric) -> Optional[BoxPlot]:
     return None
 
 
-def convert_graphql_to_charts(result: Union[MetricsQueryResponse, Dict[str, Any]]) -> List[Dict[str, Any]]:
+def convert_graphql_to_charts(result: MetricsQueryResponse) -> PlotCollection:
     metrics = extract_metrics(result)
-    charts: List[Union[LinePlot, BoxPlot]] = []
+    logger.debug("Extracted metrics: %s", metrics)
+
+    line_plots: List[LinePlot] = []
+    box_plots: List[BoxPlot] = []
+
     for metric_key, metric in metrics.items():
         metric_id = metric_id_from_key(metric_key)
-        line = build_line_plot(metric_id, metric)
-        if line:
-            charts.append(line)
-        box = build_box_plot(metric_id, metric)
-        if box:
-            charts.append(box)
-    # Return as dicts for JSON serialization
-    return [chart.model_dump(by_alias=True) for chart in charts]
+        if line := build_line_plot(metric_id, metric):
+            line_plots.append(line)
+        if box := build_box_plot(metric_id, metric):
+            box_plots.append(box)
+
+    return PlotCollection(
+        linePlots=line_plots,
+        boxPlots=box_plots,
+    )
