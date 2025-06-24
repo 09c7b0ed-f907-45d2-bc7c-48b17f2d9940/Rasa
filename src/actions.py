@@ -1,4 +1,3 @@
-import json
 import logging
 import traceback
 from typing import Any
@@ -119,7 +118,7 @@ class ActionBuildLLMQuery(Action):
         domain: DomainDict,
     ) -> list[dict[str, Any]]:
         user_query = tracker.latest_message.get("text", "")
-        logger.info(f"LLM builder received query: {user_query}")
+        logger.debug(f"LLM builder received query: {user_query}")
         if not user_query:
             dispatcher.utter_message(text="I didn't receive a query to interpret.")
             logger.warning("No user query found in tracker.")
@@ -139,7 +138,7 @@ class ActionBuildLLMQuery(Action):
                 return []
 
             gql_query: str = ITG.Build_query_from_instructor_models(mcresponse)
-            logger.info("Generated GraphQL query:\n%s", gql_query)
+            logger.debug("Generated GraphQL query:\n%s", gql_query)
 
             result = gqlpc.query(gql_query, tracker.sender_id)
 
@@ -149,9 +148,9 @@ class ActionBuildLLMQuery(Action):
                 return []
 
             try:
-                logger.info("Parsing GraphQL result:\n%s", json.dumps(result, indent=2))
+                logger.debug("Parsing GraphQL result:\n%s", result.model_dump_json(indent=2))
                 parsed = MetricsQueryResponse.model_validate(result)
-                logger.info("Parsed result: %s", parsed.model_dump_json(indent=2))
+                logger.debug("Parsed result: %s", parsed.model_dump_json(indent=2))
             except Exception as e:
                 logger.error("Validation error: %s", e)
                 dispatcher.utter_message(text=f"Validation error: {e}")
@@ -160,14 +159,14 @@ class ActionBuildLLMQuery(Action):
 
             try:
                 converted = convert_graphql_to_charts(result)
-                logger.info("Converted parsed result: %s", json.dumps(converted, indent=2))
+                logger.debug("Converted parsed result: %s", converted.model_dump_json(indent=2))
             except Exception as e:
                 logger.error("Chart conversion error: %s", e)
                 dispatcher.utter_message(text=f"Chart conversion error: {e}")
                 traceback.print_exc()
                 return []
 
-            dispatcher.utter_message(json_message={"charts": converted})
+            dispatcher.utter_message(json_message=converted.model_dump())
             dispatcher.utter_message(text="Query successful. Charts generated.")
             return []
 
