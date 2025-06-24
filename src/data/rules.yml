@@ -1,10 +1,15 @@
 version: "3.1"
 
 rules:
-- rule: queries
+- rule: queries NL
   steps:
-    - intent: patient_query
-    - action: action_route_query
+    - intent: nl_query
+    - action: action_nl_query
+
+- rule: queries CLI
+  steps:
+    - intent: cli_query
+    - action: action_cli_query
 
 - rule: Greet
   steps:

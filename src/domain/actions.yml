@@ -1,6 +1,5 @@
 version: "3.1"
 
 actions:
-  - action_route_query
-  - action_build_structured_query
-  - action_build_llm_query
+  - action_cli_query
+  - action_nl_query

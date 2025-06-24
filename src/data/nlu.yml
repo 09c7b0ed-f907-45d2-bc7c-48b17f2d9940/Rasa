@@ -15,7 +15,13 @@ nlu:
     - goodbye
     - see you later
 
-- intent: patient_query
+- intent: cli_query
+  examples: |
+    - /query AGE DTN -filter 'AND(AGE>=50, SEX==MALE)' -group FIRST_CONTACT_PLACE
+    - /query AGE DTN
+    - /query AGE -stats -distribution AGE:5:0:100
+
+- intent: nl_query
   examples: |
     - Show male patients
     - Show female patients
