@@ -11,9 +11,8 @@ import src.graphql.instructor_to_graphql as ITG
 import src.instructor.query_parser_client as QPC
 from src import env
 from src.charts.chart_converter import convert_graphql_to_charts
-from src.cli.cli_token_parser import parse_cli_to_metric_response
+from src.EntityToInstructorTranslator import EntityToInstructorTranslator
 from src.graphql.graphql_result import MetricsQueryResponse
-from src.instructor.models import MetricCalculatorResponse
 
 LOG_LEVEL = env.require_any_env("LOGLEVEL") or "INFO"
 
@@ -64,9 +63,14 @@ WEBAPP_PROXY_URL, GRAPHQL_API_URL = env.require_all_env("WEBAPP_PROXY_URL", "GRA
 gqlpc = GQLPC.GraphQLProxyClient(WEBAPP_PROXY_URL, GRAPHQL_API_URL)
 
 
-class ActionBuildCLIQuery(Action):
+llm_model: str = env.require_all_env("LLM_MODEL")
+llm_api_url, openai_api_key = env.require_any_env("LLM_API_URL", "OPENAI_API_KEY")
+llm_parser = QPC.QueryParserClient(llm_api_url, llm_model, openai_api_key)
+
+
+class ActionGenerateVisualization(Action):
     def name(self) -> str:
-        return "action_cli_query"
+        return "action_generate_visualization"
 
     async def run(
         self,
@@ -74,42 +78,88 @@ class ActionBuildCLIQuery(Action):
         tracker: Tracker,
         domain: DomainDict,
     ) -> list[dict[str, Any]]:
-        user_query = tracker.latest_message.get("text", "")
+        entities = tracker.latest_message.get("entities", [])
+        user_message = tracker.latest_message["text"]
+
+        # Get Rasa's confidence for this intent
+        intent_ranking = tracker.latest_message.get("intent_ranking", [])
+        rasa_confidence = intent_ranking[0].get("confidence", 1.0) if intent_ranking else 1.0
+
+        translator = EntityToInstructorTranslator()
+
+        # Check if query is too complex for rule-based handling
+        complexity_check = translator.is_too_complex_for_rules(entities, user_message, rasa_confidence)
+
+        if complexity_check.is_too_complex:
+            logger.info(f"Query too complex for rules: {complexity_check.reason}. Using LLM fallback.")
+            try:
+                mcresponse = llm_parser.parse(user_message)
+            except Exception as e:
+                logger.error(f"LLM parsing failed: {e}")
+                dispatcher.utter_message(text="Sorry, I couldn't understand your query. Please try rephrasing it.")
+                return []
+        else:
+            logger.info(f"Using rule-based parsing. Confidence: {complexity_check.confidence:.2f}")
+            try:
+                mcresponse = translator.translate(entities, user_message)
+            except Exception as e:
+                logger.warning(f"Rule-based parsing failed: {e}. Falling back to LLM.")
+                try:
+                    mcresponse = llm_parser.parse(user_message)
+                except Exception as llm_error:
+                    logger.error(f"LLM fallback also failed: {llm_error}")
+                    dispatcher.utter_message(text="Sorry, I couldn't understand your query. Please try rephrasing it.")
+                    return []
+
+        # Rest of your existing code unchanged
+        if not mcresponse:
+            dispatcher.utter_message(text="Failed to parse query.")
+            logger.warning("Parsed query returned None.")
+            return []
+
+        # Check if we have metrics (required) - filters are optional
+        if not mcresponse.MetricResponse or not mcresponse.MetricResponse.metricsCollection:
+            dispatcher.utter_message(text="No metrics specified in query. Please specify what data you want to analyze.")
+            logger.warning("No metrics found in parsed query.")
+            return []
+
+        gql_query: str = ITG.Build_query_from_instructor_models(mcresponse)
+        # logger.debug("Generated GraphQL query:\n%s", gql_query)
+
+        result = gqlpc.query(gql_query, tracker.sender_id)
+
+        if not result:
+            dispatcher.utter_message(text="No results found.")
+            logger.warning("No results returned from GraphQL.")
+            return []
 
         try:
-            # Parse CLI string into Pydantic model
-            parsed: MetricCalculatorResponse = parse_cli_to_metric_response(user_query)
-            logger.debug("Parsed MetricCalculatorResponse:\n%s", parsed.model_dump_json(indent=2))
-
-            # Convert to GraphQL
-            gql_query: str = ITG.Build_query_from_instructor_models(parsed)
-            logger.debug("Generated GraphQL query:\n%s", gql_query)
-
-            # Execute query
-            result = gqlpc.query(gql_query, tracker.sender_id)
-            if not result:
-                dispatcher.utter_message(text="No results found.")
-                return []
-            logger.debug("GraphQL result:\n%s", result.model_dump_json(indent=2))
-
-            # Convert to chart-friendly format
-            converted = convert_graphql_to_charts(result)
-            logger.debug("Converted charts:\n%s", converted.model_dump_json(indent=2))
-
-            dispatcher.utter_message(json_message=converted.model_dump())
-            dispatcher.utter_message(text="Query successful. Charts generated.")
-
+            # logger.debug("Parsing GraphQL result:\n%s", result.model_dump_json(indent=2))
+            parsed = MetricsQueryResponse.model_validate(result)
+            # logger.debug("Parsed result: %s", parsed.model_dump_json(indent=2))
         except Exception as e:
-            dispatcher.utter_message(text=f"❌ Error processing query: {e}")
+            logger.error("Validation error: %s", e)
+            dispatcher.utter_message(text=f"Validation error: {e}")
             traceback.print_exc()
             return []
 
+        try:
+            converted = convert_graphql_to_charts(result)
+            # logger.debug("Converted parsed result: %s", converted.model_dump_json(indent=2))
+        except Exception as e:
+            logger.error("Chart conversion error: %s", e)
+            dispatcher.utter_message(text=f"Chart conversion error: {e}")
+            traceback.print_exc()
+            return []
+
+        dispatcher.utter_message(json_message=converted.model_dump())
+        dispatcher.utter_message(text="Query successful. Charts generated.")
         return []
 
 
 class ActionBuildLLMQuery(Action):
     def name(self) -> str:
-        return "action_nl_query"
+        return "action_build_llm_query"
 
     async def run(
         self,
@@ -117,24 +167,30 @@ class ActionBuildLLMQuery(Action):
         tracker: Tracker,
         domain: DomainDict,
     ) -> list[dict[str, Any]]:
+        # This action now just forces LLM usage (useful for testing or when Rasa completely fails)
         user_query = tracker.latest_message.get("text", "")
         logger.debug(f"LLM builder received query: {user_query}")
+
         if not user_query:
             dispatcher.utter_message(text="I didn't receive a query to interpret.")
             logger.warning("No user query found in tracker.")
             return []
 
-        llm_model: str = env.require_all_env("LLM_MODEL")
-        llm_api_url, openai_api_key = env.require_any_env("LLM_API_URL", "OPENAI_API_KEY")
-
-        parser = QPC.QueryParserClient(llm_api_url, llm_model, openai_api_key)
+        logger.info("Forcing LLM parsing (bypassing rule-based logic)")
 
         try:
-            mcresponse = parser.parse(user_query)
+            mcresponse = llm_parser.parse(user_query)
+            logger.debug(f"Parsed response: {mcresponse}")
 
-            if not mcresponse or not mcresponse.FilterResponse or not mcresponse.MetricResponse:
-                dispatcher.utter_message(text="Failed to parse query into logical filter and metrics request.")
-                logger.warning("Parsed query returned empty logicalFilter or metricsRequest.")
+            # Rest of processing same as ActionGenerateVisualization
+            if not mcresponse:
+                dispatcher.utter_message(text="Failed to parse query.")
+                logger.warning("Parsed query returned None.")
+                return []
+
+            if not mcresponse.MetricResponse or not mcresponse.MetricResponse.metricsCollection:
+                dispatcher.utter_message(text="No metrics specified in query. Please specify what data you want to analyze.")
+                logger.warning("No metrics found in parsed query.")
                 return []
 
             gql_query: str = ITG.Build_query_from_instructor_models(mcresponse)

@@ -171,6 +171,6 @@ LogicalFilter.model_rebuild()
 
 
 class FilterResponse(BaseModel):
-    logicalFilter: Optional[LogicalFilter]
+    logicalFilter: Optional[LogicalFilter] = None
 
     # response: str | None

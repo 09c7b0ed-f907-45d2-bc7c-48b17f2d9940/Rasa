@@ -1,5 +1,5 @@
 import logging
-from typing import Optional
+from typing import Any, Optional
 
 from openai import OpenAI
 
@@ -40,13 +40,13 @@ class QueryParserClient:
             raise ValueError("Must provide either (llm_api_url and llm_model) for Ollama or (openai_api_key and llm_model) for OpenAI, but not both.")
 
         if llm_api_url:
-            # Use Ollama
+            # Use Ollama with TOOLS mode instead of JSON for better compatibility
             self.client = instructor.from_openai(
                 OpenAI(
                     base_url=llm_api_url,
                     api_key="ollama",
                 ),
-                mode=instructor.Mode.JSON,
+                mode=instructor.Mode.TOOLS,
             )
         elif openai_api_key:
             # Use OpenAI
@@ -59,18 +59,20 @@ class QueryParserClient:
         else:
             raise ValueError("Must provide either (llm_api_url and llm_model) for Ollama or (openai_api_key and llm_model) for OpenAI.")
 
-        # def log_completion_kwargs(*args: Any) -> None:
-        #    logger.info(f"Function called with args: {args}")
+        def log_completion_kwargs(*args: Any) -> None:
+            logger.info(f"Function called with args: {args}")
 
-        # self.client.on("completion:kwargs", log_completion_kwargs)
-        # self.client.on("completion:error", lambda exception: logger.error(f"An exception occurred: {str(exception)}"))
-        # self.client.on("parse:error", lambda exception: logger.error(f"An exception occurred: {str(exception)}"))
-        # self.client.on("completion:response", lambda response: logger.info(f"LLM response: {response}"))
-        # self.client.on("completion:last_attempt", lambda attempt: logger.info(f"LLM last attempt: {attempt}"))
+        self.client.on("completion:kwargs", log_completion_kwargs)
+        self.client.on("completion:error", lambda exception: logger.error(f"An exception occurred: {str(exception)}"))
+        self.client.on("parse:error", lambda exception: logger.error(f"An exception occurred: {str(exception)}"))
+        self.client.on("completion:response", lambda response: logger.info(f"LLM response: {response}"))
+        self.client.on("completion:last_attempt", lambda attempt: logger.info(f"LLM last attempt: {attempt}"))
 
     def parse(self, query: str):
-        return models.MetricCalculatorResponse(
-            FilterResponse=self.client.chat.completions.create(
+        logger.info(f"Parsing query: {query}")
+
+        try:
+            filter_response = self.client.chat.completions.create(
                 model=self.llm_model,
                 max_retries=5,
                 response_model=filter_models.FilterResponse,
@@ -84,10 +86,16 @@ class QueryParserClient:
                         "content": query,
                     },
                 ],
-            ),
-            MetricResponse=self.client.chat.completions.create(
+            )
+            logger.debug(f"Filter response: {filter_response}")
+        except Exception as e:
+            logger.warning(f"Filter parsing failed: {e}. Using empty filter.")
+            filter_response = filter_models.FilterResponse(logicalFilter=None)
+
+        try:
+            metric_response = self.client.chat.completions.create(
                 model=self.llm_model,
-                max_retries=5,
+                max_retries=3,
                 response_model=metric_models.MetricResponse,
                 messages=[
                     {
@@ -99,5 +107,13 @@ class QueryParserClient:
                         "content": query,
                     },
                 ],
-            ),
+            )
+            logger.debug(f"Metric response: {metric_response}")
+        except Exception as e:
+            logger.error(f"Metric parsing failed: {e}")
+            raise
+
+        return models.MetricCalculatorResponse(
+            FilterResponse=filter_response,
+            MetricResponse=metric_response,
         )

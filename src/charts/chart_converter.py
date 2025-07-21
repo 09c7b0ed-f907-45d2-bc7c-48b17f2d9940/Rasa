@@ -77,7 +77,7 @@ def build_box_plot(metric_id: str, metric: Metric) -> Optional[BoxPlot]:
 
 def convert_graphql_to_charts(result: MetricsQueryResponse) -> PlotCollection:
     metrics = extract_metrics(result)
-    logger.debug("Extracted metrics: %s", metrics)
+    # logger.debug("Extracted metrics: %s", metrics)
 
     line_plots: List[LinePlot] = []
     box_plots: List[BoxPlot] = []

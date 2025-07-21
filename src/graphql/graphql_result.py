@@ -49,8 +49,8 @@ class Kpi1(BaseModel):
     median: Optional[float] = None
     mean: Optional[float] = None
     variance: Optional[float] = None
-    confidence_interval_mean: Optional[List[float]] = Field(default=None, alias="confidenceIntervalMean")
-    confidence_interval_median: Optional[List[float]] = Field(default=None, alias="confidenceIntervalMedian")
+    confidence_interval_mean: Optional[List[Optional[float]]] = Field(default=None, alias="confidenceIntervalMean")
+    confidence_interval_median: Optional[List[Optional[float]]] = Field(default=None, alias="confidenceIntervalMedian")
     interquartile_range: Optional[float] = Field(default=None, alias="interquartileRange")
     quartiles: Optional[List[float]] = None
     d1: Optional[D1] = None

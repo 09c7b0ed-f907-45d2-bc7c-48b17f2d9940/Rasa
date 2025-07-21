@@ -238,6 +238,6 @@ class MetricsCollection(BaseModel):
 
 
 class MetricResponse(BaseModel):
-    metricsCollection: Optional[MetricsCollection]
+    metricsCollection: Optional[MetricsCollection] = None
 
     # response: str | None
