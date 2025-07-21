@@ -1,10 +1,15 @@
 version: "3.1"
 
 entities:
+  - kpi
   - sex
-  - age_min
-  - age_max
-  - nihss_min
-  - nihss_max
-  - discharge_date_min
-  - discharge_date_max
+  - stroke_type
+  - boolean_type
+  - group_by
+  - chart_type
+  - nihss:
+      roles: [lower, upper]
+  - age:
+      roles: [lower, upper]
+  - date:
+      roles: [lower, upper]

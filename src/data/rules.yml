@@ -1,15 +1,20 @@
 version: "3.1"
 
 rules:
-- rule: queries NL
+- rule: issue command
   steps:
-    - intent: nl_query
-    - action: action_nl_query
+    - intent: issue_command
+    - action: action_command
 
-- rule: queries CLI
+- rule: generate visualization
   steps:
-    - intent: cli_query
-    - action: action_cli_query
+    - intent: generate_visualization
+    - action: action_generate_visualization
+
+- rule: update visualization
+  steps:
+    - intent: update_visualization
+    - action: action_update_visualization
 
 - rule: Greet
   steps:
@@ -23,5 +28,5 @@ rules:
 
 - rule: fallback
   steps:
-    - intent: nlu_fallback
+    - intent: fallback
     - action: utter_default

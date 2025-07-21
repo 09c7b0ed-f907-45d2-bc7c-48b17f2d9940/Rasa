@@ -4,7 +4,7 @@
         {
             "label": "Rasa Train",
             "type": "shell",
-            "command": "cd src && rasa train -d domain/",
+            "command": "rasa train -d src/domain/ --config src/config.yml --data src/data/",
             "group": "build",
             "problemMatcher": []
         },

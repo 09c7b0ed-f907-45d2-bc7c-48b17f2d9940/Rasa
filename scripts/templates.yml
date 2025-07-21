@@ -1,0 +1,5 @@
+templates:
+  - Show me (kpi) for (sex) patients
+  - Chart of (kpi) grouped by (group_by) excluding (stroke_type) strokes
+  - Give me (kpi) for (sex) patients between ages (age_lower) and (age_upper)
+  - Show (kpi) and (kpi) for (sex) patients

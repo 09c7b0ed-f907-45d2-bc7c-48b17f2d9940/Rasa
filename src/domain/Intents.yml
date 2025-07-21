@@ -1,8 +1,9 @@
 version: "3.1"
 
 intents:
-  - cli_query
-  - nl_query
+  - issue_command
+  - generate_visualization
+  - update_visualization
   - greet
   - goodbye
-  - nlu_fallback
+  - fallback

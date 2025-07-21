@@ -3,7 +3,10 @@ recipe: default.v1
 language: en
 
 pipeline:
+# Tokenization
 - name: WhitespaceTokenizer
+
+# Featurization
 - name: RegexFeaturizer
 - name: LexicalSyntacticFeaturizer
 - name: CountVectorsFeaturizer
@@ -11,16 +14,95 @@ pipeline:
   analyzer: char_wb
   min_ngram: 1
   max_ngram: 4
+
+# Intent Classification
 - name: DIETClassifier
   epochs: 100
   constrain_similarities: true
+  model_confidence: softmax
+  entity_recognition: true
+
+# Entity Extraction
+- name: RegexEntityExtractor
+  case_sensitive: false
+  use_lookup_tables: true
+  use_regexes: true
+
+# Entity Extraction with roles and groups support
+#- name: CRFEntityExtractor
+#  # BILOU_flag determines whether to use BILOU tagging or not.
+#  BILOU_flag: true
+#  # features to extract in the sliding window
+#  features: [
+#    ["low", "title", "upper"],
+#    [
+#      "bias",
+#      "low",
+#      "prefix5",
+#      "prefix2",
+#      "suffix5",
+#      "suffix3",
+#      "suffix2",
+#      "upper",
+#      "title",
+#      "digit",
+#      "pattern",
+#      "text_dense_features"
+#    ],
+#    ["low", "title", "upper"],
+#  ]
+#  max_iterations: 50
+#  L1_c: 0.1
+#  L2_c: 0.1
+
+# Post-processing
 - name: EntitySynonymMapper
+  # Only apply synonyms to these entities, skip numeric entities with roles
+  entities: ["kpi", "sex", "stroke_type", "chart_type", "group_by", "boolean_type"]
 - name: ResponseSelector
   epochs: 100
   constrain_similarities: true
-- name: DucklingEntityExtractor
-  url: http://duckling:8000
-  dimensions: ["time"]
+
+# Optional: Uncomment if you need time/date entities
+#- name: DucklingEntityExtractor
+#  url: http://duckling:8000
+#  dimensions: ["time"]
+
+- name: src.components.entity_consolidator.EntityConsolidator
+  # Position matching strategy: "exact", "overlap", "ignore"
+  position_matching: "exact"
+  
+  # For exact matching: tolerance in characters for start/end positions
+  position_tolerance: 2
+  
+  # For overlap matching: minimum overlap ratio (0.0 to 1.0)
+  overlap_threshold: 0.7
+  
+  # Which aspects to use for consolidation key
+  consolidation_key: ["entity", "start", "end", "role", "value"]
+  # Alternative examples:
+  # consolidation_key: ["entity", "value", "role"]  # Ignore positions
+  # consolidation_key: ["entity", "value"]          # Ignore positions and roles
+  
+  # Whether to preserve role information
+  role_aware: true
+  
+  # Whether to normalize values (lowercase, trim) before comparison
+  value_normalization: false
+  
+  # Whether to keep all extractor information
+  preserve_all_extractors: true
+  
+  # Confidence strategy: "highest", "average", "all"
+  confidence_strategy: "all"
+
+  # Debug logging for troubleshooting
+  debug_logging: false
+  
+  # Collect consolidation statistics
+  collect_stats: false
+
+# Fallback handling
 - name: FallbackClassifier
   threshold: 0.3
   ambiguity_threshold: 0.1

@@ -24,6 +24,7 @@
 !/.vscode/**
 !/envgen.sh
 !/envgen.config
+!/scripts/**
 
 # Add config, credentials, and endpoints files along with domain and data folders from source
 !/src/config.yml
@@ -31,3 +32,6 @@
 !/src/endpoints.yml
 !/src/domain/**
 !/src/data/**
+!/src/shared/**
+!/src/components/**
+.generated

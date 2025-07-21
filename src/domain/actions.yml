@@ -1,5 +1,6 @@
 version: "3.1"
 
 actions:
-  - action_cli_query
-  - action_nl_query
+  - action_command
+  - action_generate_visualization
+  - action_update_visualization

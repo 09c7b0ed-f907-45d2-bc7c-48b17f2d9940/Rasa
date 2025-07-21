@@ -8,6 +8,9 @@ USER root
 WORKDIR /app
 
 COPY src/ .
+COPY scripts/ .
+
+RUN python /app/scripts/generate_rasa_resources.py
 
 RUN rasa train -d domain
 

@@ -3,5 +3,6 @@
 	"dockerComposeFile": "docker-compose.yml",
 	"service": "rasa",
 	"workspaceFolder": "/workspace",
-	"postStartCommand": "sh envgen.sh -d src/"
+	//"postStartCommand": "sh envgen.sh -d src/"
+	"postStartCommand": "python /workspace/scripts/generate_rasa_resources.py"
 }
