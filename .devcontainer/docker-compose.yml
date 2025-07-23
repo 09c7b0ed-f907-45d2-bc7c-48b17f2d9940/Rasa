@@ -10,15 +10,5 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
-  ollama:
-    image: ollama/ollama:latest
-    ports:
-      - "11434:11434"
-    volumes:
-      - ollama_data:/root/.ollama
-    entrypoint: sh -c "ollama pull phi3 && ollama run phi3"
-    environment:
-      - OLLAMA_MODELS=phi3
-
 volumes:
   ollama_data:

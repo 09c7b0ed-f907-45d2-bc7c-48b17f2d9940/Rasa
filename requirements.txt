@@ -12,6 +12,12 @@ requests_toolbelt==1.0.0
 graphql_query
 instructor[ollama]
 
+# LangChain packages
+langchain==0.3.26
+langchain-community==0.3.27
+langchain-ollama==0.3.6
+langchain-openai==0.3.28
+
 # Typing + linting tools
 mypy==1.15.0
 ruff==0.11.2

@@ -9,6 +9,7 @@
 # Add git & GitHub
 !/.git
 !/.gitignore
+!/.gitmodules
 !/.github/**
 
 # Add Devcontainer
@@ -31,7 +32,9 @@
 
 # Add source
 !/src/*
-!/src/charts/*
+!/src/chart/*
 !/src/graphql/*
-!/src/instructor/*
-!/src/cli/*
+!/src/langchain/*
+
+# Add external
+!/src/shared/*
