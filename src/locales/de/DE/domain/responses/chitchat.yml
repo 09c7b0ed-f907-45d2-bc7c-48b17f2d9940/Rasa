@@ -1,0 +1,7 @@
+version: "3.1"
+
+responses:
+  utter_greet:
+    - text: "Hallo! Ich kann bei Patientenabfragen helfen. (Zu übersetzen/anpassen)"
+  utter_goodbye:
+    - text: "Tschüss! Sagen Sie Bescheid, wenn Sie mehr Hilfe brauchen. (Zu übersetzen)"

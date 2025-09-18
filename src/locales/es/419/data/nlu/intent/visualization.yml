@@ -1,0 +1,55 @@
+version: "3.1"
+
+nlu:
+  - intent: generate_visualization
+    examples: |
+      - Muéstrame [door to needle](kpi) y [DIDO](kpi)
+      - Quiero [NIHSS](kpi) para todos los pacientes
+      - Dame [AdmissionNihss](kpi) y [DischargeNihss](kpi)
+      - Muéstrame [DTN](kpi) para pacientes [hombres](sex)
+      - Gráfico de [DIDO](kpi) en pacientes [mujeres](sex)
+      - Dame datos de [NIHSS](kpi) para [hombres](sex) y [mujeres](sex)
+      - Muéstrame el [tiempo door to needle](kpi) para pacientes de [50]{"entity": "age", "role": "lower"} a [90]{"entity": "age", "role": "upper"}
+      - Dame [door in door out](kpi) entre [30]{"entity": "age", "role": "lower"} y [50]{"entity": "age", "role": "upper"}
+      - Muestra [AdmissionNihss](kpi) para pacientes de [60]{"entity": "age", "role": "lower"} a [80]{"entity": "age", "role": "upper"}
+      - Muéstrame [DTN](kpi) para pacientes mayores de [50]{"entity": "age", "role": "lower"}
+      - Dame [door in door out time](kpi) para pacientes mayores de [65]{"entity": "age", "role": "lower"}
+      - Muestra datos para pacientes menores de [30]{"entity": "age", "role": "upper"}
+      - Muestra pacientes de [18]{"entity": "age", "role": "lower"} años o más
+      - Gráfico para pacientes por debajo de [90]{"entity": "age", "role": "upper"}
+      - Gráfico de [DTN](kpi) agrupado por [initial point of contact](group_by)
+      - Muestra [DIDO](kpi) por [hospital department](group_by)
+      - Dame [NIHSS](kpi) promedio agrupado por [EMS prenotification](group_by)
+      - Muestra [DTN](kpi) excluyendo pacientes [isquémicos](stroke_type)
+      - Gráfico de [DIDO](kpi) para ictus [hemorrágicos](stroke_type)
+      - Dame [NIHSS](kpi) excluyendo pacientes con [TIA](stroke_type)
+      - Muestra [DTN](kpi) entre [4 de marzo de 2023]{"entity": "date", "role": "lower"} y [5 de julio de 2024]{"entity": "date", "role": "upper"}
+      - Gráfico de [DIDO](kpi) desde [1 de enero de 2022]{"entity": "date", "role": "lower"} hasta [31 de diciembre de 2022]{"entity": "date", "role": "upper"}
+      - Muestra datos después de [2023-01-01]{"entity": "date", "role": "lower"}
+      - Muestra registros antes de [2024-12-31]{"entity": "date", "role": "upper"}
+      - Dame datos desde [Q1 2023]{"entity": "date", "role": "lower"} en adelante
+      - Muestra datos recientes desde [el mes pasado]{"entity": "date", "role": "lower"}
+      - Muestra un gráfico de [líneas](chart_type) de [DTN](kpi)
+      - Dame un gráfico de [barras](chart_type) de [DIDO](kpi) para pacientes [mujeres](sex)
+      - Muestra un gráfico [de pastel](chart_type) de [NIHSS](kpi) agrupado por [stroke type](group_by)
+      - Muestra un gráfico de [líneas](chart_type) para [DTN](kpi) y [DIDO](kpi) para pacientes [hombres](sex) y [mujeres](sex) entre [40]{"entity": "age", "role": "lower"} y [60]{"entity": "age", "role": "upper"}
+      - Dame un gráfico de [edad](kpi) de pacientes agrupado por [initial point of contact](group_by), excluyendo ictus [isquémicos](stroke_type), entre [18]{"entity": "age", "role": "lower"} y [90]{"entity": "age", "role": "upper"}
+  - intent: update_visualization
+    examples: |
+      - Cambia el gráfico a [barras](chart_type)
+      - Actualiza para mostrar solo pacientes [mujeres](sex)
+      - Modifica el rango de fechas a [2023]{"entity": "date", "role": "lower"} a [2024]{"entity": "date", "role": "upper"}
+      - Cambia a ictus [hemorrágico](stroke_type)
+      - Agrupa los datos por [centro de tratamiento](group_by)
+      - Añade [DIDO](kpi) a la visualización actual
+      - Elimina pacientes [hombres](sex) del gráfico
+      - Cambia el rango de edad a [55]{"entity": "age", "role": "lower"} a [75]{"entity": "age", "role": "upper"}
+      - Actualiza el tipo de gráfico a [pastel](chart_type)
+      - Filtra solo ictus [isquémicos](stroke_type)
+      - Cambia la agrupación a [origen de ingreso](group_by)
+      - Cambia el KPI a [AdmissionNihss](kpi)
+      - Actualiza el filtro de fechas a los últimos [6 meses]{"entity": "date", "role": "lower"}
+      - Cambia a visualización de [dispersión](chart_type)
+      - Añade pacientes con [TIA](stroke_type) al análisis
+      - Muestra solo pacientes por encima de [70]{"entity": "age", "role": "lower"}
+      - Filtra fechas después de [2024-01-01]{"entity": "date", "role": "lower"}

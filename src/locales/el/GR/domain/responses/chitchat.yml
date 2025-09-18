@@ -1,0 +1,7 @@
+version: "3.1"
+
+responses:
+  utter_greet:
+    - text: "Γεια σου! Πώς μπορώ να βοηθήσω;"
+  utter_goodbye:
+    - text: "Αντίο! Καλή συνέχεια."

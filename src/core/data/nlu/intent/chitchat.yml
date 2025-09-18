@@ -3,13 +3,7 @@ version: "3.1"
 nlu:
   - intent: greet
     examples: |
-      - hi
-      - hello
-      - hey there
-      - good morning
-      - good afternoon
+      - [placeholder] see en/us or locale overlays
   - intent: goodbye
     examples: |
-      - bye
-      - goodbye
-      - see you later
+      - [placeholder] see en/us or locale overlays

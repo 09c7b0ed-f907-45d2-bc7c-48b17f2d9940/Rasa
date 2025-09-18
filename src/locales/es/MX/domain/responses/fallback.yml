@@ -1,0 +1,5 @@
+version: "3.1"
+
+responses:
+  utter_default:
+    - text: "Perdón, no entendí muy bien. ¿Puedes decirlo de otra forma?"

@@ -143,7 +143,7 @@ jobs:
           SAFE_TAG=${LANG_SPEC//\//-}
           LANG_CODE="$LANG_SPEC"; REGION=""
           if [[ "$LANG_SPEC" == */* ]]; then REGION="${LANG_SPEC#*/}"; LANG_CODE="${LANG_SPEC%%/*}"; fi
-          LAYERS=("src/core" "src/locales/en/us")
+          LAYERS=("src/core" "src/locales/en/US")
           if [[ "$LANG_CODE" != "en" ]]; then LAYERS+=("src/locales/$LANG_CODE"); fi
           if [[ -n "$REGION" ]]; then LAYERS+=("src/locales/$LANG_CODE/$REGION"); fi
           # Only keep existing dirs

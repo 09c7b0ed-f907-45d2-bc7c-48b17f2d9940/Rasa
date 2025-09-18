@@ -1,0 +1,5 @@
+version: "3.1"
+
+responses:
+  utter_default:
+    - text: "Sorry, I didn’t quite catch that. Could you rephrase?"

@@ -1,0 +1,15 @@
+version: "3.1"
+
+nlu:
+  - intent: greet
+    examples: |
+      - bonjour
+      - salut
+      - coucou
+      - bon matin
+      - bon après-midi
+  - intent: goodbye
+    examples: |
+      - au revoir
+      - à plus tard
+      - à bientôt

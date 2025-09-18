@@ -1,0 +1,7 @@
+version: "3.1"
+
+responses:
+  utter_greet:
+    - text: "Ahoj! Jak ti mohu pomoci?"
+  utter_goodbye:
+    - text: "Na shledanou! Hezký den."

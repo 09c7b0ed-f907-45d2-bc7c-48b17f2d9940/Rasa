@@ -1,0 +1,7 @@
+version: "3.1"
+
+nlu:
+  - intent: issue_command
+    examples: |
+      - /Vytvorit_Vizualizaci
+      - /Aktualizovat_Vizualizaci

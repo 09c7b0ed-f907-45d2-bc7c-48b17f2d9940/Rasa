@@ -1,0 +1,91 @@
+version: "3.1"
+
+nlu:
+  - intent: generate_visualization
+    examples: |
+      - 给我展示[入门到针](kpi)和[DIDO](kpi)
+      - 我想查看所有患者的[NIHSS](kpi)
+      - 给我[AdmissionNihss](kpi)和[DischargeNihss](kpi)
+      - 展示[男性](sex)患者的[DTN](kpi)
+      - 显示[女性](sex)患者的[DIDO](kpi)图表
+      - 提供[男性](sex)与[女性](sex)患者的[NIHSS](kpi)数据
+      - 展示年龄从[50]{"entity": "age", "role": "lower"}到[90]{"entity": "age", "role": "upper"}患者的[入门到针时间](kpi)
+      - 给我[门到门外](kpi)在[30]{"entity": "age", "role": "lower"}到[50]{"entity": "age", "role": "upper"}岁之间的情况
+      - 显示[AdmissionNihss](kpi)，年龄从[60]{"entity": "age", "role": "lower"}到[80]{"entity": "age", "role": "upper"}
+      - 展示年龄[50]{"entity": "age", "role": "lower"}岁以上患者的[DTN](kpi)
+      - 给我[门到门外时间](kpi)在[65]{"entity": "age", "role": "lower"}岁以上患者中的表现
+      - 显示[30]{"entity": "age", "role": "upper"}岁以下患者的数据
+      - 展示[18]{"entity": "age", "role": "lower"}岁及以上的患者
+      - 显示[90]{"entity": "age", "role": "upper"}岁以下患者的图表
+      - 显示按[初始接触点](group_by)分组的[DTN](kpi)
+      - 显示按[医院科室](group_by)分组的[DIDO](kpi)
+      - 给我按[EMS 预通知](group_by)分组的平均[NIHSS](kpi)
+      - 展示排除[缺血性](stroke_type)中风患者的[DTN](kpi)
+      - 显示[出血性](stroke_type)中风的[DIDO](kpi)
+      - 给我排除[TIA](stroke_type)患者的[NIHSS](kpi)
+      - 展示从[2023年3月4日]{"entity": "date", "role": "lower"}到[2024年7月5日]{"entity": "date", "role": "upper"}的[DTN](kpi)
+      - 显示从[2022年1月1日]{"entity": "date", "role": "lower"}到[2022年12月31日]{"entity": "date", "role": "upper"}的[DIDO](kpi)图表
+      - 显示[2023-01-01]{"entity": "date", "role": "lower"}之后的数据
+      - 显示[2024-12-31]{"entity": "date", "role": "upper"}之前的记录
+      - 展示从[2023年第一季度]{"entity": "date", "role": "lower"}开始的数据
+      - 显示自[上个月]{"entity": "date", "role": "lower"}以来的最近数据
+      - 显示一个[折线](chart_type)图展示[DTN](kpi)
+      - 给我一个[柱状](chart_type)图，显示[女性](sex)患者的[DIDO](kpi)
+      - 显示一个[饼状](chart_type)图，按[卒中类型](group_by)分组显示[NIHSS](kpi)
+      - 展示一个[折线](chart_type)图，显示[男性](sex)与[女性](sex)患者在[40]{"entity": "age", "role": "lower"}到[60]{"entity": "age", "role": "upper"}之间的[DTN](kpi)与[DIDO](kpi)
+      - 给我一个关于患者[年龄](kpi)的图表，按[初始接触点](group_by)分组，排除[缺血性](stroke_type)中风，年龄[18]{"entity": "age", "role": "lower"}到[90]{"entity": "age", "role": "upper"}
+      - 可以显示[LOS](kpi)在[缺血性](stroke_type)中风患者中的表现吗？
+      - 显示按[治疗类型](group_by)分组的[DischargeNihss](kpi)
+      - 我需要一个[散点](chart_type)图，[DTN](kpi) 对 [DIDO](kpi)
+      - 展示[65]{"entity": "age", "role": "lower"}岁及以上患者的[死亡率](kpi)
+      - 为[女性](sex)患者按[卒中亚型](group_by)显示[再入院率](kpi)
+      - 给我[2023-01-01]{"entity": "date", "role": "lower"}到[2023-12-31]{"entity": "date", "role": "upper"}的[出血性](stroke_type)中风患者[mRS](kpi)
+      - 显示[年龄](kpi)分布的[直方图](chart_type)
+      - 展示按[到达方式](group_by)分组的[溶栓率](kpi)
+      - 我想查看从[入院]{"entity": "nihss", "role": "lower"}到[出院]{"entity": "nihss", "role": "upper"}的[NIHSS](kpi)改善情况
+      - 用[折线](chart_type)图显示[DTN](kpi)按[月份](group_by)的趋势
+      - 展示[TIA](stroke_type)患者中[男性](sex)的[并发症率](kpi)
+      - 显示急诊病例的[门到影像](kpi)时间
+      - 给我[18]{"entity": "age", "role": "lower"}到[45]{"entity": "age", "role": "upper"}岁的[LOS](kpi)统计
+      - 显示按[严重程度](group_by)分组的[DIDO](kpi)[箱线图](chart_type)
+      - 按[性别](group_by)显示[缺血性](stroke_type)患者的[功能结局](kpi)
+      - 我需要过去一年的[DTN](kpi)趋势
+      - 显示按[年龄组](group_by)分组的[用药依从性](kpi)
+      - 展示[出血性](stroke_type)病例的[急救响应时间](kpi)
+      - 给我按[医院科室](group_by)分组的多项[KPI](kpi)[雷达图](chart_type)
+      - 显示从[2023年第一季度]{"entity": "date", "role": "lower"}到[2023年第四季度]{"entity": "date", "role": "upper"}的[NIHSS](kpi)分布
+      - 显示NIHSS范围从[0]{"entity": "nihss", "role": "lower"}到[15]{"entity": "nihss", "role": "upper"}
+      - 展示NIHSS在[5]{"entity": "nihss", "role": "lower"}到[25]{"entity": "nihss", "role": "upper"}之间的变化
+      - 图表展示NIHSS从[8]{"entity": "nihss", "role": "lower"}到[20]{"entity": "nihss", "role": "upper"}的进展
+      - 给我NIHSS从[12]{"entity": "nihss", "role": "lower"}到[22]{"entity": "nihss", "role": "upper"}的趋势
+      - 显示NIHSS高于[15]{"entity": "nihss", "role": "lower"}的患者
+      - 显示NIHSS低于[5]{"entity": "nihss", "role": "upper"}的轻症病例
+      - 图表展示NIHSS高于[20]{"entity": "nihss", "role": "lower"}的重症病例
+      - 显示NIHSS改善高于[10]{"entity": "nihss", "role": "lower"}分
+      - 对比[DTN](kpi)与[DIDO](kpi)指标
+      - 同时显示[死亡率](kpi)与[再入院率](kpi)
+      - 展示[AdmissionNihss](kpi)与[DischargeNihss](kpi)对比
+      - 图表对比[男性](sex)与[女性](sex)患者结局
+      - 对比[缺血性](stroke_type)与[出血性](stroke_type)中风数据
+      - 显示[DTN](kpi)、[DIDO](kpi)与[门到影像](kpi)时间
+      - 展示[2023年第一季度]{"entity": "date", "role": "lower"}到[2023年第二季度]{"entity": "date", "role": "upper"}与[2023年第三季度]{"entity": "date", "role": "lower"}到[2023年第四季度]{"entity": "date", "role": "upper"}的对比
+      - 对比年龄[30]{"entity": "age", "role": "lower"}到[45]{"entity": "age", "role": "upper"}与[60]{"entity": "age", "role": "lower"}到[80]{"entity": "age", "role": "upper"}的患者
+  - intent: update_visualization
+    examples: |
+      - 将图表改为[柱状](chart_type)图
+      - 更新为仅显示[女性](sex)患者
+      - 修改日期范围为[2023]{"entity": "date", "role": "lower"}到[2024]{"entity": "date", "role": "upper"}
+      - 切换到[出血性](stroke_type)中风类型
+      - 按[治疗机构](group_by)分组数据
+      - 在当前可视化中加入[DIDO](kpi)
+      - 从图表中移除[男性](sex)患者
+      - 将年龄范围改为[55]{"entity": "age", "role": "lower"}到[75]{"entity": "age", "role": "upper"}
+      - 更新图表类型为[饼状](chart_type)
+      - 仅筛选[缺血性](stroke_type)中风
+      - 修改分组为[入院来源](group_by)
+      - 将KPI更改为[AdmissionNihss](kpi)
+      - 更新日期筛选为最近[6 个月]{"entity": "date", "role": "lower"}
+      - 切换为[散点](chart_type)图
+      - 将[TIA](stroke_type)患者加入分析
+      - 仅显示[70]{"entity": "age", "role": "lower"}岁以上患者
+      - 过滤日期在[2024-01-01]{"entity": "date", "role": "lower"}之后

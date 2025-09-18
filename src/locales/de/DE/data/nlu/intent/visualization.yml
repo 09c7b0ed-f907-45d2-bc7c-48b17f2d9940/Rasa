@@ -1,0 +1,91 @@
+version: "3.1"
+
+nlu:
+  - intent: generate_visualization
+    examples: |
+      - Zeig mir [door to needle](kpi) und [DIDO](kpi)
+      - Ich möchte [NIHSS](kpi) für alle Patienten
+      - Gib mir [AdmissionNihss](kpi) und [DischargeNihss](kpi)
+      - Zeig mir [DTN](kpi) für [männliche](sex) Patienten
+      - Diagramm von [DIDO](kpi) bei [weiblichen](sex) Schlaganfallpatienten
+      - Gib mir [NIHSS](kpi)-Daten für [Männer](sex) und [Frauen](sex)
+      - Zeig mir die [door to needle time](kpi) für Patienten von [50]{"entity": "age", "role": "lower"} bis [90]{"entity": "age", "role": "upper"}
+      - Gib mir [door in door out](kpi) zwischen [30]{"entity": "age", "role": "lower"} und [50]{"entity": "age", "role": "upper"}
+      - Zeige [AdmissionNihss](kpi) für Patienten von [60]{"entity": "age", "role": "lower"} bis [80]{"entity": "age", "role": "upper"}
+      - Zeig mir [DTN](kpi) für Patienten über [50]{"entity": "age", "role": "lower"}
+      - Gib mir [door in door out time](kpi) für Patienten über [65]{"entity": "age", "role": "lower"}
+      - Zeige Daten für Patienten unter [30]{"entity": "age", "role": "upper"}
+      - Zeige Patienten ab [18]{"entity": "age", "role": "lower"}
+      - Diagramm für Patienten unter [90]{"entity": "age", "role": "upper"}
+      - Diagramm von [DTN](kpi) gruppiert nach [initial point of contact](group_by)
+      - Zeige [DIDO](kpi) nach [hospital department](group_by)
+      - Gib mir durchschnittliche [NIHSS](kpi) gruppiert nach [EMS prenotification](group_by)
+      - Zeige [DTN](kpi) ohne [ischämische](stroke_type) Patienten
+      - Diagramm von [DIDO](kpi) für [hämorrhagische](stroke_type) Schlaganfälle
+      - Gib mir [NIHSS](kpi) ohne [TIA](stroke_type)-Patienten
+      - Zeige [DTN](kpi) zwischen [4. März 2023]{"entity": "date", "role": "lower"} und [5. Juli 2024]{"entity": "date", "role": "upper"}
+      - Diagramm von [DIDO](kpi) von [1. Januar 2022]{"entity": "date", "role": "lower"} bis [31. Dezember 2022]{"entity": "date", "role": "upper"}
+      - Zeige Daten nach [2023-01-01]{"entity": "date", "role": "lower"}
+      - Zeige Einträge vor [2024-12-31]{"entity": "date", "role": "upper"}
+      - Gib mir Daten ab [Q1 2023]{"entity": "date", "role": "lower"}
+      - Zeige aktuelle Daten seit [letztem Monat]{"entity": "date", "role": "lower"}
+      - Zeige ein [Linien](chart_type)-Diagramm von [DTN](kpi)
+      - Gib mir ein [Balken](chart_type)-Diagramm von [DIDO](kpi) für [weibliche](sex) Patienten
+      - Zeige ein [Torten](chart_type)-Diagramm von [NIHSS](kpi) gruppiert nach [stroke type](group_by)
+      - Zeige ein [Linien](chart_type)-Diagramm für [DTN](kpi) und [DIDO](kpi) für [männliche](sex) und [weibliche](sex) Patienten zwischen [40]{"entity": "age", "role": "lower"} und [60]{"entity": "age", "role": "upper"}
+      - Gib mir ein Diagramm des [Alters](kpi) der Patienten gruppiert nach [initial point of contact](group_by), ohne [ischämische](stroke_type) Schlaganfälle, zwischen [18]{"entity": "age", "role": "lower"} und [90]{"entity": "age", "role": "upper"}
+      - Kannst du [LOS](kpi) für [ischämische](stroke_type) Schlaganfallpatienten zeigen?
+      - Zeige [DischargeNihss](kpi) gruppiert nach [Behandlungsart](group_by)
+      - Ich brauche ein [Scatter](chart_type)-Diagramm von [DTN](kpi) vs [DIDO](kpi)
+      - Zeig mir die [Sterblichkeitsrate](kpi) für Patienten ab [65]{"entity": "age", "role": "lower"}
+      - Diagramm der [Wiederaufnahmerate](kpi) nach [Schlaganfall-Subtyp](group_by) für [weibliche](sex) Patienten
+      - Gib mir [mRS](kpi) für [hämorrhagische](stroke_type) Schlaganfälle von [2023-01-01]{"entity": "date", "role": "lower"} bis [2023-12-31]{"entity": "date", "role": "upper"}
+      - Zeige ein [Histogramm](chart_type) der [Alters](kpi)-Verteilung
+      - Zeige die [Thrombolyse-Rate](kpi) gruppiert nach [Ankunftsmethode](group_by)
+      - Ich möchte die Verbesserung von [NIHSS](kpi) zwischen [Aufnahme]{"entity": "nihss", "role": "lower"} und [Entlassung]{"entity": "nihss", "role": "upper"} sehen
+      - Diagramm der [DTN](kpi)-Leistung nach [Monat](group_by) in einem [Linien](chart_type)-Diagramm
+      - Zeige die [Komplikationsrate](kpi) für [männliche](sex) Patienten mit [TIA](stroke_type)
+      - Zeige [door to imaging](kpi)-Zeiten für dringende Fälle
+      - Gib mir [LOS](kpi)-Statistiken für Patienten von [18]{"entity": "age", "role": "lower"} bis [45]{"entity": "age", "role": "upper"}
+      - Zeige ein [Boxplot](chart_type)-Diagramm von [DIDO](kpi) nach [Schweregrad](group_by)
+      - Diagramm des [funktionalen Outcomes](kpi) für [ischämische](stroke_type) Patienten nach [Geschlecht](group_by)
+      - Ich brauche [DTN](kpi)-Trends des letzten Jahres
+      - Zeige [Medikamenten-Compliance](kpi)-Raten nach [Altersgruppe](group_by)
+      - Zeige [Notfallreaktionszeit](kpi) für [hämorrhagische](stroke_type) Fälle
+      - Gib mir ein [Radar](chart_type)-Diagramm mehrerer [KPI](kpi) nach [Krankenhausabteilung](group_by)
+      - Diagramm der [NIHSS](kpi)-Verteilung von [Q1 2023]{"entity": "date", "role": "lower"} bis [Q4 2023]{"entity": "date", "role": "upper"}
+      - Zeige NIHSS-Werte von [0]{"entity": "nihss", "role": "lower"} bis [15]{"entity": "nihss", "role": "upper"}
+      - Zeige NIHSS-Änderungen zwischen [5]{"entity": "nihss", "role": "lower"} und [25]{"entity": "nihss", "role": "upper"}
+      - Diagramm der NIHSS-Progression von [8]{"entity": "nihss", "role": "lower"} bis [20]{"entity": "nihss", "role": "upper"}
+      - Gib mir NIHSS-Trends von [12]{"entity": "nihss", "role": "lower"} bis [22]{"entity": "nihss", "role": "upper"}
+      - Zeige Patienten mit NIHSS über [15]{"entity": "nihss", "role": "lower"}
+      - Zeige leichte Schlaganfälle mit NIHSS unter [5]{"entity": "nihss", "role": "upper"}
+      - Diagramm schwerer Fälle mit NIHSS über [20]{"entity": "nihss", "role": "lower"}
+      - Zeige NIHSS-Verbesserungen über [10]{"entity": "nihss", "role": "lower"} Punkte
+      - Vergleiche [DTN](kpi) und [DIDO](kpi)
+      - Zeige [Sterblichkeitsrate](kpi) und [Wiederaufnahmerate](kpi) zusammen
+      - Zeige [AdmissionNihss](kpi) vs [DischargeNihss](kpi)
+      - Diagramm der [männlichen](sex) und [weiblichen](sex) Patientenergebnisse
+      - Vergleiche [ischämische](stroke_type) und [hämorrhagische](stroke_type) Schlaganfall-Daten
+      - Zeige [DTN](kpi), [DIDO](kpi) und [door to imaging](kpi)-Zeiten
+      - Zeige Daten von [Q1 2023]{"entity": "date", "role": "lower"} bis [Q2 2023]{"entity": "date", "role": "upper"} vs [Q3 2023]{"entity": "date", "role": "lower"} bis [Q4 2023]{"entity": "date", "role": "upper"}
+      - Vergleiche Patienten von [30]{"entity": "age", "role": "lower"} bis [45]{"entity": "age", "role": "upper"} mit denen von [60]{"entity": "age", "role": "lower"} bis [80]{"entity": "age", "role": "upper"}
+  - intent: update_visualization
+    examples: |
+      - Ändere das Diagramm zu [Balken](chart_type)
+      - Aktualisiere, um nur [weibliche](sex) Patienten zu zeigen
+      - Ändere den Datumsbereich auf [2023]{"entity": "date", "role": "lower"} bis [2024]{"entity": "date", "role": "upper"}
+      - Wechsle zu [hämorrhagisch](stroke_type)
+      - Gruppiere die Daten nach [Behandlungseinrichtung](group_by)
+      - Füge [DIDO](kpi) zur aktuellen Visualisierung hinzu
+      - Entferne [männliche](sex) Patienten aus dem Diagramm
+      - Ändere den Altersbereich auf [55]{"entity": "age", "role": "lower"} bis [75]{"entity": "age", "role": "upper"}
+      - Aktualisiere den Diagrammtyp zu [Torte](chart_type)
+      - Filtere nur [ischämische](stroke_type) Schlaganfälle
+      - Ändere die Gruppierung zu [Aufnahmequelle](group_by)
+      - Ändere KPI zu [AdmissionNihss](kpi)
+      - Aktualisiere den Datumsfilter auf die letzten [6 Monate]{"entity": "date", "role": "lower"}
+      - Wechsle zu [Scatter](chart_type)-Darstellung
+      - Füge [TIA](stroke_type)-Patienten zur Analyse hinzu
+      - Zeige nur Patienten über [70]{"entity": "age", "role": "lower"}
+      - Filtere Daten nach [2024-01-01]{"entity": "date", "role": "lower"}

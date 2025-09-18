@@ -1,0 +1,46 @@
+version: "3.1"
+
+nlu:
+  - intent: generate_visualization
+    examples: |
+      - Montre-moi [door to needle](kpi) et [DIDO](kpi)
+      - Je veux [NIHSS](kpi) pour tous les patients
+      - Donne-moi [AdmissionNihss](kpi) et [DischargeNihss](kpi)
+      - Montre-moi [DTN](kpi) pour les patients [hommes](sex)
+      - Diagramme de [DIDO](kpi) chez les patientes [femmes](sex)
+      - Donne-moi des données [NIHSS](kpi) pour [hommes](sex) et [femmes](sex)
+      - Montre-moi le [temps door to needle](kpi) pour des patients âgés de [50]{"entity": "age", "role": "lower"} à [90]{"entity": "age", "role": "upper"}
+      - Donne-moi [door in door out](kpi) entre [30]{"entity": "age", "role": "lower"} et [50]{"entity": "age", "role": "upper"}
+      - Affiche [AdmissionNihss](kpi) pour des patients de [60]{"entity": "age", "role": "lower"} à [80]{"entity": "age", "role": "upper"}
+      - Montre-moi [DTN](kpi) pour des patients au-dessus de [50]{"entity": "age", "role": "lower"}
+      - Donne-moi [door in door out time](kpi) pour des patients de plus de [65]{"entity": "age", "role": "lower"}
+      - Affiche des données pour des patients de moins de [30]{"entity": "age", "role": "upper"}
+      - Affiche des patients âgés de [18]{"entity": "age", "role": "lower"} et plus
+      - Diagramme pour des patients en dessous de [90]{"entity": "age", "role": "upper"}
+      - Diagramme de [DTN](kpi) groupé par [initial point of contact](group_by)
+      - Montre [DIDO](kpi) par [hospital department](group_by)
+      - Donne-moi [NIHSS](kpi) moyen groupé par [EMS prenotification](group_by)
+      - Montre [DTN](kpi) en excluant les patients [ischémiques](stroke_type)
+      - Diagramme de [DIDO](kpi) pour des AVC [hémorragiques](stroke_type)
+      - Donne-moi [NIHSS](kpi) en excluant les patients [AIT](stroke_type)
+      - Montre [DTN](kpi) entre le [4 mars 2023]{"entity": "date", "role": "lower"} et le [5 juillet 2024]{"entity": "date", "role": "upper"}
+      - Diagramme de [DIDO](kpi) du [1 janvier 2022]{"entity": "date", "role": "lower"} au [31 décembre 2022]{"entity": "date", "role": "upper"}
+      - Montre des données après le [2023-01-01]{"entity": "date", "role": "lower"}
+      - Affiche des enregistrements avant le [2024-12-31]{"entity": "date", "role": "upper"}
+      - Donne-moi des données depuis le [T1 2023]{"entity": "date", "role": "lower"}
+      - Montre des données récentes depuis [le mois dernier]{"entity": "date", "role": "lower"}
+  - intent: update_visualization
+    examples: |
+      - Change le graphique en [barres](chart_type)
+      - Mets à jour pour n'afficher que les patients [femmes](sex)
+      - Modifie la plage de dates à [2023]{"entity": "date", "role": "lower"} à [2024]{"entity": "date", "role": "upper"}
+      - Passe au type d'AVC [hémorragique](stroke_type)
+      - Regroupe les données par [établissement de traitement](group_by)
+      - Ajoute [DIDO](kpi) à la visualisation actuelle
+      - Retire les patients [hommes](sex) du graphique
+      - Change la tranche d'âge à [55]{"entity": "age", "role": "lower"} à [75]{"entity": "age", "role": "upper"}
+      - Mets à jour le type de graphique en [camembert](chart_type)
+      - Filtre uniquement les AVC [ischémiques](stroke_type)
+      - Modifie le regroupement vers [source d'admission](group_by)
+      - Change le KPI en [AdmissionNihss](kpi)
+      - Mets à jour le filtre de dates aux derniers [6 mois]{"entity": "date", "role": "lower"}

@@ -1,0 +1,20 @@
+version: "3.1"
+
+nlu:
+  - intent: fallback
+    examples: |
+      - ¿Cómo está el tiempo hoy?
+      - ¿Puedes ayudarme con mis deberes?
+      - Cuéntame un chiste sobre médicos
+      - ¿Cómo cocino pasta?
+      - ¿Qué hora es?
+      - Necesito ayuda con mi ordenador
+      - ¿Puedes poner música?
+      - ¿Cuál es la capital de Francia?
+      - ¿Qué altura tiene el Monte Everest?
+      - ¿Cuál es tu color favorito?
+      - ¿Puedes pedir una pizza para mí?
+      - Háblame de aprendizaje automático
+      - ¿Qué películas ponen esta noche?
+      - ¿Cómo arreglo mi coche?
+      - ¿Cuál es el sentido de la vida?

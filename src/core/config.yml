@@ -120,6 +120,6 @@ policies:
 importers:
   - name: "src.components.layered_importer.OverlayImporter"
     base_domain: ["src/core/domain"]
-    overlay_domain: ["src/locales/da/dk/domain"]
+    overlay_domain: []
     #src_root: "src" # used to expand OVERLAYS tokens like "locale/en-US"
   - name: "RasaFileImporter"

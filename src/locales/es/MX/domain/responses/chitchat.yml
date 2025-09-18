@@ -1,0 +1,7 @@
+version: "3.1"
+
+responses:
+  utter_greet:
+    - text: "¡Hola! ¿En qué te puedo ayudar?"
+  utter_goodbye:
+    - text: "¡Nos vemos! Que tengas un buen día."

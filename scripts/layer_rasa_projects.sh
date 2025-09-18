@@ -2,16 +2,14 @@
 
 # Usage:
 #   ./layer_rasa_projects.sh [--dry-run[=stdout|files]] [--dump-dir <dir>] /path/to/project1 [/path/to/project2 ...]
-# Layers Rasa projects exactly in the order provided (first is the base layer). When --dry-run is supplied,
-# it will dump the merged domain and NLU without running 'rasa train'. No hardcoded knowledge of core/fallback.
+# Layers Rasa projects in the order provided (first is the base layer). When --dry-run is supplied,
+# it will dump the merged domain and NLU without running 'rasa train'.
 
 set -euo pipefail
 
-# Defaults
 DRY_RUN_MODE=""
 DUMP_DIR="build/overlay-dump"
 
-# Parse options
 while [[ "$#" -gt 0 && "$1" == --* ]]; do
   case "$1" in
     --dry-run)
@@ -36,44 +34,36 @@ if [ "$#" -lt 1 ]; then
   exit 1
 fi
 
-# Consume ordered project list
 PROJECTS=("$@")
 
-# Use first as base, rest as overlays
 BASE_PATH="${PROJECTS[0]}"
 OVERLAY_PATHS=("${PROJECTS[@]:1}")
 
 BASE_DOMAIN="$BASE_PATH/domain"
-BASE_NLU="$BASE_PATH/nlu"
+BASE_CONFIG="src/core/config.yml"
 BASE_STORIES="$BASE_PATH/data"
-BASE_CONFIG="$BASE_PATH/config.yml"
 
-# Initialize overlay paths
 OVERLAY_DOMAIN_ARR=()
 OVERLAY_NLU_ARR=()
 OVERLAY_STORIES_ARR=()
 
 for overlay_path in "${OVERLAY_PATHS[@]}"; do
-  OVERLAY_DOMAIN_ARR+=("$overlay_path/domain")
-  OVERLAY_NLU_ARR+=("$overlay_path/data/nlu")
-  OVERLAY_STORIES_ARR+=("$overlay_path/data")
+  [ -d "$overlay_path/domain" ] && OVERLAY_DOMAIN_ARR+=("$overlay_path/domain")
+  [ -d "$overlay_path/data/nlu" ] && OVERLAY_NLU_ARR+=("$overlay_path/data/nlu")
+  [ -d "$overlay_path/data" ] && OVERLAY_STORIES_ARR+=("$overlay_path/data")
 done
 
-# Join overlays as comma-separated lists
 OVERLAY_DOMAIN_STR=$(IFS=,; echo "${OVERLAY_DOMAIN_ARR[*]}")
 OVERLAY_NLU_STR=$(IFS=,; echo "${OVERLAY_NLU_ARR[*]}")
 OVERLAY_STORIES_STR=$(IFS=,; echo "${OVERLAY_STORIES_ARR[*]}")
 
-# Export environment variables for OverlayImporter (env takes precedence over config)
 export OVERLAY_BASE_DOMAIN="$BASE_DOMAIN"
 export OVERLAY_DOMAIN="$OVERLAY_DOMAIN_STR"
 export OVERLAY_NLU="$OVERLAY_NLU_STR"
 export OVERLAY_STORIES="$OVERLAY_STORIES_STR"
 
-# Ensure Python can import our components (use repo root regardless of environment)
 export PYTHONPATH="${PYTHONPATH:-$PWD}"
 
-# Dry-run path: dump merged Domain and NLU using OverlayImporter and exit
 if [[ -n "$DRY_RUN_MODE" ]]; then
   if [[ "$DRY_RUN_MODE" == "stdout" ]]; then
     export OVERLAY_DUMP_DOMAIN=stdout
@@ -85,7 +75,6 @@ if [[ -n "$DRY_RUN_MODE" ]]; then
     echo "Dry run: writing merged files to $DUMP_DIR" >&2
   fi
 
-  # Call the importer directly to perform merges once
   python - <<'PY' "$BASE_DOMAIN" "${OVERLAY_DOMAIN_ARR[@]}"
 import os, sys
 from src.components.layered_importer import OverlayImporter
@@ -102,7 +91,6 @@ PY
   exit 0
 fi
 
-# Quick import check for custom components and importer
 python - <<'PY'
 import sys
 print('sys.path=', sys.path)
@@ -121,5 +109,4 @@ except Exception as e:
   raise
 PY
 
-# Run Rasa train
 rasa train -d "$BASE_DOMAIN" --config "$BASE_CONFIG" --data "$BASE_STORIES"

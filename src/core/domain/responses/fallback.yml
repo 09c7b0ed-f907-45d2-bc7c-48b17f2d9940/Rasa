@@ -2,4 +2,4 @@ version: "3.1"
 
 responses:
   utter_default:
-    - text: "Sorry, I didn’t understand that. Could you rephrase?"
+    - text: "[placeholder] localized in fallback/en-us or locale overlays"

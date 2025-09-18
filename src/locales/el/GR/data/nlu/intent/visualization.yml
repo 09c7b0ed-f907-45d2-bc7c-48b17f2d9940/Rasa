@@ -1,0 +1,17 @@
+version: "3.1"
+
+nlu:
+  - intent: generate_visualization
+    examples: |
+      - Δείξε μου [door to needle](kpi) και [DIDO](kpi)
+      - Θέλω [NIHSS](kpi) για όλους τους ασθενείς
+      - Δώσε μου [AdmissionNihss](kpi) και [DischargeNihss](kpi)
+      - Δείξε μου [DTN](kpi) για [άνδρες](sex) ασθενείς
+      - Διάγραμμα [DIDO](kpi) σε [γυναίκες](sex) ασθενείς με εγκεφαλικό
+      - Δώσε μου δεδομένα [NIHSS](kpi) για [άνδρες](sex) και [γυναίκες](sex)
+  - intent: update_visualization
+    examples: |
+      - Άλλαξε το γράφημα σε [στήλες](chart_type)
+      - Ενημέρωσε για να δείχνει μόνο [γυναίκες](sex)
+      - Τροποποίησε το εύρος ημερομηνιών σε [2023]{"entity": "date", "role": "lower"} έως [2024]{"entity": "date", "role": "upper"}
+      - Άλλαξε σε [αιμορραγικό](stroke_type) τύπο εγκεφαλικού

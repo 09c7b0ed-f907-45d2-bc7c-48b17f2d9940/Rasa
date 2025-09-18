@@ -1,0 +1,14 @@
+version: "3.1"
+
+nlu:
+  - intent: greet
+    examples: |
+      - γεια
+      - γεια σου
+      - καλημέρα
+      - καλό απόγευμα
+  - intent: goodbye
+    examples: |
+      - αντίο
+      - τα λέμε
+      - εις το επανιδείν

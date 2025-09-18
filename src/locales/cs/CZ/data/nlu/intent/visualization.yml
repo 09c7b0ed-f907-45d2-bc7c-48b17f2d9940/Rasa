@@ -1,0 +1,17 @@
+version: "3.1"
+
+nlu:
+  - intent: generate_visualization
+    examples: |
+      - Ukaž mi [door to needle](kpi) a [DIDO](kpi)
+      - Chci [NIHSS](kpi) pro všechny pacienty
+      - Dej mi [AdmissionNihss](kpi) a [DischargeNihss](kpi)
+      - Ukaž mi [DTN](kpi) pro [mužské](sex) pacienty
+      - Graf [DIDO](kpi) u [ženských](sex) pacientek
+      - Dej mi data [NIHSS](kpi) pro [muže](sex) a [ženy](sex)
+  - intent: update_visualization
+    examples: |
+      - Změň graf na [sloupcový](chart_type)
+      - Aktualizuj tak, aby zobrazoval pouze [ženské](sex) pacienty
+      - Změň rozsah dat na [2023]{"entity": "date", "role": "lower"} až [2024]{"entity": "date", "role": "upper"}
+      - Přepni na [hemoragický](stroke_type) typ mrtvice

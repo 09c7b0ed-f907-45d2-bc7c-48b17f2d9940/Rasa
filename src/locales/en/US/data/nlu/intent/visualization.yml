@@ -1,0 +1,91 @@
+version: "3.1"
+
+nlu:
+  - intent: generate_visualization
+    examples: |
+      - Show me [doot to needle](kpi) and [DIDO](kpi) scores
+      - I want [NIHSS](kpi) for all patients
+      - Give me [AdmissionNihss](kpi) and [DischargeNihss](kpi)
+      - Show me [DTN](kpi) for [male](sex) patients
+      - Chart of [DIDO](kpi) in [female](sex) stroke patients
+      - Give me [NIHSS](kpi) data for [men](sex) and [women](sex) patients
+      - Show me [door to needle time](kpi) for patients aged [50]{"entity": "age", "role": "lower"} to [90]{"entity": "age", "role": "upper"}
+      - Give me [door in door out](kpi) between ages [30]{"entity": "age", "role": "lower"} and [50]{"entity": "age", "role": "upper"}
+      - Display [AdmissionNihss](kpi) for patients aged from [60]{"entity": "age", "role": "lower"} to [80]{"entity": "age", "role": "upper"}
+      - Show me [DTN](kpi) for patients above [50]{"entity": "age", "role": "lower"}
+      - Give me [door in door out time](kpi) for patients over [65]{"entity": "age", "role": "lower"} years old
+      - Display data for patients under [30]{"entity": "age", "role": "upper"} years
+      - Show patients aged [18]{"entity": "age", "role": "lower"} and above
+      - Chart for patients below [90]{"entity": "age", "role": "upper"}
+      - Chart of [DTN](kpi) grouped by [initial point of contact](group_by)
+      - Show [DIDO](kpi) by [hospital department](group_by)
+      - Give me average [NIHSS](kpi) grouped by [EMS prenotification](group_by)
+      - Show [DTN](kpi) excluding [ischemic](stroke_type) stroke patients
+      - Chart [DIDO](kpi) for [hemorrhagic](stroke_type) strokes
+      - Give me [NIHSS](kpi) scores excluding [TIA](stroke_type) patients
+      - Show [DTN](kpi) between [March 4th, 2023]{"entity": "date", "role": "lower"} and [July 5th, 2024]{"entity": "date", "role": "upper"}
+      - Chart [DIDO](kpi) from [January 1, 2022]{"entity": "date", "role": "lower"} to [December 31, 2022]{"entity": "date", "role": "upper"}
+      - Show data after [2023-01-01]{"entity": "date", "role": "lower"}
+      - Display records before [2024-12-31]{"entity": "date", "role": "upper"}
+      - Give me data from [Q1 2023]{"entity": "date", "role": "lower"} onwards
+      - Show recent data since [last month]{"entity": "date", "role": "lower"}
+      - Show a [line](chart_type) graph of [DTN](kpi)
+      - Give me a [bar](chart_type) chart of [DIDO](kpi) for [female](sex) patients
+      - Display a [pie](chart_type) chart of [NIHSS](kpi) grouped by [stroke type](group_by)
+      - Show a [line](chart_type) graph for [DTN](kpi) and [DIDO](kpi) for [male](sex) and [female](sex) patients between [40]{"entity": "age", "role": "lower"} and [60]{"entity": "age", "role": "upper"}
+      - Give me a chart of [age](kpi) of patients grouped by [initial point of contact](group_by), excluding [ischemic](stroke_type) strokes, between ages [18]{"entity": "age", "role": "lower"} to [90]{"entity": "age", "role": "upper"}
+      - Can you show [LOS](kpi) for [ischemic](stroke_type) stroke patients?
+      - Display [DischargeNihss](kpi) scores grouped by [treatment type](group_by)
+      - I need a [scatter](chart_type) plot of [DTN](kpi) vs [DIDO](kpi)
+      - Show me [mortality rate](kpi) for patients aged [65]{"entity": "age", "role": "lower"} and above
+      - Chart [readmission rate](kpi) by [stroke subtype](group_by) for [female](sex) patients
+      - Give me [mRS](kpi) scores for [hemorrhagic](stroke_type) strokes from [2023-01-01]{"entity": "date", "role": "lower"} to [2023-12-31]{"entity": "date", "role": "upper"}
+      - Display a [histogram](chart_type) of [age](kpi) distribution
+      - Show [thrombolysis rate](kpi) grouped by [arrival method](group_by)
+      - I want to see [NIHSS](kpi) improvement between [admission]{"entity": "nihss", "role": "lower"} and [discharge]{"entity": "nihss", "role": "upper"}
+      - Chart [DTN](kpi) performance by [month](group_by) in a [line](chart_type) graph
+      - Show [complications rate](kpi) for [male](sex) patients with [TIA](stroke_type)
+      - Display [door to imaging](kpi) times for urgent cases
+      - Give me [LOS](kpi) statistics for patients aged [18]{"entity": "age", "role": "lower"} to [45]{"entity": "age", "role": "upper"}
+      - Show a [box plot](chart_type) of [DIDO](kpi) by [severity level](group_by)
+      - Chart [functional outcome](kpi) for [ischemic](stroke_type) patients by [sex](group_by)
+      - I need [DTN](kpi) trends over the past year
+      - Display [medication compliance](kpi) rates by [age group](group_by)
+      - Show [emergency response time](kpi) for [hemorrhagic](stroke_type) cases
+      - Give me a [radar](chart_type) chart of multiple [KPIs](kpi) by [hospital unit](group_by)
+      - Chart [NIHSS](kpi) distribution from [Q1 2023]{"entity": "date", "role": "lower"} to [Q4 2023]{"entity": "date", "role": "upper"}
+      - Show NIHSS scores ranging from [0]{"entity": "nihss", "role": "lower"} to [15]{"entity": "nihss", "role": "upper"}
+      - Display NIHSS changes between [5]{"entity": "nihss", "role": "lower"} and [25]{"entity": "nihss", "role": "upper"}
+      - Chart NIHSS progression from [8]{"entity": "nihss", "role": "lower"} to [20]{"entity": "nihss", "role": "upper"} severity
+      - Give me NIHSS trends from [12]{"entity": "nihss", "role": "lower"} to [22]{"entity": "nihss", "role": "upper"}
+      - Show patients with NIHSS above [15]{"entity": "nihss", "role": "lower"}
+      - Display mild strokes with NIHSS below [5]{"entity": "nihss", "role": "upper"}
+      - Chart severe cases with NIHSS over [20]{"entity": "nihss", "role": "lower"}
+      - Show NIHSS improvements above [10]{"entity": "nihss", "role": "lower"} points
+      - Compare [DTN](kpi) and [DIDO](kpi) scores
+      - Show [mortality rate](kpi) and [readmission rate](kpi) together
+      - Display [AdmissionNihss](kpi) vs [DischargeNihss](kpi) scores
+      - Chart [male](sex) and [female](sex) patient outcomes
+      - Compare [ischemic](stroke_type) and [hemorrhagic](stroke_type) stroke data
+      - Show [DTN](kpi) and [DIDO](kpi) and [door to imaging](kpi) times
+      - Display data from [Q1 2023]{"entity": "date", "role": "lower"} to [Q2 2023]{"entity": "date", "role": "upper"} vs [Q3 2023]{"entity": "date", "role": "lower"} to [Q4 2023]{"entity": "date", "role": "upper"}
+      - Compare patients aged [30]{"entity": "age", "role": "lower"} to [45]{"entity": "age", "role": "upper"} with those aged [60]{"entity": "age", "role": "lower"} to [80]{"entity": "age", "role": "upper"}
+  - intent: update_visualization
+    examples: |
+      - Change the chart to a [bar](chart_type) graph
+      - Update to show [female](sex) patients only
+      - Modify the date range to [2023]{"entity": "date", "role": "lower"} to [2024]{"entity": "date", "role": "upper"}
+      - Switch to [hemorrhagic](stroke_type) stroke type
+      - Group the data by [treatment facility](group_by)
+      - Add [DIDO](kpi) to the current visualization
+      - Remove [male](sex) patients from the chart
+      - Change age range to [55]{"entity": "age", "role": "lower"} to [75]{"entity": "age", "role": "upper"}
+      - Update chart type to [pie](chart_type)
+      - Filter for [ischemic](stroke_type) strokes only
+      - Modify grouping to [admission source](group_by)
+      - Change KPI to [AdmissionNihss](kpi)
+      - Update date filter to last [6 months]{"entity": "date", "role": "lower"}
+      - Switch to [scatter](chart_type) plot visualization
+      - Add [TIA](stroke_type) patients to the analysis
+      - Show only patients above [70]{"entity": "age", "role": "lower"}
+      - Filter dates after [2024-01-01]{"entity": "date", "role": "lower"}

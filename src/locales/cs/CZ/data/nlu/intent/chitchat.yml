@@ -1,0 +1,15 @@
+version: "3.1"
+
+nlu:
+  - intent: greet
+    examples: |
+      - ahoj
+      - dobrý den
+      - čau
+      - dobré ráno
+      - dobré odpoledne
+  - intent: goodbye
+    examples: |
+      - na shledanou
+      - čau
+      - uvidíme se později

@@ -1,0 +1,20 @@
+version: "3.1"
+
+nlu:
+  - intent: fallback
+    examples: |
+      - Jaké je dnes počasí?
+      - Můžeš mi pomoct s domácím úkolem?
+      - Řekni mi vtip o doktorech
+      - Jak uvařit těstoviny?
+      - Kolik je hodin?
+      - Potřebuji pomoc s počítačem
+      - Můžeš pustit hudbu?
+      - Jaké je hlavní město Francie?
+      - Jak je vysoký Mount Everest?
+      - Jaká je tvoje oblíbená barva?
+      - Můžeš mi objednat pizzu?
+      - Řekni mi něco o strojovém učení
+      - Jaké filmy dnes dávají?
+      - Jak opravím auto?
+      - Jaký je smysl života?

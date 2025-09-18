@@ -46,6 +46,16 @@ def _load_yaml_docs(paths: Iterable[Path]) -> List[Dict[str, Any]]:
     return docs
 
 
+def _has_yaml_under(path: Path) -> bool:
+    if path.is_file():
+        return path.suffix.lower() in {".yml", ".yaml"}
+    if path.is_dir():
+        for p in path.rglob("*"):
+            if p.suffix.lower() in {".yml", ".yaml"}:
+                return True
+    return False
+
+
 def _parse_key(key: str, inherited_op: str) -> Tuple[str, str]:
     if key.endswith(".add"):
         return key[:-4], ADD
@@ -311,10 +321,16 @@ class OverlayImporter(TrainingDataImporter):
     def get_domain(self) -> Domain:
         base_docs: List[Dict[str, Any]] = []
         for p in self._base_domain_paths:
+            if not _has_yaml_under(p):
+                logger.info(f"Skipping base domain path with no YAML: {p}")
+                continue
             logger.info(f"Loading base domain: {p}")
             base_docs.append(Domain.load(str(p)).as_dict())
         overlay_docs: List[Dict[str, Any]] = []
         for p in self._overlay_domain_paths:
+            if not _has_yaml_under(p):
+                logger.info(f"Skipping overlay domain path with no YAML: {p}")
+                continue
             logger.info(f"Loading overlay domain: {p}")
             overlay_docs.append(Domain.load(str(p)).as_dict())
         logger.info("Merging domains...")

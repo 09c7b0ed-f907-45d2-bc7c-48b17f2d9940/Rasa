@@ -3,18 +3,4 @@ version: "3.1"
 nlu:
   - intent: fallback
     examples: |
-      - What's the weather like today?
-      - Can you help me with my homework?
-      - Tell me a joke about doctors
-      - How do I cook pasta?
-      - What time is it?
-      - I need help with my computer
-      - Can you play music?
-      - What's the capital of France?
-      - How tall is Mount Everest?
-      - What's your favorite color?
-      - Can you order pizza for me?
-      - Tell me about machine learning
-      - What movies are playing tonight?
-      - How do I fix my car?
-      - What's the meaning of life?
+      - [placeholder] see en/us or locale overlays

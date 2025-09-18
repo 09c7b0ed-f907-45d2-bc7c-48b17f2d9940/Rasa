@@ -1,0 +1,20 @@
+version: "3.1"
+
+nlu:
+  - intent: fallback
+    examples: |
+      - Quel temps fait-il aujourd'hui ?
+      - Peux-tu m'aider avec mes devoirs ?
+      - Raconte-moi une blague sur les médecins
+      - Comment cuisiner des pâtes ?
+      - Quelle heure est-il ?
+      - J'ai besoin d'aide avec mon ordinateur
+      - Peux-tu mettre de la musique ?
+      - Quelle est la capitale de la France ?
+      - Quelle est la hauteur du mont Everest ?
+      - Quelle est ta couleur préférée ?
+      - Peux-tu commander une pizza pour moi ?
+      - Parle-moi d'apprentissage automatique
+      - Quels films passent ce soir ?
+      - Comment réparer ma voiture ?
+      - Quel est le sens de la vie ?

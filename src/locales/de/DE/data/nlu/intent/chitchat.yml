@@ -1,0 +1,15 @@
+version: "3.1"
+
+nlu:
+  - intent: greet
+    examples: |
+      - hallo
+      - hi
+      - guten morgen
+      - guten tag
+      - guten abend
+  - intent: goodbye
+    examples: |
+      - tschüss
+      - auf wiedersehen
+      - bis später

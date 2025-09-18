@@ -1,0 +1,7 @@
+version: "3.1"
+
+responses:
+  utter_greet:
+    - text: "你好！我能為你做些什麼？"
+  utter_goodbye:
+    - text: "再見！祝你有美好的一天。"
