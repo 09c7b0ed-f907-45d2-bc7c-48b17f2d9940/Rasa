@@ -1,0 +1,20 @@
+version: "3.1"
+
+nlu:
+  - intent: fallback
+    examples: |
+      - Hvordan er vejret i dag?
+      - Kan du hjælpe mig med min lektier?
+      - Fortæl mig en joke om læger
+      - Hvordan laver jeg pasta?
+      - Hvad er klokken?
+      - Jeg har brug for hjælp med min computer
+      - Kan du spille musik?
+      - Hvad er hovedstaden i Frankrig?
+      - Hvor høj er Mount Everest?
+      - Hvad er din yndlingsfarve?
+      - Kan du bestille pizza til mig?
+      - Fortæl mig om maskinlæring
+      - Hvilke film vises i aften?
+      - Hvordan reparerer jeg min bil?
+      - Hvad er meningen med livet?
