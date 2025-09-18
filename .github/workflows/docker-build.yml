@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+  workflow_dispatch:
 
 jobs:
   get-langs:
@@ -71,7 +72,7 @@ jobs:
     permissions: write-all
     strategy:
       matrix:
-        lang: ${{ fromJson('[''' + needs.filter.outputs.changed_langs.replace(' ', '","') + ''']') }}
+        lang: ${{ fromJson(format('["{0}"]', replace(needs.filter.outputs.changed_langs, ' ', '","'))) }}
       fail-fast: false
     if: needs.filter.outputs.changed_langs != ''
     steps:
