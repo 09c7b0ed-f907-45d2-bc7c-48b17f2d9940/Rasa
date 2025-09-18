@@ -102,5 +102,24 @@ PY
   exit 0
 fi
 
+# Quick import check for custom components and importer
+python - <<'PY'
+import sys
+print('sys.path=', sys.path)
+try:
+  import src.components.layered_importer as li
+  from src.components.layered_importer import OverlayImporter
+  print('OverlayImporter import OK:', li.__file__)
+except Exception as e:
+  print('Failed to import OverlayImporter:', e)
+  raise
+try:
+  import src.components.entity_consolidator as ec
+  print('EntityConsolidator import OK:', ec.__file__)
+except Exception as e:
+  print('Failed to import EntityConsolidator:', e)
+  raise
+PY
+
 # Run Rasa train
 rasa train -d "$BASE_DOMAIN" --config "$BASE_CONFIG" --data "$BASE_STORIES"
