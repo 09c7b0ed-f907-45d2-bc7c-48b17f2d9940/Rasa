@@ -36,8 +36,9 @@ except Exception as e:
 	print('Import diagnostic error:', repr(e))
 	raise
 PY
-	&& \
-	PYTHONPATH=/app:/app/src ./scripts/layer_rasa_projects.sh ${LAYERS}
+
+# Run layering + training in a separate step to avoid heredoc chaining issues
+RUN PYTHONPATH=/app:/app/src ./scripts/layer_rasa_projects.sh ${LAYERS}
 
 EXPOSE 5005
 
