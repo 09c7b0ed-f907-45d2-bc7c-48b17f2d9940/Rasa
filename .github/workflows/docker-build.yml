@@ -151,7 +151,6 @@ jobs:
           for p in "${LAYERS[@]}"; do [ -d "$p" ] && EXISTING+=("$p"); done
           LAYERS_STR=$(IFS=' '; echo "${EXISTING[*]}")
           echo "Using layers: $LAYERS_STR"
-          CACHE_REF="ghcr.io/$REPO_NAME_LC:buildcache"
           # Decide whether to push or load locally (manual runs can set push=false)
           DOCKER_OUTPUT_FLAG="--push"
           if [ "${PUSH_IMAGES:-true}" = "false" ]; then
@@ -159,8 +158,9 @@ jobs:
           fi
           docker buildx build \
             --build-arg LAYERS="$LAYERS_STR" \
-            --cache-from type=registry,ref=$CACHE_REF \
-            --cache-to type=registry,ref=$CACHE_REF,mode=max \
+            --cache-from type=gha,scope=rasa-build \
+            --cache-to type=gha,scope=rasa-build,mode=max \
+            --platform linux/amd64 \
             -t ghcr.io/$REPO_NAME_LC:${SAFE_TAG}-latest \
             -t ghcr.io/$REPO_NAME_LC:${SAFE_TAG}-${{ github.sha }} \
             $DOCKER_OUTPUT_FLAG .
