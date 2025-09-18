@@ -1,4 +1,4 @@
-# Whitelist pattern: ignore all, then allow specific dirs/files
+# Whitelist pattern: ignore all, then allow what we need
 *
 !*/
 
@@ -8,18 +8,6 @@
 !README.md
 !envgen.sh
 
-# Scripts orchestrating overlays/training
-!scripts/
+# Scripts and source
 !scripts/**
-
-# Project source needed inside the image
-!src/
-!src/__init__.py
-!src/components/
-!src/components/**
-!src/core/
-!src/core/**
-!src/locales/
-!src/locales/**
-!src/shared/
-!src/shared/**
+!src/**

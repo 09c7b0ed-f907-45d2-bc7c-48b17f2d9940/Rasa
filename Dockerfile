@@ -18,6 +18,7 @@ RUN chmod +x /app/scripts/*.sh
 
 RUN echo "Using PYTHONPATH=$PYTHONPATH" && \
 	python -c "import sys; print('Container sys.path:', sys.path)" && \
+	echo 'Listing /app/src/components:' && ls -la /app/src/components || true && \
 	PYTHONPATH=/app:/app/src ./scripts/layer_rasa_projects.sh ${LAYERS}
 
 EXPOSE 5005
