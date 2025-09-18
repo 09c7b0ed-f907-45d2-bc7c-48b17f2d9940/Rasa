@@ -1,10 +1,25 @@
-# Whitelist pattern https://jasonstitt.com/gitignore-whitelisting-patterns
+# Whitelist pattern: ignore all, then allow specific dirs/files
 *
 !*/
 
-# Add config, credentials, and endpoints files along with domain and data folders from source
-!/src/config.yml
-!/src/credentials.yml
-!/src/endpoints.yml
-!/src/domain/**
-!/src/data/**
+# Top-level files needed
+!Dockerfile
+!requirements.txt
+!README.md
+!envgen.sh
+
+# Scripts orchestrating overlays/training
+!scripts/
+!scripts/**
+
+# Project source needed inside the image
+!src/
+!src/__init__.py
+!src/components/
+!src/components/**
+!src/core/
+!src/core/**
+!src/locales/
+!src/locales/**
+!src/shared/
+!src/shared/**
