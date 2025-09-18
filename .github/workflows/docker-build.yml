@@ -5,6 +5,19 @@ on:
     branches:
       - master
   workflow_dispatch:
+    inputs:
+      force_all:
+        description: "Build all languages regardless of changes"
+        required: false
+        default: "false"
+        type: choice
+        options: ["false", "true"]
+      push:
+        description: "Push images to GHCR (false will build locally only)"
+        required: false
+        default: "true"
+        type: choice
+        options: ["true", "false"]
 
 jobs:
   get-langs:
@@ -12,8 +25,10 @@ jobs:
     outputs:
       langs: ${{ steps.langs.outputs.langs }}
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v4
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.x"
       - name: Get language/region matrix
@@ -27,8 +42,11 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       changed_langs: ${{ steps.filter.outputs.changed_langs }}
+      changed_langs_json: ${{ steps.filter.outputs.changed_langs_json }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Determine base ref
         id: base
         run: |
@@ -40,13 +58,18 @@ jobs:
           echo "files=$FILES" >> $GITHUB_OUTPUT
       - name: Filter changed languages
         id: filter
+        env:
+          FORCE_ALL: ${{ github.event.inputs.force_all }}
         run: |
           LANGS="${{ needs.get-langs.outputs.langs }}"
           CHANGED="${{ steps.diff.outputs.files }}"
           CHANGED_LANGS=()
           FALLBACK_REGION="us"
           # If global-impact files changed, rebuild all languages
-          if echo "$CHANGED" | grep -qE "^(Dockerfile|scripts/|src/components/|src/core/|src/locales/en/)"; then
+          if [ "${FORCE_ALL}" = "true" ]; then
+            IFS=',' read -ra ALL <<< "$LANGS"
+            CHANGED_LANGS=("${ALL[@]}")
+          elif echo "$CHANGED" | grep -qE "^(Dockerfile|scripts/|src/components/|src/core/|src/locales/en/)"; then
             IFS=',' read -ra ALL <<< "$LANGS"
             CHANGED_LANGS=("${ALL[@]}")
           else
@@ -65,6 +88,21 @@ jobs:
           done
           fi
           echo "changed_langs=${CHANGED_LANGS[*]}" >> $GITHUB_OUTPUT
+          # Also emit a JSON array for matrix consumption
+          if [ ${#CHANGED_LANGS[@]} -eq 0 ]; then
+            echo 'changed_langs_json=[]' >> $GITHUB_OUTPUT
+          else
+            json='['
+            for i in "${!CHANGED_LANGS[@]}"; do
+              val="${CHANGED_LANGS[$i]}"
+              esc=${val//\\/\\\\}
+              esc=${esc//\"/\\\"}
+              if [ "$i" -gt 0 ]; then json+=","; fi
+              json+="\"$esc\""
+            done
+            json+=']'
+            echo "changed_langs_json=$json" >> $GITHUB_OUTPUT
+          fi
 
   build:
     needs: [get-langs, filter]
@@ -72,18 +110,18 @@ jobs:
     permissions: write-all
     strategy:
       matrix:
-        lang: ${{ fromJson(format('["{0}"]', replace(needs.filter.outputs.changed_langs, ' ', '","'))) }}
+        lang: ${{ fromJson(needs.filter.outputs.changed_langs_json) }}
       fail-fast: false
-    if: needs.filter.outputs.changed_langs != ''
+    if: needs.filter.outputs.changed_langs_json != '[]'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v3
 
       - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -94,8 +132,11 @@ jobs:
           REPO_NAME=${{ github.repository }}
           echo "REPO_NAME_LC=${REPO_NAME,,}" >>${GITHUB_ENV}
 
-      - name: Build and push Docker image with cache for ${{ matrix.lang }}
+      - name: Build and (optionally) push Docker image for ${{ matrix.lang }}
+        env:
+          PUSH_IMAGES: ${{ github.event.inputs.push }}
         run: |
+          set -euo pipefail
           LANG_SPEC='${{ matrix.lang }}'
           LANG_CODE="$LANG_SPEC"; REGION=""
           if [[ "$LANG_SPEC" == */* ]]; then REGION="${LANG_SPEC#*/}"; LANG_CODE="${LANG_SPEC%%/*}"; fi
@@ -108,9 +149,15 @@ jobs:
           LAYERS_STR=$(IFS=' '; echo "${EXISTING[*]}")
           echo "Using layers: $LAYERS_STR"
           CACHE_REF="ghcr.io/$REPO_NAME_LC:buildcache"
+          # Decide whether to push or load locally (manual runs can set push=false)
+          DOCKER_OUTPUT_FLAG="--push"
+          if [ "${PUSH_IMAGES:-true}" = "false" ]; then
+            DOCKER_OUTPUT_FLAG="--load"
+          fi
           docker buildx build \
             --build-arg LAYERS="$LAYERS_STR" \
             --cache-from type=registry,ref=$CACHE_REF \
             --cache-to type=registry,ref=$CACHE_REF,mode=max \
             -t ghcr.io/$REPO_NAME_LC:${{ matrix.lang }}-latest \
-            --push .
+            -t ghcr.io/$REPO_NAME_LC:${{ matrix.lang }}-${{ github.sha }} \
+            $DOCKER_OUTPUT_FLAG .
