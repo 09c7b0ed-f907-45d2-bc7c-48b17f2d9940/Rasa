@@ -138,6 +138,7 @@ jobs:
         run: |
           set -euo pipefail
           LANG_SPEC='${{ matrix.lang }}'
+          SAFE_TAG=${LANG_SPEC//\//-}
           LANG_CODE="$LANG_SPEC"; REGION=""
           if [[ "$LANG_SPEC" == */* ]]; then REGION="${LANG_SPEC#*/}"; LANG_CODE="${LANG_SPEC%%/*}"; fi
           LAYERS=("src/core" "src/locales/en/us")
@@ -158,6 +159,6 @@ jobs:
             --build-arg LAYERS="$LAYERS_STR" \
             --cache-from type=registry,ref=$CACHE_REF \
             --cache-to type=registry,ref=$CACHE_REF,mode=max \
-            -t ghcr.io/$REPO_NAME_LC:${{ matrix.lang }}-latest \
-            -t ghcr.io/$REPO_NAME_LC:${{ matrix.lang }}-${{ github.sha }} \
+            -t ghcr.io/$REPO_NAME_LC:${SAFE_TAG}-latest \
+            -t ghcr.io/$REPO_NAME_LC:${SAFE_TAG}-${{ github.sha }} \
             $DOCKER_OUTPUT_FLAG .
