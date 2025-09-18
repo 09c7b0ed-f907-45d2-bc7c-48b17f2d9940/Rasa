@@ -6,13 +6,78 @@ on:
       - master
 
 jobs:
-  build:
-    permissions: write-all
+  get-langs:
     runs-on: ubuntu-latest
+    outputs:
+      langs: ${{ steps.langs.outputs.langs }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+      - name: Get language/region matrix
+        id: langs
+        run: |
+          LANGS=$(python3 scripts/list_languages.py)
+          echo "langs=$LANGS" >> $GITHUB_OUTPUT
+
+  filter:
+    needs: get-langs
+    runs-on: ubuntu-latest
+    outputs:
+      changed_langs: ${{ steps.filter.outputs.changed_langs }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Determine base ref
+        id: base
+        run: |
+          if [ -n "${{ github.event.before }}" ]; then echo "base=${{ github.event.before }}" >> $GITHUB_OUTPUT; else echo "base=$(git rev-parse HEAD~1)" >> $GITHUB_OUTPUT; fi
+      - name: Get changed files
+        id: diff
+        run: |
+          FILES=$(git diff --name-only "${{ steps.base.outputs.base }}" "${{ github.sha }}")
+          echo "files=$FILES" >> $GITHUB_OUTPUT
+      - name: Filter changed languages
+        id: filter
+        run: |
+          LANGS="${{ needs.get-langs.outputs.langs }}"
+          CHANGED="${{ steps.diff.outputs.files }}"
+          CHANGED_LANGS=()
+          FALLBACK_REGION="us"
+          # If global-impact files changed, rebuild all languages
+          if echo "$CHANGED" | grep -qE "^(Dockerfile|scripts/|src/components/|src/core/|src/locales/en/)"; then
+            IFS=',' read -ra ALL <<< "$LANGS"
+            CHANGED_LANGS=("${ALL[@]}")
+          else
+          IFS=',' read -ra LANG_ARR <<< "$LANGS"
+          for lang in "${LANG_ARR[@]}"; do
+            lang_code="$lang"
+            region=""
+            if [[ "$lang" == */* ]]; then
+              region="${lang#*/}"
+              lang_code="${lang%%/*}"
+            fi
+            # Build if core changed or if locale/language/region changed
+            if echo "$CHANGED" | grep -qE "^(src/core/|src/locales/$lang_code/|src/locales/$lang_code/$region/)"; then
+              CHANGED_LANGS+=("$lang")
+            fi
+          done
+          fi
+          echo "changed_langs=${CHANGED_LANGS[*]}" >> $GITHUB_OUTPUT
+
+  build:
+    needs: [get-langs, filter]
+    runs-on: ubuntu-latest
+    permissions: write-all
+    strategy:
+      matrix:
+        lang: ${{ fromJson('[''' + needs.filter.outputs.changed_langs.replace(' ', '","') + ''']') }}
+      fail-fast: false
+    if: needs.filter.outputs.changed_langs != ''
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-        
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
@@ -25,13 +90,26 @@ jobs:
 
       - name: Set lowercase repository name
         run: |
-          REPO_NAME=${{ github.repository }} 
+          REPO_NAME=${{ github.repository }}
           echo "REPO_NAME_LC=${REPO_NAME,,}" >>${GITHUB_ENV}
 
-      - name: Build Docker image with Rasa model
+      - name: Build and push Docker image with cache for ${{ matrix.lang }}
         run: |
-          docker build -t ghcr.io/$REPO_NAME_LC:latest .
-
-      - name: Push Docker image to GitHub Container Registry
-        run: |
-          docker push ghcr.io/$REPO_NAME_LC:latest
+          LANG_SPEC='${{ matrix.lang }}'
+          LANG_CODE="$LANG_SPEC"; REGION=""
+          if [[ "$LANG_SPEC" == */* ]]; then REGION="${LANG_SPEC#*/}"; LANG_CODE="${LANG_SPEC%%/*}"; fi
+          LAYERS=("src/core" "src/locales/en/us")
+          if [[ "$LANG_CODE" != "en" ]]; then LAYERS+=("src/locales/$LANG_CODE"); fi
+          if [[ -n "$REGION" ]]; then LAYERS+=("src/locales/$LANG_CODE/$REGION"); fi
+          # Only keep existing dirs
+          EXISTING=()
+          for p in "${LAYERS[@]}"; do [ -d "$p" ] && EXISTING+=("$p"); done
+          LAYERS_STR=$(IFS=' '; echo "${EXISTING[*]}")
+          echo "Using layers: $LAYERS_STR"
+          CACHE_REF="ghcr.io/$REPO_NAME_LC:buildcache"
+          docker buildx build \
+            --build-arg LAYERS="$LAYERS_STR" \
+            --cache-from type=registry,ref=$CACHE_REF \
+            --cache-to type=registry,ref=$CACHE_REF,mode=max \
+            -t ghcr.io/$REPO_NAME_LC:${{ matrix.lang }}-latest \
+            --push .

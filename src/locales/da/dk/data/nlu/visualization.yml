@@ -1,0 +1,92 @@
+version: "3.1"
+
+nlu:
+  - intent: generate_visualization
+    examples: |
+      - Vis mig [doot to needle](kpi) og [DIDO](kpi) resultater
+      - Jeg vil have [NIHSS](kpi) for alle patienter
+      - Giv mig [AdmissionNihss](kpi) og [DischargeNihss](kpi)
+      - Vis mig [DTN](kpi) for [mandlige](sex) patienter
+      - Diagram over [DIDO](kpi) hos [kvindelige](sex) strokepatienter
+      - Giv mig [NIHSS](kpi) data for [mænd](sex) og [kvinder](sex)
+      - Vis mig [door to needle time](kpi) for patienter i alderen [50]{"entity": "age", "role": "lower"} til [90]{"entity": "age", "role": "upper"}
+      - Giv mig [door in door out](kpi) mellem [30]{"entity": "age", "role": "lower"} og [50]{"entity": "age", "role": "upper"}
+      - Vis [AdmissionNihss](kpi) for patienter i alderen fra [60]{"entity": "age", "role": "lower"} til [80]{"entity": "age", "role": "upper"}
+      - Vis mig [DTN](kpi) for patienter over [50]{"entity": "age", "role": "lower"}
+      - Giv mig [door in door out time](kpi) for patienter over [65]{"entity": "age", "role": "lower"} år
+      - Vis data for patienter under [30]{"entity": "age", "role": "upper"} år
+      - Vis patienter i alderen [18]{"entity": "age", "role": "lower"} og derover
+      - Diagram for patienter under [90]{"entity": "age", "role": "upper"}
+      - Diagram over [DTN](kpi) grupperet efter [initial point of contact](group_by)
+      - Vis [DIDO](kpi) efter [hospital department](group_by)
+      - Giv mig gennemsnitlig [NIHSS](kpi) grupperet efter [EMS prenotification](group_by)
+      - Vis [DTN](kpi) ekskluderende [iskæmisk](stroke_type) strokepatienter
+      - Diagram over [DIDO](kpi) for [hæmoragisk](stroke_type) slagtilfælde
+      - Giv mig [NIHSS](kpi) resultater ekskluderende [TIA](stroke_type) patienter
+      - Vis [DTN](kpi) mellem [4. marts 2023]{"entity": "date", "role": "lower"} og [5. juli 2024]{"entity": "date", "role": "upper"}
+      - Diagram over [DIDO](kpi) fra [1. januar 2022]{"entity": "date", "role": "lower"} til [31. december 2022]{"entity": "date", "role": "upper"}
+      - Vis data efter [2023-01-01]{"entity": "date", "role": "lower"}
+      - Vis poster før [2024-12-31]{"entity": "date", "role": "upper"}
+      - Giv mig data fra [Q1 2023]{"entity": "date", "role": "lower"} og frem
+      - Vis de seneste data siden [sidste måned]{"entity": "date", "role": "lower"}
+      - Vis et [linje](chart_type) diagram over [DTN](kpi)
+      - Giv mig et [søjle](chart_type) diagram over [DIDO](kpi) for [kvindelige](sex) patienter
+      - Vis et [lagkage](chart_type) diagram over [NIHSS](kpi) grupperet efter [stroke type](group_by)
+      - Vis et [linje](chart_type) diagram for [DTN](kpi) og [DIDO](kpi) for [mandlige](sex) og [kvindelige](sex) patienter mellem [40]{"entity": "age", "role": "lower"} og [60]{"entity": "age", "role": "upper"}
+      - Giv mig et diagram over [alder](kpi) for patienter grupperet efter [initial point of contact](group_by), ekskluderende [iskæmisk](stroke_type) slagtilfælde, mellem [18]{"entity": "age", "role": "lower"} til [90]{"entity": "age", "role": "upper"}
+      - Kan du vise [LOS](kpi) for [iskæmisk](stroke_type) strokepatienter?
+      - Vis [DischargeNihss](kpi) resultater grupperet efter [treatment type](group_by)
+      - Jeg har brug for et [sprednings](chart_type) diagram af [DTN](kpi) vs [DIDO](kpi)
+      - Vis mig [mortalitetsrate](kpi) for patienter i alderen [65]{"entity": "age", "role": "lower"} og derover
+      - Diagram over [genindlæggelsesrate](kpi) efter [stroke subtype](group_by) for [kvindelige](sex) patienter
+      - Giv mig [mRS](kpi) resultater for [hæmoragisk](stroke_type) slagtilfælde fra [2023-01-01]{"entity": "date", "role": "lower"} til [2023-12-31]{"entity": "date", "role": "upper"}
+      - Vis et [histogram](chart_type) over [alder](kpi) fordeling
+      - Vis [trombolyse rate](kpi) grupperet efter [ankomstmetode](group_by)
+      - Jeg vil se [NIHSS](kpi) forbedring mellem [indlæggelse]{"entity": "nihss", "role": "lower"} og [udskrivning]{"entity": "nihss", "role": "upper"}
+      - Diagram over [DTN](kpi) præstation efter [måned](group_by) i et [linje](chart_type) diagram
+      - Vis [komplikationsrate](kpi) for [mandlige](sex) patienter med [TIA](stroke_type)
+      - Vis [door to imaging](kpi) tider for akutte tilfælde
+      - Giv mig [LOS](kpi) statistik for patienter i alderen [18]{"entity": "age", "role": "lower"} til [45]{"entity": "age", "role": "upper"}
+      - Vis et [boksplot](chart_type) over [DIDO](kpi) efter [sværhedsgrad](group_by)
+      - Diagram over [funktionelt udfald](kpi) for [iskæmisk](stroke_type) patienter efter [køn](group_by)
+      - Jeg har brug for [DTN](kpi) tendenser over det sidste år
+      - Vis [medicin overholdelse](kpi) rater efter [aldersgruppe](group_by)
+      - Vis [responstid for akutberedskab](kpi) for [hæmoragisk](stroke_type) tilfælde
+      - Giv mig et [radar](chart_type) diagram over flere [KPI'er](kpi) efter [hospital unit](group_by)
+      - Diagram over [NIHSS](kpi) fordeling fra [Q1 2023]{"entity": "date", "role": "lower"} til [Q4 2023]{"entity": "date", "role": "upper"}
+      - Vis NIHSS resultater fra [0]{"entity": "nihss", "role": "lower"} til [15]{"entity": "nihss", "role": "upper"}
+      - Vis NIHSS ændringer mellem [5]{"entity": "nihss", "role": "lower"} og [25]{"entity": "nihss", "role": "upper"}
+      - Diagram over NIHSS progression fra [8]{"entity": "nihss", "role": "lower"} til [20]{"entity": "nihss", "role": "upper"} sværhedsgrad
+      - Giv mig NIHSS tendenser fra [12]{"entity": "nihss", "role": "lower"} til [22]{"entity": "nihss", "role": "upper"}
+      - Vis patienter med NIHSS over [15]{"entity": "nihss", "role": "lower"}
+      - Vis milde slagtilfælde med NIHSS under [5]{"entity": "nihss", "role": "upper"}
+      - Diagram over alvorlige tilfælde med NIHSS over [20]{"entity": "nihss", "role": "lower"}
+      - Vis NIHSS forbedringer over [10]{"entity": "nihss", "role": "lower"} point
+      - Sammenlign [DTN](kpi) og [DIDO](kpi) resultater
+      - Vis [mortalitetsrate](kpi) og [genindlæggelsesrate](kpi) sammen
+      - Vis [AdmissionNihss](kpi) vs [DischargeNihss](kpi) resultater
+      - Diagram over [mandlige](sex) og [kvindelige](sex) patientresultater
+      - Sammenlign [iskæmisk](stroke_type) og [hæmoragisk](stroke_type) strokedata
+      - Vis [DTN](kpi) og [DIDO](kpi) og [door to imaging](kpi) tider
+      - Vis data fra [Q1 2023]{"entity": "date", "role": "lower"} til [Q2 2023]{"entity": "date", "role": "upper"} vs [Q3 2023]{"entity": "date", "role": "lower"} til [Q4 2023]{"entity": "date", "role": "upper"}
+      - Sammenlign patienter i alderen [30]{"entity": "age", "role": "lower"} til [45]{"entity": "age", "role": "upper"} med dem i alderen [60]{"entity": "age", "role": "lower"} til [80]{"entity": "age", "role": "upper"}
+
+  - intent: update_visualization
+    examples: |
+      - Skift diagrammet til et [søjle](chart_type) diagram
+      - Opdater til kun at vise [kvindelige](sex) patienter
+      - Ændr datoperioden til [2023]{"entity": "date", "role": "lower"} til [2024]{"entity": "date", "role": "upper"}
+      - Skift til [hæmoragisk](stroke_type) slagtilfælde
+      - Gruppér dataene efter [behandlingssted](group_by)
+      - Tilføj [DIDO](kpi) til den nuværende visualisering
+      - Fjern [mandlige](sex) patienter fra diagrammet
+      - Skift aldersinterval til [55]{"entity": "age", "role": "lower"} til [75]{"entity": "age", "role": "upper"}
+      - Opdater diagramtype til [lagkage](chart_type)
+      - Filtrér kun for [iskæmisk](stroke_type) slagtilfælde
+      - Ændr gruppering til [indlæggelseskilde](group_by)
+      - Skift KPI til [AdmissionNihss](kpi)
+      - Opdater datofilter til de sidste [6 måneder]{"entity": "date", "role": "lower"}
+      - Skift til [sprednings](chart_type) diagram
+      - Tilføj [TIA](stroke_type) patienter til analysen
+      - Vis kun patienter over [70]{"entity": "age", "role": "lower"}
+      - Filtrér datoer efter [2024-01-01]{"entity": "date", "role": "lower"}

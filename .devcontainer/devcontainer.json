@@ -4,5 +4,30 @@
 	"service": "rasa",
 	"workspaceFolder": "/workspace",
 	//"postStartCommand": "sh envgen.sh -d src/"
-	"postStartCommand": "python /workspace/scripts/generate_rasa_resources.py"
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"GitHub.copilot-chat",
+				"GitHub.copilot",
+				"ms-python.python",
+				"ms-python.vscode-pylance",
+				"charliermarsh.ruff",
+				"matangover.mypy",
+				"redhat.vscode-yaml"
+			],
+			"settings": {
+				"python.defaultInterpreterPath": "/usr/local/bin/python",
+				"editor.formatOnSave": true,
+				"editor.codeActionsOnSave": {
+					"source.fixAll": "always",
+					"source.organizeImports": "always"
+				},
+				"python.linting.enabled": true,
+				"python.linting.mypyEnabled": true,
+				"python.linting.ruffEnabled": true,
+				"python.analysis.typeCheckingMode": "strict"
+			}
+		}
+	},
+	"postCreateCommand": "pip install -e . && mypy --strict . && ruff check ."
 }

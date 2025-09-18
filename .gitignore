@@ -25,13 +25,13 @@
 !/envgen.sh
 !/envgen.config
 !/scripts/**
+!/requirements.txt
 
 # Add config, credentials, and endpoints files along with domain and data folders from source
-!/src/config.yml
-!/src/credentials.yml
-!/src/endpoints.yml
-!/src/domain/**
-!/src/data/**
-!/src/shared/**
 !/src/components/**
+!/src/core/**
+!/src/locales/**
+!/src/shared/**
+
 .generated
+__pycache__

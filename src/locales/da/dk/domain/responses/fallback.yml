@@ -1,0 +1,5 @@
+version: "3.1"
+
+responses:
+  utter_default:
+    - text: "Beklager, jeg forstod det ikke. Kan du omformulere?"

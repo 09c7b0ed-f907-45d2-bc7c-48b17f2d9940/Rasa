@@ -1,9 +1,5 @@
 version: "3.1"
 
 intents:
-  - issue_command
   - generate_visualization
   - update_visualization
-  - greet
-  - goodbye
-  - fallback

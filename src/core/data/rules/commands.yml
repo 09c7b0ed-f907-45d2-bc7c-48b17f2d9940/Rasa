@@ -1,0 +1,7 @@
+version: "3.1"
+
+rules:
+  - rule: issue command
+    steps:
+      - intent: issue_command
+      - action: action_command

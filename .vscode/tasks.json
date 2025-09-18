@@ -2,25 +2,100 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Rasa Train",
+            "label": "Rasa: Dry Run (layers - preset)",
             "type": "shell",
-            "command": "rasa train -d src/domain/ --config src/config.yml --data src/data/",
+            "command": "bash scripts/layer_rasa_projects.sh --dry-run=stdout ${input:layersPreset}",
+            "group": "test",
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "env": {
+                    "PYTHONPATH": "${workspaceFolder}"
+                }
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Rasa: Dry Run (layers - custom)",
+            "type": "shell",
+            "command": "bash scripts/layer_rasa_projects.sh --dry-run=stdout ${input:layersCustom}",
+            "group": "test",
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "env": {
+                    "PYTHONPATH": "${workspaceFolder}"
+                }
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Rasa: Train (layers - preset)",
+            "type": "shell",
+            "command": "./scripts/layer_rasa_projects.sh ${input:layersPreset}",
             "group": "build",
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "env": {
+                    "PYTHONPATH": "${workspaceFolder}"
+                }
+            },
             "problemMatcher": []
         },
         {
-            "label": "Rasa Shell",
+            "label": "Rasa: Train (layers - custom)",
             "type": "shell",
-            "command": "cd src && rasa shell",
-            "group": "test",
+            "command": "./scripts/layer_rasa_projects.sh ${input:layersCustom}",
+            "group": "build",
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "env": {
+                    "PYTHONPATH": "${workspaceFolder}"
+                }
+            },
             "problemMatcher": []
         },
         {
-            "label": "Rasa Run",
+            "label": "Rasa: Shell (latest)",
             "type": "shell",
-            "command": "cd src && rasa run --enable-api --cors '*'",
+            "command": "rasa shell --model models",
             "group": "test",
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "env": {
+                    "PYTHONPATH": "${workspaceFolder}"
+                }
+            },
             "problemMatcher": []
+        },
+        {
+            "label": "Rasa: Run (latest)",
+            "type": "shell",
+            "command": "rasa run --enable-api --cors '*' --model models",
+            "group": "test",
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "env": {
+                    "PYTHONPATH": "${workspaceFolder}"
+                }
+            },
+            "problemMatcher": []
+        }
+    ],
+    "inputs": [
+        {
+            "id": "layersPreset",
+            "type": "pickString",
+            "description": "Choose a layer set (space-separated paths)",
+            "options": [
+                "src/core src/locales/en/us",
+                "src/core src/locales/en/us src/locales/da src/locales/da/dk"
+            ],
+            "default": "src/core src/locales/en/us"
+        },
+        {
+            "id": "layersCustom",
+            "type": "promptString",
+            "description": "Enter space-separated layer paths (e.g., src/core src/locales/en/us src/locales/da src/locales/da/dk)",
+            "default": "src/core src/locales/da src/locales/da/dk"
         }
     ]
 }

@@ -1,0 +1,8 @@
+version: "3.1"
+
+responses:
+  utter_greet:
+    - text: "Hej! Jeg kan hjælpe dig med at forespørge patientdata. For eksempel: 'Vis mænd i alderen 40 til 60 med NIHSS > 4'."
+
+  utter_goodbye:
+    - text: "Farvel! Sig til, hvis du har brug for mere hjælp."

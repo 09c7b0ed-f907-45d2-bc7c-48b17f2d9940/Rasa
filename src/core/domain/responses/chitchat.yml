@@ -3,9 +3,5 @@ version: "3.1"
 responses:
   utter_greet:
     - text: "Hi! I can help you query patient data. For example: 'Show males aged 40 to 60 with NIHSS > 4'."
-
   utter_goodbye:
     - text: "Goodbye! Let me know if you need anything else."
-
-  utter_default:
-    - text: "Sorry, I didn’t understand that. Could you rephrase?"

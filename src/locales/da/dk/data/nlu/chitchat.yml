@@ -1,0 +1,15 @@
+version: "3.1"
+
+nlu:
+  - intent: greet
+    examples: |
+      - hej
+      - hej der
+      - godmorgen
+      - god eftermiddag
+
+  - intent: goodbye
+    examples: |
+      - farvel
+      - vi ses senere
+      - på gensyn
