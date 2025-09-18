@@ -70,8 +70,8 @@ export OVERLAY_DOMAIN="$OVERLAY_DOMAIN_STR"
 export OVERLAY_NLU="$OVERLAY_NLU_STR"
 export OVERLAY_STORIES="$OVERLAY_STORIES_STR"
 
-# Ensure Python can import our components
-export PYTHONPATH="${PYTHONPATH:-src}"
+# Ensure Python can import our components (use repo root regardless of environment)
+export PYTHONPATH="${PYTHONPATH:-$PWD}"
 
 # Dry-run path: dump merged Domain and NLU using OverlayImporter and exit
 if [[ -n "$DRY_RUN_MODE" ]]; then

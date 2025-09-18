@@ -17,7 +17,7 @@ COPY scripts/ scripts/
 
 RUN chmod +x /app/scripts/*.sh
 
-RUN ./scripts/layer_rasa_projects.sh ${LAYERS}
+RUN echo "Using PYTHONPATH=$PYTHONPATH" && ./scripts/layer_rasa_projects.sh ${LAYERS}
 
 EXPOSE 5005
 
