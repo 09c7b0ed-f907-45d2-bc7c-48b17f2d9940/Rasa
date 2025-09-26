@@ -3,7 +3,7 @@ from typing import Any, Dict, Optional, TypedDict
 
 import requests
 
-import src.graphql.graphql_result as gqlr
+import src.graphql.graphql_response as gqlr
 
 
 class GraphQLPayload(TypedDict):

@@ -1,3 +1,8 @@
+"""
+Pydantic models for GraphQL response parsing.
+Compatible with SSOT-based enums used in requests.
+"""
+
 from typing import Any, Dict, List, Optional
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
