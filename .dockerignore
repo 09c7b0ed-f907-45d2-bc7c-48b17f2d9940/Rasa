@@ -1,10 +1,25 @@
-# Whitelist pattern https://jasonstitt.com/gitignore-whitelisting-patterns
+# Ignore everything by default
 *
-!*/
 
-# Add requirements.txt
-!/requirements.txt
+# Re-include root files we need
+!requirements.txt
+!Dockerfile
+!README.md
+!LICENSE
 
-# Add source
-!/src/*
-!/src/models/*
+# Include entire src tree (recursively) so that nested YAML (shared/SSOT/*.yml) are not dropped
+!src/
+!src/**
+
+# Still ignore Python cache and editor artifacts (must come AFTER the re-include so they win)
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.mypy_cache/
+.pytest_cache/
+.DS_Store
+.venv/
+venv/
+.idea/
+.vscode/
