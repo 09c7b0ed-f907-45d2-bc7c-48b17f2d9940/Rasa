@@ -2,4 +2,4 @@ version: "3.1"
 
 actions:
   - action_generate_visualization
-  - action_update_visualization
+  #- action_update_visualization

@@ -56,7 +56,7 @@
         {
             "label": "Rasa: Shell (latest)",
             "type": "shell",
-            "command": "rasa shell --model models",
+            "command": "rasa shell --model models --endpoints src/core/endpoints.yml",
             "group": "test",
             "options": {
                 "cwd": "${workspaceFolder}",
@@ -69,8 +69,34 @@
         {
             "label": "Rasa: Run (latest)",
             "type": "shell",
-            "command": "rasa run --enable-api --cors '*' --model models",
+            "command": "rasa run --enable-api --cors '*' --model models --endpoints src/core/endpoints.yml",
             "group": "test",
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "env": {
+                    "PYTHONPATH": "${workspaceFolder}"
+                }
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Rasa: Dry Run (lang spec)",
+            "type": "shell",
+            "command": "bash scripts/layer_rasa_lang.sh --dry-run=stdout ${input:langSpec}",
+            "group": "test",
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "env": {
+                    "PYTHONPATH": "${workspaceFolder}"
+                }
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Rasa: Train (lang spec)",
+            "type": "shell",
+            "command": "bash scripts/layer_rasa_lang.sh ${input:langSpec}",
+            "group": "build",
             "options": {
                 "cwd": "${workspaceFolder}",
                 "env": {
@@ -86,16 +112,30 @@
             "type": "pickString",
             "description": "Choose a layer set (space-separated paths)",
             "options": [
-                "src/core src/locales/en/us",
-                "src/core src/locales/en/us src/locales/da src/locales/da/dk"
+                "src/core src/locales/en/US",
+                "src/core src/locales/en/US src/locales/da src/locales/da/DK"
             ],
-            "default": "src/core src/locales/en/us"
+            "default": "src/core src/locales/en/US"
         },
         {
             "id": "layersCustom",
             "type": "promptString",
-            "description": "Enter space-separated layer paths (e.g., src/core src/locales/en/us src/locales/da src/locales/da/dk)",
-            "default": "src/core src/locales/da src/locales/da/dk"
+            "description": "Enter space-separated layer paths (e.g., src/core src/locales/en/US src/locales/da src/locales/da/DK)",
+            "default": "src/core src/locales/da src/locales/da/DK"
+        },
+        {
+            "id": "langSpec",
+            "type": "pickString",
+            "description": "Language spec (lang or lang/REGION)",
+            "options": [
+                "en/US",
+                "da/DK",
+                "es/ES",
+                "es/MX",
+                "fr/FR",
+                "de/DE"
+            ],
+            "default": "en/US"
         }
     ]
 }

@@ -14,6 +14,11 @@ from rasa.shared.importers.importer import TrainingDataImporter  # type: ignore
 from rasa.shared.nlu.training_data import loading as nlu_loading  # type: ignore
 from rasa.shared.nlu.training_data.training_data import TrainingData  # type: ignore
 
+try:  # story reader imports (robust across minor Rasa versions)
+    from rasa.shared.core.training_data.story_reader.yaml_story_reader import YAMLStoryReader  # type: ignore
+except Exception:  # pragma: no cover
+    YAMLStoryReader = None  # type: ignore
+
 ADD = "add"
 REPLACE = "replace"
 
@@ -216,6 +221,77 @@ def _merge_nlu_docs(base_docs: List[Dict[str, Any]], overlay_docs: List[Dict[str
     return {"version": version, "nlu": merged_items}
 
 
+def _merge_config_docs(base_docs: List[Dict[str, Any]], overlay_docs: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """Merge Rasa config dictionaries with add/replace semantics.
+
+    Semantics:
+      * Keys ending with .add / .replace control list/dict merging like domain logic.
+      * Known list sections: pipeline, policies. `.replace` fully replaces, `.add` appends with de-dup.
+      * Dict (top-level) keys: deep add by default; `.replace` updates only existing keys (strict like domain replace).
+    """
+    # Start from combined base (deep add)
+    merged: Dict[str, Any] = {}
+    for d in base_docs:
+        clean, _ = _normalize_ops(d, REPLACE)
+        merged = _deep_add(merged, clean)
+
+    def _merge_in(doc: Dict[str, Any]) -> None:
+        clean_top: Dict[str, Any] = {}
+        section_ops: Dict[str, str] = {}
+        for raw_key, value in doc.items():
+            key, sec_op = _parse_key(raw_key, REPLACE)
+            section_ops[key] = sec_op
+            clean_top[key] = _normalize_ops(value, sec_op)[0]
+
+        # List-like sections
+        for section in ("pipeline", "policies"):
+            if section in clean_top:
+                op = section_ops.get(section, REPLACE)
+                if op == REPLACE:
+                    merged[section] = clean_top[section]
+                else:
+                    existing_raw = merged.get(section, [])
+                    existing_list = cast(List[Any], existing_raw) if isinstance(existing_raw, list) else []
+                    new_raw = clean_top[section]
+                    new_list = cast(List[Any], new_raw) if isinstance(new_raw, list) else [new_raw]
+                    merged[section] = _list_unique_extend(existing_list, new_list)
+
+        # Other keys
+        for k, v in clean_top.items():
+            if k in {"pipeline", "policies"}:
+                continue
+            op = section_ops.get(k, REPLACE)
+            if isinstance(v, dict):
+                base_section_any = merged.get(k, {})
+                base_section = cast(Dict[str, Any], base_section_any) if isinstance(base_section_any, dict) else {}
+                if op == REPLACE:
+                    # Only replace existing keys strictly
+                    missing: List[str] = []
+                    for mk in list(cast(Dict[str, Any], v).keys()):
+                        if mk not in base_section:
+                            missing.append(mk)
+                    if base_section and missing:
+                        raise ValueError(f"Config overlay attempted to replace non-existent keys in '{k}': {missing}")
+                    merged[k] = {**base_section, **v}
+                else:
+                    merged[k] = _deep_add(base_section, v)
+            else:
+                # Scalar or list (non-recognized list handled by deep add semantics)
+                if op == REPLACE:
+                    merged[k] = v if k in merged else v  # allow introducing new key even on replace for simplicity
+                else:
+                    existing_any = merged.get(k)
+                    if isinstance(existing_any, list) and isinstance(v, list):
+                        merged[k] = _list_unique_extend(cast(List[Any], existing_any), cast(List[Any], v))
+                    else:
+                        merged[k] = v
+
+    for d in overlay_docs:
+        _merge_in(d)
+
+    return merged
+
+
 def _derive_nlu_paths(domain_paths: List[Path]) -> List[Path]:
     n_paths: List[Path] = []
     for d in domain_paths:
@@ -318,6 +394,61 @@ class OverlayImporter(TrainingDataImporter):
         if self._overlay_nlu_paths:
             logger.info(f"Overlay NLU paths: {[str(p) for p in self._overlay_nlu_paths]}")
 
+        # Stories (rules + stories) layering: discover base/overlay story roots (data directories)
+        def _story_roots_from_domain_paths(paths: List[Path]) -> List[Path]:
+            outs: List[Path] = []
+            for p in paths:
+                root = p.parent / "data"
+                if root.exists() and root.is_dir():
+                    outs.append(root)
+            return outs
+
+        self._base_story_roots: List[Path] = _story_roots_from_domain_paths(self._base_domain_paths)
+        self._overlay_story_roots: List[Path] = _story_roots_from_domain_paths(self._overlay_domain_paths)
+
+        # Allow env to specify explicit overlay story roots (comma separated)
+        env_story = os.environ.get("OVERLAY_STORIES", "").strip()
+        if env_story:
+            extra = _parse_comma_paths(env_story)
+            for p in extra:
+                if p not in self._overlay_story_roots:
+                    self._overlay_story_roots.append(p)
+
+        if self._base_story_roots:
+            logger.info(f"Base story roots: {[str(p) for p in self._base_story_roots]}")
+        if self._overlay_story_roots:
+            logger.info(f"Overlay story roots: {[str(p) for p in self._overlay_story_roots]}")
+
+        # Config layering: detect config.yml adjacent to domain roots
+        def _config_from_domain_paths(paths: List[Path]) -> List[Path]:
+            outs: List[Path] = []
+            for p in paths:
+                root = p.parent
+                cand = root / "config.yml"
+                if cand.exists():
+                    outs.append(cand)
+            return outs
+
+        self._base_config_paths: List[Path] = _config_from_domain_paths(self._base_domain_paths)
+        self._overlay_config_paths: List[Path] = _config_from_domain_paths(self._overlay_domain_paths)
+
+        # Env overrides for config layering
+        env_base_cfg = os.environ.get("OVERLAY_BASE_CONFIG", "").strip()
+        if env_base_cfg:
+            base_cfg_paths = _parse_comma_paths(env_base_cfg)
+            if base_cfg_paths:
+                self._base_config_paths = base_cfg_paths
+        env_overlay_cfg = os.environ.get("OVERLAY_CONFIG", "").strip()
+        if env_overlay_cfg:
+            overlay_cfg_paths = _parse_comma_paths(env_overlay_cfg)
+            if overlay_cfg_paths:
+                self._overlay_config_paths = overlay_cfg_paths
+
+        if self._base_config_paths:
+            logger.info(f"Base config files: {[str(p) for p in self._base_config_paths]}")
+        if self._overlay_config_paths:
+            logger.info(f"Overlay config files: {[str(p) for p in self._overlay_config_paths]}")
+
     def get_domain(self) -> Domain:
         base_docs: List[Dict[str, Any]] = []
         for p in self._base_domain_paths:
@@ -397,10 +528,89 @@ class OverlayImporter(TrainingDataImporter):
             return nlu_loading.load_data(str(tmp))
 
     def get_stories(self, exclusion_percentage: Optional[int] = None) -> StoryGraph:
-        return StoryGraph([])
+        # Aggregate story & rule files from base then overlays
+        story_files: List[Path] = []
+
+        def _collect(root: Path) -> None:
+            if not root.exists():
+                return
+            candidates: List[Path] = []
+            for sub in (root, root / "stories", root / "rules"):
+                if sub.exists() and sub.is_dir():
+                    for pattern in ("*.yml", "*.yaml"):
+                        candidates.extend(list(sub.rglob(pattern)))
+            for c in candidates:
+                if c not in story_files:
+                    story_files.append(c)
+
+        for r in self._base_story_roots:
+            _collect(r)
+        for r in self._overlay_story_roots:
+            _collect(r)
+
+        if not story_files or YAMLStoryReader is None:
+            return StoryGraph([])
+
+        all_steps: List[Any] = []
+        for fp in story_files:
+            try:
+                reader = YAMLStoryReader(domain=None)  # type: ignore[arg-type]
+                reader.read_from_file(str(fp))  # type: ignore[attr-defined]
+                steps = getattr(reader, "story_steps", [])
+                if steps and isinstance(steps, list):
+                    all_steps.extend(cast(List[Any], steps))
+            except Exception as e:  # pragma: no cover
+                logger.warning(f"Failed to load story file {fp}: {e}")
+
+        if exclusion_percentage is not None and 0 < exclusion_percentage < 100 and all_steps:
+            cut = int(len(all_steps) * (100 - exclusion_percentage) / 100)
+            if cut < 1:
+                cut = 1
+            all_steps = all_steps[:cut]
+
+        return StoryGraph(all_steps)
 
     def get_config(self) -> Dict[str, Any]:
-        return {}
+        base_docs: List[Dict[str, Any]] = []
+        for p in self._base_config_paths:
+            try:
+                with p.open("r", encoding="utf-8") as f:
+                    raw = yaml.safe_load(f)
+                    if isinstance(raw, dict):
+                        base_docs.append(cast(Dict[str, Any], raw))
+            except Exception as e:
+                logger.warning(f"Failed loading base config {p}: {e}")
+
+        overlay_docs: List[Dict[str, Any]] = []
+        for p in self._overlay_config_paths:
+            try:
+                with p.open("r", encoding="utf-8") as f:
+                    raw = yaml.safe_load(f)
+                    if isinstance(raw, dict):
+                        overlay_docs.append(cast(Dict[str, Any], raw))
+            except Exception as e:
+                logger.warning(f"Failed loading overlay config {p}: {e}")
+
+        if not base_docs and not overlay_docs:
+            return {}
+
+        logger.info("Merging configs...")
+        merged = _merge_config_docs(base_docs, overlay_docs)
+        # Optional dump support via OVERLAY_DUMP_CONFIG env
+        dump_target = os.environ.get("OVERLAY_DUMP_CONFIG", "").strip()
+        if dump_target:
+            try:
+                if dump_target.lower() in {"1", "true", "yes", "stdout"}:
+                    yaml.safe_dump(merged, sys.stdout, sort_keys=False, allow_unicode=True)
+                else:
+                    out_path = Path(dump_target)
+                    out_path.parent.mkdir(parents=True, exist_ok=True)
+                    with out_path.open("w", encoding="utf-8") as f:
+                        yaml.safe_dump(merged, f, sort_keys=False, allow_unicode=True)
+                    logger.info(f"Dumped merged config to {out_path}")
+            except Exception as e:
+                logger.warning(f"Failed to dump merged config: {e}")
+        return merged
 
     def get_config_file_for_auto_config(self) -> Optional[str]:
         return None

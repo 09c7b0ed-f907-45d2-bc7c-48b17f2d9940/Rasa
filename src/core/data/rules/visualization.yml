@@ -5,7 +5,7 @@ rules:
     steps:
       - intent: generate_visualization
       - action: action_generate_visualization
-  - rule: update visualization
-    steps:
-      - intent: update_visualization
-      - action: action_update_visualization
+  #- rule: update visualization
+  #  steps:
+  #    - intent: update_visualization
+  #    - action: action_update_visualization

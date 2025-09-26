@@ -44,5 +44,6 @@ EXPOSE 5005
 
 USER 1001
 
-ENTRYPOINT ["rasa", "run"]
+# Always run with the core endpoints file (can still be overridden by supplying a new command)
+ENTRYPOINT ["rasa", "run", "--endpoints", "src/core/endpoints.yml"]
 CMD []
