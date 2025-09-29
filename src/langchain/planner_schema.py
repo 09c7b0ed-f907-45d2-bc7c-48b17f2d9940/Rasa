@@ -3,16 +3,46 @@ from __future__ import annotations
 
 from datetime import datetime
 from pathlib import Path
-from typing import List, Optional, Union
+from typing import Any, Dict, List, Optional, Union, cast
 
 import yaml
 from pydantic import BaseModel, Field, field_validator
 
 
-def load_dynamic_enum(yaml_path: str):
-    with open(yaml_path, "r") as f:
-        data = yaml.safe_load(f)
-    return [item["canonical"] for item in data]
+def _extract_canonical(entry: Any) -> Optional[str]:
+    if isinstance(entry, dict):
+        cast_entry: Dict[str, Any] = cast(Dict[str, Any], entry)
+        val = cast_entry.get("canonical")
+        if isinstance(val, str):
+            return val
+    return None
+
+
+def load_dynamic_enum(yaml_path: str) -> List[str]:
+    path = Path(yaml_path)
+    if not path.exists():
+        raise FileNotFoundError(
+            f"Missing SSOT file: {yaml_path}\n"
+            f"Working dir: {Path.cwd()}\n"
+            "Diagnostics: The SSOT YAML files were not found inside the container. "
+            "If you are building a Docker image ensure that .dockerignore does not exclude 'src/shared/SSOT'.\n"
+            "Suggested steps:\n"
+            "  1. docker build --no-cache -t action-server .\n"
+            "  2. docker run --rm action-server ls -l /app/src/shared/SSOT\n"
+            "  3. Confirm host path has files: ls -l src/shared/SSOT\n"
+            "If you are volume-mounting src into the container, ensure the host directory actually contains the SSOT files."
+        )
+    with path.open("r") as f:
+        raw_any: Any = yaml.safe_load(f)
+    if not isinstance(raw_any, list):
+        return []
+    raw_list: List[Any] = cast(List[Any], raw_any)
+    values: List[str] = []
+    for entry in raw_list:
+        canonical = _extract_canonical(entry)
+        if canonical is not None:
+            values.append(canonical)
+    return values
 
 
 # Load all SSOT-driven types dynamically
