@@ -64,6 +64,11 @@ pipeline:
     epochs: 100
     constrain_similarities: true
 
+  # CLI intent override (configure prefixes/intent here)
+  - name: src.components.cli_intent_setter.CLIIntentSetter
+    prefixes: ["/cli", "!"]
+    intent_name: "cli_command"
+
   # Optional: Uncomment if you need time/date entities
   #- name: DucklingEntityExtractor
   #  url: http://duckling:8000
@@ -102,6 +107,8 @@ pipeline:
 
     # Collect consolidation statistics
     collect_stats: false
+
+  - name: src.components.entity_consolidator.EntityConsolidator # keep this LAST
 
   # Fallback handling
   - name: FallbackClassifier

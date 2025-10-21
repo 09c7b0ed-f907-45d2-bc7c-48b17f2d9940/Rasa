@@ -1,7 +1,7 @@
 version: "3.1"
 
 rules:
-  - rule: issue command
+  - rule: Route all CLI commands
     steps:
-      - intent: issue_command
-      - action: action_command
+      - intent: cli_command
+      - action: action_cli_router

@@ -1,4 +1,4 @@
 version: "3.1"
 
 intents:
-  - issue_command
+  - cli_command
