@@ -1,6 +1,6 @@
 import logging
 
-from src import env
+from src.util import env
 
 LOG_LEVEL = env.require_any_env("LOGLEVEL") or "INFO"
 

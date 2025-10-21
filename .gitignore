@@ -31,15 +31,6 @@
 !/requirements.txt
 
 # Add source
-!/src/analytics/*
-!/src/chart/*
-!/src/cli/*
-!/src/executor/*
-!/src/graphql/*
-!/src/langchain/*
-
-# Add external
-!/src/shared/*
-
+!/src/**
 
 __pycache__
