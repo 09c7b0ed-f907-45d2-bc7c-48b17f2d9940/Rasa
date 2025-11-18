@@ -44,6 +44,7 @@ from .test import line as _test_line  # noqa: E402
 from .test import pie as _test_pie  # noqa: E402
 from .test import radar as _test_radar  # noqa: E402
 from .test import scatter as _test_scatter  # noqa: E402
+from .test import stream as _test_stream  # noqa: E402
 from .test import waterfall as _test_waterfall  # noqa: E402
 
 _ = (
@@ -59,5 +60,6 @@ _ = (
     _test_waterfall,
     _test_area,
     _test_line,
+    _test_stream,
     _test_charts,
 )

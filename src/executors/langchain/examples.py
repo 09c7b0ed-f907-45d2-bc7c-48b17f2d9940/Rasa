@@ -1,7 +1,7 @@
 import json
 from typing import Dict, List, Tuple
 
-from src.domain.langchain.schema import AnalysisPlan, ChartSpec, GroupBySex, GroupByStrokeType, MetricSpec, StatisticalTestSpec
+from src.domain.langchain.schema import AnalysisPlan, ChartSpec, GroupByCanonicalField, GroupBySex, GroupByStrokeType, MetricSpec, StatisticalTestSpec
 
 
 def example_dtn_by_sex() -> Tuple[str, str, str]:
@@ -12,21 +12,13 @@ def example_dtn_by_sex() -> Tuple[str, str, str]:
                 title="DTN by Sex",
                 description="Line graph of Door-to-Needle Time for males and females.",
                 chart_type="LINE",
+                group_by=[GroupBySex(categories=["MALE", "FEMALE"])],
                 metrics=[
                     MetricSpec(
                         title="DTN for Males",
                         description="Average DTN for male patients",
                         metric="DTN",
-                        group_by=[GroupBySex(categories=["MALE"])],
-                        filters=None,
-                    ),
-                    MetricSpec(
-                        title="DTN for Females",
-                        description="Average DTN for female patients",
-                        metric="DTN",
-                        group_by=[GroupBySex(categories=["FEMALE"])],
-                        filters=None,
-                    ),
+                    )
                 ],
             )
         ],
@@ -34,6 +26,58 @@ def example_dtn_by_sex() -> Tuple[str, str, str]:
     )
     desc = "Line graph of DTN for males and females."
     user = f"USER_UTTERANCE:\nShow me a line graph of DTN for males and females\n\nENTITIES_DETECTED(JSON):\n{json.dumps(detected_entities)}"
+    assistant = plan.model_dump_json(indent=2)
+    return desc, user, assistant
+
+
+def example_dtn_by_first_contact_place() -> Tuple[str, str, str]:
+    detected_entities = {"metric": ["DTN"], "chart_type": ["LINE"], "group_by": ["FIRST_CONTACT_PLACE"]}
+    plan = AnalysisPlan(
+        charts=[
+            ChartSpec(
+                title="DTN by First Contact Place",
+                description="Line graph of Door-to-Needle Time grouped by first contact place.",
+                chart_type="LINE",
+                group_by=[GroupByCanonicalField(field="FIRST_CONTACT_PLACE")],
+                metrics=[
+                    MetricSpec(
+                        title="DTN",
+                        description="Average Door-to-Needle Time across different first contact places",
+                        metric="DTN",
+                    )
+                ],
+            )
+        ],
+        statistical_tests=None,
+    )
+    desc = "Line graph of DTN grouped by first contact place."
+    user = "USER_UTTERANCE:\nShow me a line graph of DTN grouped by first contact place\n\nENTITIES_DETECTED(JSON):\n" + json.dumps(detected_entities)
+    assistant = plan.model_dump_json(indent=2)
+    return desc, user, assistant
+
+
+def example_dtn_distribution_line() -> Tuple[str, str, str]:
+    detected_entities = {"metric": ["DTN"], "chart_type": ["LINE"]}
+    plan = AnalysisPlan(
+        charts=[
+            ChartSpec(
+                title="DTN Distribution",
+                description="Line visualization of the distribution of Door-to-Needle Time.",
+                chart_type="LINE",
+                group_by=None,
+                metrics=[
+                    MetricSpec(
+                        title="DTN",
+                        description="Distribution of DTN",
+                        metric="DTN",
+                    )
+                ],
+            )
+        ],
+        statistical_tests=None,
+    )
+    desc = "Line visualization of the distribution of DTN (no explicit time axis)."
+    user = "USER_UTTERANCE:\nShow me a line graph of DTN\n\nENTITIES_DETECTED(JSON):\n" + json.dumps(detected_entities)
     assistant = plan.model_dump_json(indent=2)
     return desc, user, assistant
 
@@ -46,36 +90,8 @@ def example_dtn_by_sex_and_stroke() -> Tuple[str, str, str]:
                 title="DTN by Sex and Stroke Type",
                 description="Bar chart of Door-to-Needle Time for males and females, grouped by stroke type.",
                 chart_type="BAR",
-                metrics=[
-                    MetricSpec(
-                        title="DTN for Males (Ischemic)",
-                        description="Average DTN for male patients with ischemic stroke",
-                        metric="DTN",
-                        group_by=[GroupBySex(categories=["MALE"]), GroupByStrokeType(categories=["ISCHEMIC"])],
-                        filters=None,
-                    ),
-                    MetricSpec(
-                        title="DTN for Females (Ischemic)",
-                        description="Average DTN for female patients with ischemic stroke",
-                        metric="DTN",
-                        group_by=[GroupBySex(categories=["FEMALE"]), GroupByStrokeType(categories=["ISCHEMIC"])],
-                        filters=None,
-                    ),
-                    MetricSpec(
-                        title="DTN for Males (ICH)",
-                        description="Average DTN for male patients with intracerebral hemorrhage",
-                        metric="DTN",
-                        group_by=[GroupBySex(categories=["MALE"]), GroupByStrokeType(categories=["INTRACEREBRAL_HEMORRHAGE"])],
-                        filters=None,
-                    ),
-                    MetricSpec(
-                        title="DTN for Females (ICH)",
-                        description="Average DTN for female patients with intracerebral hemorrhage",
-                        metric="DTN",
-                        group_by=[GroupBySex(categories=["FEMALE"]), GroupByStrokeType(categories=["INTRACEREBRAL_HEMORRHAGE"])],
-                        filters=None,
-                    ),
-                ],
+                group_by=[GroupBySex(categories=["MALE", "FEMALE"]), GroupByStrokeType()],
+                metrics=[MetricSpec(title="DTN", description="DTN across sex and stroke types", metric="DTN")],
             )
         ],
         statistical_tests=None,
@@ -95,20 +111,17 @@ def example_statistical_test_dtn_by_sex() -> Tuple[str, str, str]:
                 title="T-Test for DTN by Sex",
                 description="T-Test comparing DTN between male and female patients.",
                 test_type="T_TEST",
+                group_by=[GroupBySex(categories=["MALE", "FEMALE"])],
                 metrics=[
                     MetricSpec(
                         title="DTN for Males",
                         description="DTN for male patients",
                         metric="DTN",
-                        group_by=[GroupBySex(categories=["MALE"])],
-                        filters=None,
                     ),
                     MetricSpec(
                         title="DTN for Females",
                         description="DTN for female patients",
                         metric="DTN",
-                        group_by=[GroupBySex(categories=["FEMALE"])],
-                        filters=None,
                     ),
                 ],
             )
@@ -123,6 +136,8 @@ def example_statistical_test_dtn_by_sex() -> Tuple[str, str, str]:
 def get_few_shot_examples() -> List[Dict[str, str]]:
     examples: List[Dict[str, str]] = []
     for desc, user, assistant in [
+        example_dtn_distribution_line(),  # clarify title pattern for distribution-style line
+        example_dtn_by_first_contact_place(),  # prioritize canonical field grouping example
         example_dtn_by_sex(),
         example_dtn_by_sex_and_stroke(),
         example_statistical_test_dtn_by_sex(),

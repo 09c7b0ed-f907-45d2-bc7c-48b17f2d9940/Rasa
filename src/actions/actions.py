@@ -1,3 +1,4 @@
+import json
 import logging
 from typing import Any, Dict, List
 
@@ -5,9 +6,18 @@ from rasa_sdk import Action, Tracker  # type: ignore
 from rasa_sdk.executor import CollectingDispatcher  # type: ignore
 from rasa_sdk.types import DomainDict  # type: ignore
 
+from src.domain.langchain.schema import AnalysisPlan
 from src.executors.langchain.pipeline import generate_analysis_plan
+from src.executors.plan_executor import execute_plan
+from src.shared.ssot_loader import validate_metric_metadata_complete
 
 logger = logging.getLogger(__name__)
+
+# Emit SSOT completeness warnings once on module import
+try:
+    validate_metric_metadata_complete(logger)
+except Exception as _e:
+    logger.debug("SSOT validation skipped due to: %s", _e)
 
 
 class ActionGenerateVisualization(Action):
@@ -26,8 +36,8 @@ class ActionGenerateVisualization(Action):
     ) -> List[Dict[str, Any]]:
         try:
             user_message = tracker.latest_message.get("text", "")
-            user_id = tracker.sender_id
-            logger.info(f"Processing visualization request: '{user_message}' for user: {user_id}")
+            session_token = tracker.sender_id
+            logger.info(f"Processing visualization request: '{user_message}' for user: {session_token}")
 
             # Extract entities from Rasa NLU
             entities = tracker.latest_message.get("entities", [])
@@ -51,19 +61,17 @@ class ActionGenerateVisualization(Action):
             if isinstance(override_language, str):
                 override_language = override_language.split("-")[0].lower() or None
 
-            plan_obj = generate_analysis_plan(
+            plan_obj: AnalysisPlan = generate_analysis_plan(
                 question=user_message,
                 entities=extracted_entities,
                 language=override_language,
+                max_retries=2,
                 debug=False,
             )
 
-            # Serialize plan (Pydantic model) to JSON and return as single message
-            try:
-                plan_dict = plan_obj.model_dump() if hasattr(plan_obj, "model_dump") else plan_obj  # type: ignore[attr-defined]
-            except Exception as ser_exc:
-                plan_dict = f"Serialization error: {ser_exc}"
-            dispatcher.utter_message(text=plan_dict)
+            visualization = execute_plan(plan_obj, session_token=session_token)
+            dispatcher.utter_message(json_message=json.loads(visualization.model_dump_json()))
+            dispatcher.utter_message(text="Hopefully that did something lol.")
         except Exception as e:
             error_msg = f"Error generating visualization: {str(e)}"
             logger.error(error_msg)

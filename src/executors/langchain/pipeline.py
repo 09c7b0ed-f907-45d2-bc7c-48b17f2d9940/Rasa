@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Dict, List, Type
+from typing import Any, Dict, List, Literal, Optional, Type, TypedDict, Union, overload
 
 from langchain_core.runnables import RunnablePassthrough
 from langchain_openai import ChatOpenAI
@@ -87,7 +87,8 @@ plan_prompt: ChatPromptTemplate = ChatPromptTemplate.from_messages(  # type: ign
             "All 'title' and 'description' fields MUST be written in the interface language ({language}). "
             "Keep enum-like codes (metric, chart_type, test_type, stroke categories, sex categories) in their canonical uppercase English forms. "
             "Use the reasoning and prior examples. Place detected entities into metrics (group_by / filters). "
-            "Prefer LINE/BAR for trends or comparisons; BOX/VIOLIN/HISTOGRAM for distributions.",
+            "Prefer LINE/BAR for trends or comparisons; BOX/VIOLIN/HISTOGRAM for distributions. "
+            "Title guidance: Avoid phrases like 'Over Time' unless there is an explicit temporal grouping. If no time/canonical grouping is specified and a LINE chart is used for a distribution, prefer '<METRIC> Distribution' for the title.",
         ),
         ("system", "SCHEMA:\n" + SCHEMA_DESCRIPTION),
         ("system", "FEW_SHOT_EXAMPLES:\n{few_shots}"),
@@ -116,16 +117,61 @@ full_chain: Any = (
 )
 
 
+class GeneratePlanDebug(TypedDict):
+    """Typed structure for debug output of generate_analysis_plan."""
+
+    reasoning: Any
+    steps: List[Any]
+    attempts: List[Any]
+    final_output: Optional[AnalysisPlan]
+
+
+@overload
+def generate_analysis_plan(
+    question: str,
+    entities: Dict[str, Any],
+    language: Optional[str],  # None or "auto" lets model infer
+    max_retries: int,
+    debug: Literal[True],  # when explicitly True, return debug payload
+) -> GeneratePlanDebug: ...
+
+
+@overload
+def generate_analysis_plan(
+    question: str,
+    entities: Dict[str, Any],
+    language: Optional[str],
+    max_retries: int,
+    debug: Literal[False],  # default path returns validated plan
+) -> AnalysisPlan: ...
+
+
+@overload
+def generate_analysis_plan(
+    question: str,
+    entities: Dict[str, Any],
+    language: Optional[str],
+    max_retries: int,
+    debug: bool,  # general case
+) -> Union[AnalysisPlan, GeneratePlanDebug]: ...
+
+
 def generate_analysis_plan(
     question: str,
     entities: Dict[str, Any],
     language: str | None = None,
     max_retries: int = 2,
     debug: bool = False,
-) -> Any:
+) -> Union[AnalysisPlan, GeneratePlanDebug]:
     """
-    Generate a validated AnalysisPlan from user input, with chain-of-thought reasoning and automatic correction/retry on validation failure.
-    If debug=True, returns a dict with all prompts, LLM responses, validation attempts, and the final output.
+    Generate a validated AnalysisPlan from user input, with chain-of-thought reasoning and automatic
+    correction/retry on validation failure.
+
+    Returns:
+    - AnalysisPlan when debug is False (default).
+    - GeneratePlanDebug when debug is True, including reasoning, steps, attempts, and final_output
+      (which will be an AnalysisPlan or None on failure).
+
     Always includes 'reasoning' in the debug output, even if an error occurs.
     """
     import json
@@ -203,13 +249,24 @@ def generate_analysis_plan(
                     "response": result,
                 }
             )
+            # Ensure the return value is an AnalysisPlan instance (defensive in case the LLM returns a raw dict)
+            if not isinstance(result, AnalysisPlan):
+                try:
+                    result = AnalysisPlan.model_validate(result)  # pydantic v2
+                except Exception:
+                    # Best-effort: keep original so the ValidationError path can handle it on retry
+                    pass
+
             if debug:
-                return {
+                debug_payload: GeneratePlanDebug = {
                     "reasoning": reasoning,
                     "steps": steps,
                     "attempts": attempts,
-                    "final_output": result,
+                    "final_output": result if isinstance(result, AnalysisPlan) else None,
                 }
+                return debug_payload
+            # At this point, guarantee AnalysisPlan type for non-debug callers
+            assert isinstance(result, AnalysisPlan), "Expected AnalysisPlan from structured output"
             return result
         except ValidationError as ve:
             logger.error(f"[Planner] ValidationError: {ve}")
@@ -250,3 +307,5 @@ def generate_analysis_plan(
                 }
             )
             _chain = critique_chain
+    # Should never reach here; all paths either return or raise inside the loop
+    raise RuntimeError("generate_analysis_plan failed to produce a result")

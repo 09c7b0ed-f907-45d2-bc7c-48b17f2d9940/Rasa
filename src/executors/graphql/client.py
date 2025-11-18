@@ -49,7 +49,17 @@ class GraphQLProxyClient:
                     logger.error("[GraphQLProxyClient] Validation error: %s. Raw: %s", e, response.text)
                     return None
             else:
-                logger.error(f"[GraphQLProxyClient] Error {response.status_code}: {response.text}")
+                content_type = response.headers.get("Content-Type", "")
+                # Avoid parsing JSON on non-JSON error responses; log safe preview
+                # response.text is a str; truncate for logging
+                preview = response.text[:1000]
+                logger.error(
+                    "[GraphQLProxyClient] Error %s (Content-Type=%s). Body preview: %s. Query preview: %s",
+                    response.status_code,
+                    content_type,
+                    preview,
+                    query_str[:300],
+                )
                 return None
 
         except Exception as e:

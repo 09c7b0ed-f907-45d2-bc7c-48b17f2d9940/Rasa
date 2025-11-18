@@ -128,6 +128,11 @@ class MetricRequest(BaseModel):
         """Builder method: include distribution data"""
         self.include_distribution = True
         self.distribution_options = DistributionOptions(binCount=bin_count, lowerBound=lower, upperBound=upper)
+        # Ensure kpiOptions carry the range as some providers require lower/upper boundary for distributions
+        if not self.metric_options:
+            self.metric_options = MetricOptions()
+        self.metric_options.lower_boundary = lower
+        self.metric_options.upper_boundary = upper
         return self
 
     def with_bounds(self, lower: int, upper: int) -> "MetricRequest":
@@ -257,13 +262,14 @@ class GraphQLQueryGenerator:
         """Generate filter GraphQL from filter models"""
 
         if isinstance(filter_obj, LogicalFilter):
-            children_str = ", ".join([f"[{GraphQLQueryGenerator._generate_filter(child)}]" for child in filter_obj.children])
-            return f'''{{
+            # Render enum operator without quotes and children as objects (no extra brackets)
+            children_str = ", ".join([GraphQLQueryGenerator._generate_filter(child) for child in filter_obj.children])
+            return f"""{{
                 node: {{
-                    logicalOperator: "{filter_obj.operator}",
+                    logicalOperator: {filter_obj.operator},
                     children: [{children_str}]
                 }}
-            }}'''
+            }}"""
 
         elif isinstance(filter_obj, IntegerFilter):
             return f'''{{
@@ -287,28 +293,30 @@ class GraphQLQueryGenerator:
             }}'''
 
         elif isinstance(filter_obj, SexFilter):
-            return f'''{{
+            # Render enum values without quotes and as a list
+            return f"""{{
                 leaf: {{
                     enumCaseFilter: {{
                         sexType: {{
-                            values: "{filter_obj.sex_type.value}",
+                            values: [{filter_obj.sex_type.value}],
                             contains: {str(filter_obj.contains).lower()}
                         }}
                     }}
                 }}
-            }}'''
+            }}"""
 
         elif isinstance(filter_obj, StrokeFilter):
-            return f'''{{
+            # Render enum values without quotes and as a list
+            return f"""{{
                 leaf: {{
                     enumCaseFilter: {{
                         strokeType: {{
-                            values: "{filter_obj.stroke_type.value}",
+                            values: [{filter_obj.stroke_type.value}],
                             contains: {str(filter_obj.contains).lower()}
                         }}
                     }}
                 }}
-            }}'''
+            }}"""
 
         elif type(filter_obj).__name__ == "DateFilter":
             return f'''{{

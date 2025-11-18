@@ -11,6 +11,6 @@ class VisualizationResponse(BaseModel):
     """Response containing charts and statistical results (v1)."""
 
     schema_version: int = 1
-    charts: Optional[List[ChartDTO]] = None
-    stats: Optional[List[StatisticalTestResult]] = None
+    charts: List[ChartDTO] = []
+    stats: List[StatisticalTestResult] = []
     timestamp: Optional[datetime] = None

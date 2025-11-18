@@ -3,10 +3,71 @@ from __future__ import annotations
 
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union, cast
+from typing import Any, Dict, List, Optional, Set, Union, cast
 
 import yaml
 from pydantic import BaseModel, Field, field_validator
+
+from src.domain.graphql.ssot_enums import (
+    BooleanPropertyType as BooleanType,
+)
+from src.domain.graphql.ssot_enums import (
+    GroupByType as CanonicalGroupByField,
+)
+
+# Unified SSOT enum imports (replace local dynamic loader usage)
+from src.domain.graphql.ssot_enums import (
+    MetricType,
+    SexType,
+    StrokeType,
+)
+from src.domain.graphql.ssot_enums import (
+    Operator as OperatorType,
+)
+
+
+def _deep_freeze(value: Any) -> Any:
+    """Recursively convert dict/list/set structures into hashable tuples.
+
+    Ensures a stable, order-independent representation for dictionaries by
+    sorting keys, while preserving list order (which aligns with equality semantics).
+    """
+    if isinstance(value, dict):
+        mapping: Dict[str, Any] = cast(Dict[str, Any], value)
+        return tuple((k, _deep_freeze(v)) for k, v in sorted(mapping.items(), key=lambda kv: kv[0]))
+    if isinstance(value, list):
+        seq: List[Any] = cast(List[Any], value)
+        return tuple(_deep_freeze(v) for v in seq)
+    if isinstance(value, set):
+        s: set[Any] = cast(set[Any], value)
+        return tuple(sorted((_deep_freeze(v) for v in s), key=lambda x: str(x)))
+    return value
+
+
+class HashableBaseModel(BaseModel):
+    """BaseModel with a content-derived hash compatible with Pydantic equality.
+
+    - Does not freeze/lock instances (avoids breaking existing mutations).
+    - Hash is computed from a normalized dump of the model (mode='json').
+    """
+
+    def __hash__(self) -> int:  # type: ignore[override]
+        data = self.model_dump(mode="json")
+        return hash(_deep_freeze(data))
+
+
+def _enum_allowed_values(enum_cls: Any) -> Set[str]:
+    """Return a set of canonical string values for a dynamic Enum.
+
+    Works with str-subclass Enums created via SSOT loader; avoids EnumMeta __contains__ pitfalls.
+    """
+    try:
+        return {m.value for m in enum_cls}  # type: ignore[attr-defined]
+    except Exception:
+        try:
+            return {str(m.value) if hasattr(m, "value") else str(m) for m in list(enum_cls)}  # type: ignore[arg-type]
+        except Exception:
+            return set()
 
 
 def _extract_canonical(entry: Any) -> Optional[str]:
@@ -18,59 +79,26 @@ def _extract_canonical(entry: Any) -> Optional[str]:
     return None
 
 
-def load_dynamic_enum(yaml_path: str) -> List[str]:
-    path = Path(yaml_path)
+# NOTE: ChartType & StatisticalTestType are still needed here as list-like sets.
+# We keep the lightweight loader for these two until they are promoted to shared enums.
+def _load_chart_or_test_enum(filename: str) -> List[str]:
+    path = Path(__file__).resolve().parents[2] / "shared" / "SSOT" / filename
     if not path.exists():
-        raise FileNotFoundError(
-            f"Missing SSOT file: {yaml_path}\n"
-            f"Working dir: {Path.cwd()}\n"
-            "Diagnostics: The SSOT YAML files were not found inside the container. "
-            "If you are building a Docker image ensure that .dockerignore does not exclude 'src/shared/SSOT'.\n"
-            "Suggested steps:\n"
-            "  1. docker build --no-cache -t action-server .\n"
-            "  2. docker run --rm action-server ls -l /app/src/shared/SSOT\n"
-            "  3. Confirm host path has files: ls -l src/shared/SSOT\n"
-            "If you are volume-mounting src into the container, ensure the host directory actually contains the SSOT files."
-        )
-    with path.open("r") as f:
+        return []
+    with path.open("r", encoding="utf-8") as f:
         raw_any: Any = yaml.safe_load(f)
     if not isinstance(raw_any, list):
         return []
-    raw_list: List[Any] = cast(List[Any], raw_any)
-    values: List[str] = []
-    for entry in raw_list:
+    out: List[str] = []
+    for entry in cast(List[Any], raw_any):
         canonical = _extract_canonical(entry)
-        if canonical is not None:
-            values.append(canonical)
-    return values
+        if canonical:
+            out.append(canonical)
+    return out
 
 
-# Load all SSOT-driven types dynamically
-BASE_SSOT = (Path(__file__).resolve().parents[2] / "shared" / "SSOT").resolve()
-
-BOOLEAN_TYPE_YAML = (BASE_SSOT / "BooleanType.yml").resolve()
-BooleanType = load_dynamic_enum(str(BOOLEAN_TYPE_YAML))
-
-CHART_TYPE_YAML = (BASE_SSOT / "ChartType.yml").resolve()
-ChartType = load_dynamic_enum(str(CHART_TYPE_YAML))
-
-GROUP_BY_TYPE_YAML = (BASE_SSOT / "GroupByType.yml").resolve()
-CanonicalGroupByField = load_dynamic_enum(str(GROUP_BY_TYPE_YAML))
-
-METRIC_TYPE_YAML = (BASE_SSOT / "MetricType.yml").resolve()
-MetricType = load_dynamic_enum(str(METRIC_TYPE_YAML))
-
-OPERATOR_TYPE_YAML = (BASE_SSOT / "OperatorType.yml").resolve()
-OperatorType = load_dynamic_enum(str(OPERATOR_TYPE_YAML))
-
-SEX_TYPE_YAML = (BASE_SSOT / "SexType.yml").resolve()
-SexType = load_dynamic_enum(str(SEX_TYPE_YAML))
-
-STATISTICAL_TEST_TYPE_YAML = (BASE_SSOT / "StatisticalTestType.yml").resolve()
-StatisticalTestType = load_dynamic_enum(str(STATISTICAL_TEST_TYPE_YAML))
-
-STROKE_TYPE_YAML = (BASE_SSOT / "StrokeType.yml").resolve()
-StrokeType = load_dynamic_enum(str(STROKE_TYPE_YAML))
+ChartType = _load_chart_or_test_enum("ChartType.yml")
+StatisticalTestType = _load_chart_or_test_enum("StatisticalTestType.yml")
 
 
 class DateFilter(BaseModel):
@@ -87,9 +115,11 @@ class DateFilter(BaseModel):
 
     @field_validator("operator")
     def validate_operator_type(cls, v: str) -> str:
-        if v not in OperatorType:
-            raise ValueError(f"{v} is not a valid OperatorType. Allowed: {OperatorType}")
-        return v
+        v_norm = v.upper()
+        allowed = _enum_allowed_values(OperatorType)
+        if v_norm not in allowed:
+            raise ValueError(f"{v} is not a valid OperatorType. Allowed: {sorted(allowed)}")
+        return v_norm
 
     @field_validator("value")
     def validate_date_value(cls, v: str) -> str:
@@ -114,9 +144,11 @@ class AgeFilter(BaseModel):
 
     @field_validator("operator")
     def validate_operator_type(cls, v: str) -> str:
-        if v not in OperatorType:
-            raise ValueError(f"{v} is not a valid OperatorType. Allowed: {OperatorType}")
-        return v
+        v_norm = v.upper()
+        allowed = _enum_allowed_values(OperatorType)
+        if v_norm not in allowed:
+            raise ValueError(f"{v} is not a valid OperatorType. Allowed: {sorted(allowed)}")
+        return v_norm
 
 
 class NIHSSFilter(BaseModel):
@@ -133,9 +165,11 @@ class NIHSSFilter(BaseModel):
 
     @field_validator("operator")
     def validate_operator_type(cls, v: str) -> str:
-        if v not in OperatorType:
-            raise ValueError(f"{v} is not a valid OperatorType. Allowed: {OperatorType}")
-        return v
+        v_norm = v.upper()
+        allowed = _enum_allowed_values(OperatorType)
+        if v_norm not in allowed:
+            raise ValueError(f"{v} is not a valid OperatorType. Allowed: {sorted(allowed)}")
+        return v_norm
 
 
 class AndFilter(BaseModel):
@@ -183,9 +217,11 @@ class SexFilter(BaseModel):
 
     @field_validator("value")
     def validate_sex_type(cls, v: str) -> str:
-        if v not in SexType:
-            raise ValueError(f"{v} is not a valid SexType. Allowed: {SexType}")
-        return v
+        v_norm = v.upper()
+        allowed = _enum_allowed_values(SexType)
+        if v_norm not in allowed:
+            raise ValueError(f"{v} is not a valid SexType. Allowed: {sorted(allowed)}")
+        return v_norm
 
 
 class StrokeFilter(BaseModel):
@@ -200,9 +236,11 @@ class StrokeFilter(BaseModel):
 
     @field_validator("value")
     def validate_stroke_type(cls, v: str) -> str:
-        if v not in StrokeType:
-            raise ValueError(f"{v} is not a valid StrokeType. Allowed: {StrokeType}")
-        return v
+        v_norm = v.upper()
+        allowed = _enum_allowed_values(StrokeType)
+        if v_norm not in allowed:
+            raise ValueError(f"{v} is not a valid StrokeType. Allowed: {sorted(allowed)}")
+        return v_norm
 
 
 class BooleanFilter(BaseModel):
@@ -219,15 +257,17 @@ class BooleanFilter(BaseModel):
 
     @field_validator("boolean_type")
     def validate_boolean_type(cls, v: str) -> str:
-        if v not in BooleanType:
-            raise ValueError(f"{v} is not a valid BooleanType. Allowed: {BooleanType}")
-        return v
+        v_norm = v.upper()
+        allowed = _enum_allowed_values(BooleanType)
+        if v_norm not in allowed:
+            raise ValueError(f"{v} is not a valid BooleanType. Allowed: {sorted(allowed)}")
+        return v_norm
 
 
 FilterNode = Union[AndFilter, OrFilter, NotFilter, DateFilter, AgeFilter, NIHSSFilter, SexFilter, StrokeFilter, BooleanFilter]
 
 
-class GroupBySex(BaseModel):
+class GroupBySex(HashableBaseModel):
     """
     Grouping by patient sex.
 
@@ -240,9 +280,14 @@ class GroupBySex(BaseModel):
     @field_validator("categories")
     def validate_categories(cls, v: Optional[List[str]]) -> Optional[List[str]]:
         if v is not None:
+            allowed = _enum_allowed_values(SexType)
+            out: List[str] = []
             for val in v:
-                if val not in SexType:
-                    raise ValueError(f"{val} is not a valid SexType. Allowed: {SexType}")
+                val_norm = val.upper()
+                if val_norm not in allowed:
+                    raise ValueError(f"{val} is not a valid SexType. Allowed: {sorted(allowed)}")
+                out.append(val_norm)
+            return out
         return v
 
 
@@ -259,7 +304,7 @@ class Bucket(BaseModel):
     max: int
 
 
-class GroupByAge(BaseModel):
+class GroupByAge(HashableBaseModel):
     """
     Grouping by age buckets.
 
@@ -270,7 +315,7 @@ class GroupByAge(BaseModel):
     buckets: List[Bucket] = Field(description="List of age buckets.")
 
 
-class GroupByNIHSS(BaseModel):
+class GroupByNIHSS(HashableBaseModel):
     """
     Grouping by NIHSS score buckets.
 
@@ -281,7 +326,7 @@ class GroupByNIHSS(BaseModel):
     buckets: List[Bucket] = Field(description="List of NIHSS score buckets.")
 
 
-class GroupByStrokeType(BaseModel):
+class GroupByStrokeType(HashableBaseModel):
     """
     Grouping by stroke type.
 
@@ -294,13 +339,18 @@ class GroupByStrokeType(BaseModel):
     @field_validator("categories")
     def validate_categories(cls, v: Optional[List[str]]) -> Optional[List[str]]:
         if v is not None:
+            allowed = _enum_allowed_values(StrokeType)
+            out: List[str] = []
             for val in v:
-                if val not in StrokeType:
-                    raise ValueError(f"{val} is not a valid StrokeType. Allowed: {StrokeType}")
+                val_norm = val.upper()
+                if val_norm not in allowed:
+                    raise ValueError(f"{val} is not a valid StrokeType. Allowed: {sorted(allowed)}")
+                out.append(val_norm)
+            return out
         return v
 
 
-class GroupByBoolean(BaseModel):
+class GroupByBoolean(HashableBaseModel):
     """
     Grouping by boolean field.
 
@@ -314,12 +364,14 @@ class GroupByBoolean(BaseModel):
 
     @field_validator("boolean_type")
     def validate_boolean_type(cls, v: str) -> str:
-        if v not in BooleanType:
-            raise ValueError(f"{v} is not a valid BooleanType. Allowed: {BooleanType}")
-        return v
+        v_norm = v.upper()
+        allowed = _enum_allowed_values(BooleanType)
+        if v_norm not in allowed:
+            raise ValueError(f"{v} is not a valid BooleanType. Allowed: {sorted(allowed)}")
+        return v_norm
 
 
-class GroupByCanonicalField(BaseModel):
+class GroupByCanonicalField(HashableBaseModel):
     """
     Grouping by a canonical field from SSOT/GraphQL.
 
@@ -333,12 +385,14 @@ class GroupByCanonicalField(BaseModel):
 
     @field_validator("field")
     def validate_field(cls, v: str) -> str:
-        if v not in CanonicalGroupByField:
-            raise ValueError(f"{v} is not a valid CanonicalGroupByField. Allowed: {CanonicalGroupByField}")
-        return v
+        v_norm = v.upper()
+        allowed = _enum_allowed_values(CanonicalGroupByField)
+        if v_norm not in allowed:
+            raise ValueError(f"{v} is not a valid CanonicalGroupByField. Allowed: {sorted(allowed)}")
+        return v_norm
 
 
-class CustomGroup(BaseModel):
+class CustomGroup(HashableBaseModel):
     """
     Custom group defined by filters.
 
@@ -354,6 +408,21 @@ class CustomGroup(BaseModel):
 GroupBySpec = Union[GroupBySex, GroupByAge, GroupByNIHSS, GroupByStrokeType, GroupByBoolean, GroupByCanonicalField, CustomGroup]
 
 
+class DistributionSpec(BaseModel):
+    """
+    Specification for a distribution to be computed.
+
+    Attributes:
+        num_buckets: Number of buckets in the distribution.
+        min_value: Minimum value of the distribution range.
+        max_value: Maximum value of the distribution range.
+    """
+
+    num_buckets: int = Field(description="Number of buckets in the distribution.")
+    min_value: int = Field(description="Minimum value of the distribution range.")
+    max_value: int = Field(description="Maximum value of the distribution range.")
+
+
 class MetricSpec(BaseModel):
     """
     Specification for a metric to be analyzed or visualized.
@@ -362,21 +431,30 @@ class MetricSpec(BaseModel):
         title: Optional title for the metric.
         description: Optional description for the metric.
         metric: The metric type (must be in MetricType).
-        group_by: Optional list of groupings to apply.
-        filters: Optional filter node to apply.
+        distribution: Optional distribution specification for this metric.
     """
 
     title: Optional[str] = None
     description: Optional[str] = None
     metric: str  # Should be a value from MetricType
-    group_by: Optional[List[GroupBySpec]] = None
-    filters: Optional[FilterNode] = None
+    distribution: Optional[DistributionSpec] = None
 
     @field_validator("metric")
     def validate_metric_type(cls, v: str) -> str:
+        # Normalize to uppercase canonical form
         v_norm = v.upper()
-        if v_norm not in MetricType:
-            raise ValueError(f"{v} is not a valid MetricType. Allowed: {MetricType}")
+        try:
+            # Dynamic SSOT enums are str-subclass Enum members; membership with `in Enum` raises TypeError on raw str.
+            # Collect allowed canonical values from enum members robustly.
+            allowed_values: Set[str] = {m.value for m in MetricType}  # type: ignore[attr-defined]
+        except Exception:
+            # Fallback: gracefully degrade to iter(MetricType)
+            try:
+                allowed_values = {str(m.value) if hasattr(m, "value") else str(m) for m in list(MetricType)}  # type: ignore[arg-type]
+            except Exception:
+                allowed_values = set()
+        if v_norm not in allowed_values:
+            raise ValueError(f"{v} is not a valid MetricType. Allowed: {sorted(allowed_values)}")
         return v_norm
 
 
@@ -388,12 +466,16 @@ class ChartSpec(BaseModel):
         title: Optional title for the chart.
         description: Optional description for the chart.
         chart_type: The chart type (must be in ChartType).
+        filters: Optional chart-level filters applied to all metrics/series.
+        group_by: Optional chart-level groupings applied to all metrics/series.
         metrics: List of metrics to include in the chart.
     """
 
     title: Optional[str] = None
     description: Optional[str] = None
     chart_type: str  # Should be a value from ChartType
+    filters: Optional[FilterNode] = None
+    group_by: Optional[List[GroupBySpec]] = None
     metrics: List[MetricSpec]
 
     @field_validator("chart_type")
@@ -402,6 +484,68 @@ class ChartSpec(BaseModel):
         if v_norm not in ChartType:
             raise ValueError(f"{v} is not a valid ChartType. Allowed: {ChartType}")
         return v_norm
+
+    from pydantic import model_validator as _model_validator  # type: ignore
+
+    @_model_validator(mode="after")
+    def validate_chart_level_groupby(self) -> "ChartSpec":
+        """Validate chart-level group_by and filters.
+
+        Rules enforced:
+        - No duplicate GroupBy of the same exact spec.
+        - At most one GroupBySex and one GroupByStrokeType.
+        - At most one GroupByAge and one GroupByNIHSS.
+        - GroupByBoolean: at most one per boolean_type.
+        - GroupByCanonicalField: no duplicates of the same field (but multiple distinct canonical fields are allowed).
+        """
+        try:
+            gb = self.group_by or []
+            if not gb:
+                return self
+
+            seen_specs: set[GroupBySpec] = set()
+            sex_count = 0
+            stroke_count = 0
+            age_count = 0
+            nihss_count = 0
+            boolean_by_type: dict[str, int] = {}
+            canonical_fields: set[str] = set()
+
+            for g in gb:
+                if g in seen_specs:
+                    raise ValueError("Duplicate groupBy spec detected in chart.group_by; remove duplicates.")
+                seen_specs.add(g)
+
+                if isinstance(g, GroupBySex):
+                    sex_count += 1
+                    if sex_count > 1:
+                        raise ValueError("Only one GroupBySex is allowed per chart.")
+                elif isinstance(g, GroupByStrokeType):
+                    stroke_count += 1
+                    if stroke_count > 1:
+                        raise ValueError("Only one GroupByStrokeType is allowed per chart.")
+                elif isinstance(g, GroupByAge):
+                    age_count += 1
+                    if age_count > 1:
+                        raise ValueError("Only one GroupByAge is allowed per chart.")
+                elif isinstance(g, GroupByNIHSS):
+                    nihss_count += 1
+                    if nihss_count > 1:
+                        raise ValueError("Only one GroupByNIHSS is allowed per chart.")
+                elif isinstance(g, GroupByBoolean):
+                    boolean_by_type[g.boolean_type] = boolean_by_type.get(g.boolean_type, 0) + 1
+                elif isinstance(g, GroupByCanonicalField):
+                    if g.field in canonical_fields:
+                        raise ValueError("Duplicate GroupByCanonicalField for the same field is not allowed.")
+                    canonical_fields.add(g.field)
+
+            for btype, count in boolean_by_type.items():
+                if count > 1:
+                    raise ValueError(f"Only one GroupByBoolean per boolean_type is allowed (duplicate for '{btype}').")
+        except Exception:
+            return self
+
+        return self
 
 
 class StatisticalTestSpec(BaseModel):
@@ -419,6 +563,8 @@ class StatisticalTestSpec(BaseModel):
     description: Optional[str] = None
     test_type: str  # Should be a value from StatisticalTestType
     metrics: List[MetricSpec]
+    group_by: Optional[List[GroupBySpec]] = None
+    filters: Optional[FilterNode] = None
 
     @field_validator("test_type")
     def validate_test_type(cls, v: str) -> str:
@@ -426,6 +572,57 @@ class StatisticalTestSpec(BaseModel):
         if v_norm not in StatisticalTestType:
             raise ValueError(f"{v} is not a valid StatisticalTestType. Allowed: {StatisticalTestType}")
         return v_norm
+
+    from pydantic import model_validator as _model_validator  # type: ignore
+
+    @_model_validator(mode="after")
+    def validate_test_groupby(self) -> "StatisticalTestSpec":
+        """Ensure no duplicate group_by specs and single-instance constraints similar to charts.
+
+        - Only one GroupBySex / GroupByStrokeType / GroupByAge / GroupByNIHSS per test.
+        - GroupByBoolean: only one per boolean_type.
+        - Allow multiple distinct GroupByCanonicalField but no duplicates of same field.
+        """
+        try:
+            gb = self.group_by or []
+            if not gb:
+                return self
+            seen: set[GroupBySpec] = set()
+            sex = stroke = age = nihss = 0
+            boolean_types: dict[str, int] = {}
+            canonical_fields: set[str] = set()
+            for g in gb:
+                if g in seen:
+                    raise ValueError("Duplicate group_by spec in statistical test.")
+                seen.add(g)
+                if isinstance(g, GroupBySex):
+                    sex += 1
+                    if sex > 1:
+                        raise ValueError("Only one GroupBySex allowed in a statistical test.")
+                elif isinstance(g, GroupByStrokeType):
+                    stroke += 1
+                    if stroke > 1:
+                        raise ValueError("Only one GroupByStrokeType allowed in a statistical test.")
+                elif isinstance(g, GroupByAge):
+                    age += 1
+                    if age > 1:
+                        raise ValueError("Only one GroupByAge allowed in a statistical test.")
+                elif isinstance(g, GroupByNIHSS):
+                    nihss += 1
+                    if nihss > 1:
+                        raise ValueError("Only one GroupByNIHSS allowed in a statistical test.")
+                elif isinstance(g, GroupByBoolean):
+                    boolean_types[g.boolean_type] = boolean_types.get(g.boolean_type, 0) + 1
+                elif isinstance(g, GroupByCanonicalField):
+                    if g.field in canonical_fields:
+                        raise ValueError("Duplicate GroupByCanonicalField for same field in statistical test.")
+                    canonical_fields.add(g.field)
+            for bt, ct in boolean_types.items():
+                if ct > 1:
+                    raise ValueError(f"Duplicate GroupByBoolean for boolean_type '{bt}' in statistical test.")
+        except Exception:
+            return self
+        return self
 
 
 class AnalysisPlan(BaseModel):
