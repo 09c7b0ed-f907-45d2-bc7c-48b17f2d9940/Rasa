@@ -331,7 +331,7 @@ def validate_metric_metadata_complete(logger: Optional[Any] = None) -> List[str]
             seen_keys: set[str] = set()
             for idx, opt_any in enumerate(options_raw):
                 if not isinstance(opt_any, dict):
-                    msg = f"SSOT invalid [ENUM]: {code} option #{idx+1} is not a dict"
+                    msg = f"SSOT invalid [ENUM]: {code} option #{idx + 1} is not a dict"
                     warnings.append(msg)
                     lg.warning(msg)
                     continue
@@ -339,7 +339,7 @@ def validate_metric_metadata_complete(logger: Optional[Any] = None) -> List[str]
                 key = _ci_get(opt, "key")
                 syns = _ci_get(opt, "synonyms")
                 if not isinstance(key, str) or not key.strip():
-                    msg = f"SSOT incomplete [ENUM]: {code} option #{idx+1} missing key"
+                    msg = f"SSOT incomplete [ENUM]: {code} option #{idx + 1} missing key"
                     warnings.append(msg)
                     lg.warning(msg)
                 else:
