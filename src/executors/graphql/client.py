@@ -50,8 +50,6 @@ class GraphQLProxyClient:
                     return None
             else:
                 content_type = response.headers.get("Content-Type", "")
-                # Avoid parsing JSON on non-JSON error responses; log safe preview
-                # response.text is a str; truncate for logging
                 preview = response.text[:1000]
                 logger.error(
                     "[GraphQLProxyClient] Error %s (Content-Type=%s). Body preview: %s. Query preview: %s",

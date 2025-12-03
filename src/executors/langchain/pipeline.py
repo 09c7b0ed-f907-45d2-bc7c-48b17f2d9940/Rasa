@@ -15,7 +15,6 @@ LLM_MODEL = env.require_all_env("LLM_MODEL")
 llm: Any = ChatOpenAI(model=LLM_MODEL, temperature=0)
 
 
-# --- SCHEMA INJECTION UTILITY ---
 def get_schema_description(model: Type[Any]) -> str:
     """
     Recursively extract field descriptions from a Pydantic model as a readable schema spec (Pydantic v2 compatible).
@@ -42,8 +41,6 @@ def get_schema_description(model: Type[Any]) -> str:
 
 
 SCHEMA_DESCRIPTION: str = get_schema_description(AnalysisPlan)
-
-# Step 1: Chain-of-Thought reasoning step (no context)
 cot_prompt: ChatPromptTemplate = ChatPromptTemplate.from_messages(  # type: ignore
     [
         (
@@ -77,8 +74,6 @@ def _build_few_shots_text() -> str:
 
 
 FEW_SHOTS_TEXT = _build_few_shots_text()
-
-# Step 2: Structured plan generation prompt with single few_shots variable
 plan_prompt: ChatPromptTemplate = ChatPromptTemplate.from_messages(  # type: ignore
     [
         (
@@ -99,7 +94,6 @@ plan_prompt: ChatPromptTemplate = ChatPromptTemplate.from_messages(  # type: ign
 
 structured_llm: Any = llm.with_structured_output(AnalysisPlan)
 
-# Compose the chain: CoT -> Plan
 cot_chain: Any = cot_prompt | llm
 plan_chain: Any = plan_prompt | structured_llm
 
@@ -130,9 +124,9 @@ class GeneratePlanDebug(TypedDict):
 def generate_analysis_plan(
     question: str,
     entities: Dict[str, Any],
-    language: Optional[str],  # None or "auto" lets model infer
+    language: Optional[str],
     max_retries: int,
-    debug: Literal[True],  # when explicitly True, return debug payload
+    debug: Literal[True],
 ) -> GeneratePlanDebug: ...
 
 
@@ -142,7 +136,7 @@ def generate_analysis_plan(
     entities: Dict[str, Any],
     language: Optional[str],
     max_retries: int,
-    debug: Literal[False],  # default path returns validated plan
+    debug: Literal[False],
 ) -> AnalysisPlan: ...
 
 
@@ -152,7 +146,7 @@ def generate_analysis_plan(
     entities: Dict[str, Any],
     language: Optional[str],
     max_retries: int,
-    debug: bool,  # general case
+    debug: bool,
 ) -> Union[AnalysisPlan, GeneratePlanDebug]: ...
 
 
@@ -180,8 +174,6 @@ def generate_analysis_plan(
     from pydantic import ValidationError
 
     logger = logging.getLogger(__name__)
-
-    # Language handling: if caller passes None or 'auto', let the model infer from user utterance.
     if not language:
         language = "auto"
 
@@ -196,7 +188,6 @@ def generate_analysis_plan(
     steps: List[Any] = []
     attempts: List[Any] = []
     reasoning: Any = None
-    # --- Chain-of-Thought step ---
     cot_inputs: Dict[str, Any] = {
         "question": question,
         "entities": json.dumps(entities),
@@ -226,7 +217,6 @@ def generate_analysis_plan(
             }
         )
         reasoning = f"ERROR: {cot_exc}"
-    # --- Plan generation and correction loop ---
     plan_inputs: Dict[str, Any] = {
         "question": question,
         "entities": json.dumps(entities),
@@ -249,12 +239,10 @@ def generate_analysis_plan(
                     "response": result,
                 }
             )
-            # Ensure the return value is an AnalysisPlan instance (defensive in case the LLM returns a raw dict)
             if not isinstance(result, AnalysisPlan):
                 try:
-                    result = AnalysisPlan.model_validate(result)  # pydantic v2
+                    result = AnalysisPlan.model_validate(result)
                 except Exception:
-                    # Best-effort: keep original so the ValidationError path can handle it on retry
                     pass
 
             if debug:
@@ -265,7 +253,6 @@ def generate_analysis_plan(
                     "final_output": result if isinstance(result, AnalysisPlan) else None,
                 }
                 return debug_payload
-            # At this point, guarantee AnalysisPlan type for non-debug callers
             assert isinstance(result, AnalysisPlan), "Expected AnalysisPlan from structured output"
             return result
         except ValidationError as ve:
@@ -286,7 +273,6 @@ def generate_analysis_plan(
                         "final_output": None,
                     }
                 raise
-            # --- Correction/self-critique step ---
             invalid_output: str = ve.json() if hasattr(ve, "json") else str(ve)
             critique_prompt_obj: ChatPromptTemplate = ChatPromptTemplate.from_messages(  # type: ignore
                 [

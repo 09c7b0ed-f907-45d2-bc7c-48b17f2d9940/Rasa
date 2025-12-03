@@ -1,4 +1,3 @@
-# Semantic parser + deterministic executor = LLM-driven planner
 from __future__ import annotations
 
 from datetime import datetime
@@ -14,8 +13,6 @@ from src.domain.graphql.ssot_enums import (
 from src.domain.graphql.ssot_enums import (
     GroupByType as CanonicalGroupByField,
 )
-
-# Unified SSOT enum imports (replace local dynamic loader usage)
 from src.domain.graphql.ssot_enums import (
     MetricType,
     SexType,
@@ -79,8 +76,6 @@ def _extract_canonical(entry: Any) -> Optional[str]:
     return None
 
 
-# NOTE: ChartType & StatisticalTestType are still needed here as list-like sets.
-# We keep the lightweight loader for these two until they are promoted to shared enums.
 def _load_chart_or_test_enum(filename: str) -> List[str]:
     path = Path(__file__).resolve().parents[2] / "shared" / "SSOT" / filename
     if not path.exists():
@@ -350,6 +345,76 @@ class GroupByStrokeType(HashableBaseModel):
         return v
 
 
+TIME_INTERVALS: Set[str] = {"DAY", "WEEK", "BIWEEK", "MONTH", "QUARTER", "YEAR"}
+TIME_ALIGNMENT: Set[str] = {"CALENDAR", "FISCAL"}
+
+
+class TimeWindow(BaseModel):
+    """
+    Relative time window specification.
+
+    Attributes:
+        last_n: Positive integer count of units to include (e.g., 6 for last 6 months).
+        unit: Unit for the window (DAY, WEEK, MONTH, YEAR).
+    """
+
+    last_n: int = Field(gt=0, description="Positive count for the relative window.")
+    unit: str = Field(description="Time unit for the window. One of DAY, WEEK, BIWEEK, MONTH, QUARTER, YEAR.")
+
+    @field_validator("unit")
+    def validate_unit(cls, v: str) -> str:
+        v_norm = v.upper()
+        if v_norm not in TIME_INTERVALS:
+            raise ValueError(f"{v} is not a valid time unit. Allowed: {sorted(TIME_INTERVALS)}")
+        return v_norm
+
+
+class TimeRange(BaseModel):
+    """
+    Absolute time range specification.
+
+    Attributes:
+        start_date: ISO 8601 start date (inclusive).
+        end_date: ISO 8601 end date (inclusive).
+    """
+
+    start_date: str = Field(description="Start date (inclusive), ISO 8601 format.")
+    end_date: str = Field(description="End date (inclusive), ISO 8601 format.")
+
+    @field_validator("start_date", "end_date")
+    def validate_iso_date(cls, v: str) -> str:
+        try:
+            datetime.fromisoformat(v)
+        except ValueError:
+            raise ValueError(f"{v} is not a valid ISO 8601 date or datetime string.")
+        return v
+
+
+class GroupByTime(HashableBaseModel):
+    """Grouping by time buckets.
+
+    Simplified for now to just grain + window; timezone and
+    fiscal-year alignment are commented out until we know how
+    to drive them from configuration.
+
+    Attributes:
+        grain: Aggregation grain (DAY, WEEK, BIWEEK, MONTH, QUARTER, YEAR).
+        window: Optional relative time window (e.g., last 6 months). If omitted, executor may use defaults or chart-level filters.
+        include_partial: Whether to include the current, incomplete bucket.
+    """
+
+    grain: str = Field(description="Time aggregation grain.")
+    window: Optional[Union[TimeWindow, TimeRange]] = Field(default=None, description="Optional relative or absolute time window.")
+    include_partial: Optional[bool] = Field(default=None, description="Whether to include the current, incomplete bucket.")
+
+    @field_validator("grain")
+    def validate_grain(cls, v: str) -> str:
+        v_norm = v.upper()
+        if v_norm not in TIME_INTERVALS:
+            raise ValueError(f"{v} is not a valid time grain. Allowed: {sorted(TIME_INTERVALS)}")
+        return v_norm
+
+
 class GroupByBoolean(HashableBaseModel):
     """
     Grouping by boolean field.
@@ -405,7 +470,16 @@ class CustomGroup(HashableBaseModel):
     filters: List[FilterNode] = Field(description="Filters defining this group.")
 
 
-GroupBySpec = Union[GroupBySex, GroupByAge, GroupByNIHSS, GroupByStrokeType, GroupByBoolean, GroupByCanonicalField, CustomGroup]
+GroupBySpec = Union[
+    GroupBySex,
+    GroupByAge,
+    GroupByNIHSS,
+    GroupByStrokeType,
+    GroupByBoolean,
+    GroupByCanonicalField,
+    GroupByTime,
+    CustomGroup,
+]
 
 
 class DistributionSpec(BaseModel):
@@ -441,14 +515,10 @@ class MetricSpec(BaseModel):
 
     @field_validator("metric")
     def validate_metric_type(cls, v: str) -> str:
-        # Normalize to uppercase canonical form
         v_norm = v.upper()
         try:
-            # Dynamic SSOT enums are str-subclass Enum members; membership with `in Enum` raises TypeError on raw str.
-            # Collect allowed canonical values from enum members robustly.
             allowed_values: Set[str] = {m.value for m in MetricType}  # type: ignore[attr-defined]
         except Exception:
-            # Fallback: gracefully degrade to iter(MetricType)
             try:
                 allowed_values = {str(m.value) if hasattr(m, "value") else str(m) for m in list(MetricType)}  # type: ignore[arg-type]
             except Exception:
@@ -508,6 +578,7 @@ class ChartSpec(BaseModel):
             stroke_count = 0
             age_count = 0
             nihss_count = 0
+            time_count = 0
             boolean_by_type: dict[str, int] = {}
             canonical_fields: set[str] = set()
 
@@ -532,6 +603,10 @@ class ChartSpec(BaseModel):
                     nihss_count += 1
                     if nihss_count > 1:
                         raise ValueError("Only one GroupByNIHSS is allowed per chart.")
+                elif isinstance(g, GroupByTime):
+                    time_count += 1
+                    if time_count > 1:
+                        raise ValueError("Only one GroupByTime is allowed per chart.")
                 elif isinstance(g, GroupByBoolean):
                     boolean_by_type[g.boolean_type] = boolean_by_type.get(g.boolean_type, 0) + 1
                 elif isinstance(g, GroupByCanonicalField):
@@ -588,7 +663,7 @@ class StatisticalTestSpec(BaseModel):
             if not gb:
                 return self
             seen: set[GroupBySpec] = set()
-            sex = stroke = age = nihss = 0
+            sex = stroke = age = nihss = time = 0
             boolean_types: dict[str, int] = {}
             canonical_fields: set[str] = set()
             for g in gb:
@@ -611,6 +686,10 @@ class StatisticalTestSpec(BaseModel):
                     nihss += 1
                     if nihss > 1:
                         raise ValueError("Only one GroupByNIHSS allowed in a statistical test.")
+                elif isinstance(g, GroupByTime):
+                    time += 1
+                    if time > 1:
+                        raise ValueError("Only one GroupByTime allowed in a statistical test.")
                 elif isinstance(g, GroupByBoolean):
                     boolean_types[g.boolean_type] = boolean_types.get(g.boolean_type, 0) + 1
                 elif isinstance(g, GroupByCanonicalField):

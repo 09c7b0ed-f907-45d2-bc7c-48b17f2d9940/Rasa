@@ -363,10 +363,117 @@ def validate_metric_metadata_complete(logger: Optional[Any] = None) -> List[str]
     return warnings
 
 
+def _first_synonym(item: Dict[str, Any]) -> Optional[str]:
+    syn = item.get("synonyms")
+    if isinstance(syn, list) and syn and isinstance(syn[0], str):
+        return syn[0]
+    return None
+
+
+@lru_cache(maxsize=1)
+def _metric_meta_cached() -> Dict[str, Dict[str, Any]]:
+    return get_metric_metadata()
+
+
+def get_metric_display_name(metric_code: str) -> str:
+    """Return SSOT-preferred display name for a metric (first synonym), fallback to canonical code.
+
+    Avoids local formatting in executors; centralizes presentation in the loader.
+    """
+    code = (metric_code or "").upper()
+    meta = _metric_meta_cached().get(code) or {}
+    disp = meta.get("display_name")
+    if isinstance(disp, str) and disp.strip():
+        return disp
+    return code
+
+
+def get_enum_option_label(metric_code: str, key: str) -> Optional[str]:
+    """Return preferred label for an enum option of a given metric from SSOT.
+
+    Looks up MetricType.yml entry, then 'enum_options' mapping derived by get_metric_metadata.
+    Fallbacks: None if not found.
+    """
+    code = (metric_code or "").upper()
+    k = (key or "").strip()
+    if not code or not k:
+        return None
+    meta = _metric_meta_cached().get(code) or {}
+    options = cast(Dict[str, Any], meta.get("enum_options") or {})
+    # Try exact key, then case-insensitive match
+    entry = options.get(k)
+    if entry is None:
+        for ok, ov in options.items():
+            if ok.lower() == k.lower():
+                entry = ov
+                break
+    if isinstance(entry, dict):
+        entry_dict: Dict[str, Any] = cast(Dict[str, Any], entry)
+        syns = entry_dict.get("synonyms")
+        if isinstance(syns, list) and syns and isinstance(syns[0], str):
+            return syns[0]
+    return None
+
+
+def get_canonical_display_name(canonical: str) -> str:
+    """Return display name for a canonical field/metric from SSOT synonyms.
+
+    Prefers MetricType.yml first; if not found, falls back to canonical value.
+    """
+    code = (canonical or "").upper()
+    meta = _metric_meta_cached().get(code)
+    if meta:
+        disp = meta.get("display_name")
+        if isinstance(disp, str) and disp.strip():
+            return disp
+    # Optional: check GroupByType.yml for synonyms
+    try:
+        items = _load_yaml("GroupByType.yml")
+        for it in items:
+            can = it.get("canonical")
+            if isinstance(can, str) and can.upper() == code:
+                lbl = _first_synonym(it)
+                if lbl:
+                    return lbl
+    except Exception:
+        pass
+    return code
+
+
+def _label_from_simple_type_file(filename: str, value: str) -> Optional[str]:
+    """Return label from simple SSOT type files (e.g., SexType.yml, StrokeType.yml) using first synonym.
+
+    Matches by canonical (case-insensitive). Returns None if not found.
+    """
+    try:
+        items = _load_yaml(filename)
+        val_up = (value or "").upper()
+        for it in items:
+            can = it.get("canonical")
+            if isinstance(can, str) and can.upper() == val_up:
+                return _first_synonym(it) or can
+    except Exception:
+        return None
+    return None
+
+
+def get_sex_label(value: str) -> str:
+    return _label_from_simple_type_file("SexType.yml", value) or value
+
+
+def get_stroke_label(value: str) -> str:
+    return _label_from_simple_type_file("StrokeType.yml", value) or value
+
+
 __all__ = [
     "BASE_SSOT",
     "create_enum",
     "get_canonical_values",
     "get_metric_metadata",
     "validate_metric_metadata_complete",
+    "get_metric_display_name",
+    "get_enum_option_label",
+    "get_canonical_display_name",
+    "get_sex_label",
+    "get_stroke_label",
 ]

@@ -8,7 +8,7 @@ from rasa_sdk.types import DomainDict  # type: ignore
 
 from src.domain.langchain.schema import AnalysisPlan
 from src.executors.langchain.pipeline import generate_analysis_plan
-from src.executors.plan_executor import execute_plan
+from src.executors.plan_executor import execute_plan_async
 from src.shared.ssot_loader import validate_metric_metadata_complete
 
 logger = logging.getLogger(__name__)
@@ -61,6 +61,8 @@ class ActionGenerateVisualization(Action):
             if isinstance(override_language, str):
                 override_language = override_language.split("-")[0].lower() or None
 
+            dispatcher.utter_message(text="Got it, generating the visualization now – this may take a few seconds…")
+
             plan_obj: AnalysisPlan = generate_analysis_plan(
                 question=user_message,
                 entities=extracted_entities,
@@ -69,9 +71,8 @@ class ActionGenerateVisualization(Action):
                 debug=False,
             )
 
-            visualization = execute_plan(plan_obj, session_token=session_token)
+            visualization = await execute_plan_async(plan_obj, session_token=session_token, max_concurrency=4)
             dispatcher.utter_message(json_message=json.loads(visualization.model_dump_json()))
-            dispatcher.utter_message(text="Hopefully that did something lol.")
         except Exception as e:
             error_msg = f"Error generating visualization: {str(e)}"
             logger.error(error_msg)

@@ -1,7 +1,7 @@
 import json
 from typing import Dict, List, Tuple
 
-from src.domain.langchain.schema import AnalysisPlan, ChartSpec, GroupByCanonicalField, GroupBySex, GroupByStrokeType, MetricSpec, StatisticalTestSpec
+from src.domain.langchain.schema import AnalysisPlan, ChartSpec, GroupByCanonicalField, GroupBySex, GroupByStrokeType, GroupByTime, MetricSpec, StatisticalTestSpec, TimeWindow
 
 
 def example_dtn_by_sex() -> Tuple[str, str, str]:
@@ -102,6 +102,34 @@ def example_dtn_by_sex_and_stroke() -> Tuple[str, str, str]:
     return desc, user, assistant
 
 
+def example_dtn_last_6_months_by_sex() -> Tuple[str, str, str]:
+    detected_entities = {
+        "sex": ["MALE", "FEMALE"],
+        "metric": ["DTN"],
+        "chart_type": ["LINE"],
+        "time_window": ["LAST_6_MONTHS"],
+    }
+    plan = AnalysisPlan(
+        charts=[
+            ChartSpec(
+                title="DTN by Sex over Last 6 Months",
+                description="Line graph of DTN for males and females over the last 6 months, monthly.",
+                chart_type="LINE",
+                group_by=[
+                    GroupByTime(grain="MONTH", window=TimeWindow(last_n=6, unit="MONTH")),
+                    GroupBySex(categories=["MALE", "FEMALE"]),
+                ],
+                metrics=[MetricSpec(metric="DTN")],
+            )
+        ],
+        statistical_tests=None,
+    )
+    desc = "Line graph of DTN by sex over the last 6 months."
+    user = "USER_UTTERANCE:\nShow me DTN by sex over the last 6 months, monthly\n\nENTITIES_DETECTED(JSON):\n" + json.dumps(detected_entities)
+    assistant = plan.model_dump_json(indent=2)
+    return desc, user, assistant
+
+
 def example_statistical_test_dtn_by_sex() -> Tuple[str, str, str]:
     detected_entities = {"sex": ["MALE", "FEMALE"], "metric": ["DTN"], "statistical_test_type": ["T_TEST"]}
     plan = AnalysisPlan(
@@ -136,8 +164,9 @@ def example_statistical_test_dtn_by_sex() -> Tuple[str, str, str]:
 def get_few_shot_examples() -> List[Dict[str, str]]:
     examples: List[Dict[str, str]] = []
     for desc, user, assistant in [
-        example_dtn_distribution_line(),  # clarify title pattern for distribution-style line
-        example_dtn_by_first_contact_place(),  # prioritize canonical field grouping example
+        example_dtn_last_6_months_by_sex(),
+        example_dtn_distribution_line(),
+        example_dtn_by_first_contact_place(),
         example_dtn_by_sex(),
         example_dtn_by_sex_and_stroke(),
         example_statistical_test_dtn_by_sex(),
