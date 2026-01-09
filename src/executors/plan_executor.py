@@ -4,8 +4,8 @@ from concurrent.futures import ThreadPoolExecutor
 from itertools import product
 from typing import Any, Dict, List, Optional, Sequence, Tuple, cast
 
-from src.domain.dto.charts import union
-from src.domain.dto.charts.types import ChartAxis, ChartMetadata, ChartPoint, ChartSeries
+from src.domain.dto.charts import BarChart, ChartDTO, LineChart, union
+from src.domain.dto.charts.types import ChartAxis, ChartMetadata, ChartPoint, ChartSeries, ChartType
 from src.domain.dto.response import VisualizationResponse
 from src.domain.graphql.request import (
     DataOrigin,
@@ -320,6 +320,7 @@ async def execute_plan_async(plan: AnalysisPlan, session_token: str, max_concurr
     ) -> List[ChartSeries]:
         async with sem:
             query_str = req.to_graphql_string()
+            logger.info("[plan_executor] GraphQL query for chart (groupBy=%s, labels=%s):\n%s", group_by_field, " | ".join(label_parts), query_str)
             resp = await asyncio.to_thread(client.query, query_str, session_token)
         series: List[ChartSeries] = []
         if resp is None:
@@ -357,10 +358,6 @@ async def execute_plan_async(plan: AnalysisPlan, session_token: str, max_concurr
         return series
 
     for planChart in planCharts:
-        if planChart.chart_type != "LINE":
-            logger.warning("Only LINE charts are implemented in test2 async; got %s", planChart.chart_type)
-            continue
-
         metric_requests: List[MetricRequest] = []
         derived_axes: Optional[tuple[ChartAxis, ChartAxis]] = None
         for metric in planChart.metrics:
@@ -451,7 +448,7 @@ async def execute_plan_async(plan: AnalysisPlan, session_token: str, max_concurr
             if not all_series:
                 logger.warning(
                     "[test2] No series generated for chart '%s'%s. This often indicates a backend error or empty results.",
-                    planChart.title or "Line Chart",
+                    planChart.title or "Chart",
                     "",
                 )
             metric_codes = [m.metric for m in planChart.metrics]
@@ -475,7 +472,7 @@ async def execute_plan_async(plan: AnalysisPlan, session_token: str, max_concurr
                 title_text = base if (" by " in base.lower()) or not dims_phrase else base + dims_phrase
             else:
                 if len(metric_names) == 0:
-                    base_title = "Line Chart"
+                    base_title = f"{planChart.chart_type.title()} Chart"
                 elif len(metric_names) == 1:
                     base_title = f"{metric_names[0]} Distribution"
                 elif len(metric_names) == 2:
@@ -491,10 +488,18 @@ async def execute_plan_async(plan: AnalysisPlan, session_token: str, max_concurr
             if derived_axes is not None:
                 meta_kwargs["x_axis"], meta_kwargs["y_axis"] = derived_axes
 
-            visChart: union.LineChart = union.LineChart(
-                metadata=ChartMetadata(**meta_kwargs),
-                series=all_series,
-            )
-            response.charts.append(visChart)
+            chart_type_upper = (planChart.chart_type or "").upper()
+            vis_chart: ChartDTO
+            if chart_type_upper == ChartType.LINE.value:
+                vis_chart = LineChart(metadata=ChartMetadata(**meta_kwargs), series=all_series)
+            elif chart_type_upper == ChartType.BAR.value:
+                vis_chart = BarChart(metadata=ChartMetadata(**meta_kwargs), series=all_series)
+            elif chart_type_upper == ChartType.AREA.value:
+                vis_chart = union.AreaChart(metadata=ChartMetadata(**meta_kwargs), series=all_series)
+            else:
+                logger.warning("Chart type %s not yet implemented; defaulting to LINE rendering", planChart.chart_type)
+                vis_chart = LineChart(metadata=ChartMetadata(**meta_kwargs), series=all_series)
+
+            response.charts.append(vis_chart)
 
     return response

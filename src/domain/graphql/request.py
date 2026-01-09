@@ -116,8 +116,8 @@ class MetricRequest(BaseModel):
 class TimePeriod(BaseModel):
     """Time period for the query"""
 
-    start_date: Optional[str] = Field(default="1900-01-01", alias="startDate")
-    end_date: Optional[str] = Field(default="2100-12-31", alias="endDate")
+    start_date: Optional[str] = Field(default="2022-01-01", alias="startDate")
+    end_date: Optional[str] = Field(default="2024-12-31", alias="endDate")
 
     @model_validator(mode="after")
     def _fill_none_bounds(self):
@@ -126,9 +126,9 @@ class TimePeriod(BaseModel):
         This allows callers to pass None to mean "use the implicit min/max".
         """
         if self.start_date is None:
-            self.start_date = "1900-01-01"
+            self.start_date = "2022-01-01"
         if self.end_date is None:
-            self.end_date = "2100-12-31"
+            self.end_date = "2024-12-31"
         return self
 
 

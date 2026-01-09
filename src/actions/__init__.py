@@ -1,5 +1,5 @@
 from .actions import ActionGenerateVisualization
-from .cli.router import ActionCliRouter  # ensure CLI router action is registered
+from .cli.router import ActionCliRouter
 
 __all__ = [
     "ActionCliRouter",

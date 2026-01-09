@@ -1,59 +1,64 @@
+import asyncio
 import json
 import logging
-from typing import Any, Dict, List
+from typing import Any, Dict, List, cast
 
-from rasa_sdk import Action, Tracker  # type: ignore
-from rasa_sdk.executor import CollectingDispatcher  # type: ignore
-from rasa_sdk.types import DomainDict  # type: ignore
-
-from src.domain.langchain.schema import AnalysisPlan
-from src.executors.langchain.pipeline import generate_analysis_plan
-from src.executors.plan_executor import execute_plan_async
-from src.shared.ssot_loader import validate_metric_metadata_complete
+from src.actions.long_action.long_action import LongAction
+from src.actions.long_action.long_action_context import LongActionContext
+from src.domain.langchain import schema as lang_schema
+from src.executors import plan_executor
+from src.executors.langchain import pipeline as lang_pipeline
+from src.shared import ssot_loader
 
 logger = logging.getLogger(__name__)
 
 # Emit SSOT completeness warnings once on module import
 try:
-    validate_metric_metadata_complete(logger)
+    ssot_loader.validate_metric_metadata_complete(logger)
 except Exception as _e:
     logger.debug("SSOT validation skipped due to: %s", _e)
 
 
-class ActionGenerateVisualization(Action):
-    """
-    Rasa action that uses the planner chain to generate visualizations and statistics.
+class ActionGenerateVisualization(LongAction):
+    """Long action that uses the planner chain to generate visualizations and statistics.
+
+    In callback mode this streams messages via the long-action callback URL;
+    otherwise it behaves like a normal synchronous action and uses the
+    dispatcher directly.
     """
 
     def name(self) -> str:
         return "action_generate_visualization"
 
-    async def run(
-        self,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: DomainDict,
-    ) -> List[Dict[str, Any]]:
+    async def work(self, ctx: LongActionContext) -> Any:
         try:
-            user_message = tracker.latest_message.get("text", "")
-            session_token = tracker.sender_id
-            logger.info(f"Processing visualization request: '{user_message}' for user: {session_token}")
+            user_message = ctx.text
+            session_token = ctx.sender_id
+            logger.info("Processing visualization request: '%s'", user_message)
 
-            # Extract entities from Rasa NLU
-            entities = tracker.latest_message.get("entities", [])
-            extracted_entities = {entity["entity"]: entity["value"] for entity in entities}
+            latest_meta = ctx.metadata
+
+            # Extract entities from the tracker snapshot
+            latest_any = ctx.tracker_snapshot.get("latest_message")
+            entities_list: List[Dict[str, Any]] = []
+            if isinstance(latest_any, dict):
+                latest_msg = cast(Dict[str, Any], latest_any)
+                ents_any = latest_msg.get("entities", [])
+                if isinstance(ents_any, list):
+                    ents_list = cast(List[Any], ents_any)
+                    for e_any in ents_list:
+                        if isinstance(e_any, dict):
+                            entities_list.append(cast(Dict[str, Any], e_any))
+            extracted_entities: Dict[str, Any] = {ent["entity"]: ent["value"] for ent in entities_list if isinstance(ent.get("entity"), str) and "value" in ent}
 
             # Optional language override from Rasa (metadata.language or slot 'language').
-            override_language = None
+            override_language: Any = None
             try:
-                meta_any = tracker.latest_message.get("metadata")
-                if isinstance(meta_any, dict):
-                    meta_dict: Dict[str, Any] = meta_any  # type: ignore[assignment]
-                    lang_meta = meta_dict.get("language")
-                    if isinstance(lang_meta, str) and lang_meta.strip():
-                        override_language = lang_meta
-                if override_language is None and hasattr(tracker, "get_slot"):
-                    slot_lang = tracker.get_slot("language")  # type: ignore[attr-defined]
+                lang_meta = latest_meta.get("language")
+                if isinstance(lang_meta, str) and lang_meta.strip():
+                    override_language = lang_meta
+                if override_language is None:
+                    slot_lang = ctx.slots.get("language")
                     if isinstance(slot_lang, str) and slot_lang.strip():
                         override_language = slot_lang
             except Exception:
@@ -61,9 +66,9 @@ class ActionGenerateVisualization(Action):
             if isinstance(override_language, str):
                 override_language = override_language.split("-")[0].lower() or None
 
-            dispatcher.utter_message(text="Got it, generating the visualization now – this may take a few seconds…")
+            ctx.say(text="Got it, generating the visualization now – this may take a few seconds…")
 
-            plan_obj: AnalysisPlan = generate_analysis_plan(
+            plan_obj: lang_schema.AnalysisPlan = lang_pipeline.generate_analysis_plan(
                 question=user_message,
                 entities=extracted_entities,
                 language=override_language,
@@ -71,11 +76,45 @@ class ActionGenerateVisualization(Action):
                 debug=False,
             )
 
-            visualization = await execute_plan_async(plan_obj, session_token=session_token, max_concurrency=4)
-            dispatcher.utter_message(json_message=json.loads(visualization.model_dump_json()))
+            visualization = await plan_executor.execute_plan_async(
+                plan_obj,
+                session_token=session_token,
+                max_concurrency=4,
+            )
+
+            # Send the visualization as a structured payload. In synchronous
+            # mode this goes via dispatcher.json_message; in callback mode it
+            # is forwarded in the long-action callback body.
+            ctx.say(json_message=json.loads(visualization.model_dump_json()))
         except Exception as e:
             error_msg = f"Error generating visualization: {str(e)}"
             logger.error(error_msg)
-            dispatcher.utter_message(text="❌ Error generating visualization.")
-            dispatcher.utter_message(text=error_msg)
-        return []
+            ctx.say(text="❌ Error generating visualization.")
+            ctx.say(text=error_msg)
+        finally:
+            ctx.done()
+
+        # No structured return value is required; the frontend uses messages
+        # emitted via ctx.say(...).
+        return None
+
+
+class ActionDummyCountdown(LongAction):
+    """Test long action that counts down from 5 with 1s intervals."""
+
+    def name(self) -> str:
+        return "action_dummy_countdown"
+
+    async def work(self, ctx: LongActionContext) -> Any:
+        logger.info("[DummyCountdown] Starting countdown")
+
+        for i in range(5, 0, -1):
+            logger.info("[DummyCountdown] Emitting step i=%s", i)
+            ctx.say(progress=f"Countdown: {i}")
+            await asyncio.sleep(1.0)
+
+        logger.info("[DummyCountdown] Finished countdown")
+        ctx.say(text="Countdown finished.")
+        ctx.done()
+        # Dummy result object for callback mode.
+        return {"ok": True}

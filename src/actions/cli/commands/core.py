@@ -35,6 +35,7 @@ def _ping(dispatcher: Any, tracker: Any, domain: Any, args: List[str], opts: Dic
 
 ALLOWED_ACTIONS = {
     "action_generate_visualization",
+    "action_dummy_countdown",
 }
 
 
