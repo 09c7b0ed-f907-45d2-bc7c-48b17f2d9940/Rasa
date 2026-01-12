@@ -40,22 +40,33 @@ class LongActionContext:
 
     def say(self, **kwargs: Any) -> None:
         """
-        - ctx.say(text="hi") → normal message
-        - ctx.say(json_message={...}) / ctx.say(image="...") → normal message
-        - ctx.say(progress="...") → special progress event (frontend decides how to render/replace)
+        - ctx.say(text="hi")  normal message
+        - ctx.say(json_message={...}) / ctx.say(image="...")  normal message
+        - ctx.say(progress="...")  special progress event (frontend decides how to render/replace)
         """
         if self.dispatcher is not None:
             # Synchronous mode: send directly via dispatcher.
             self.dispatcher.utter_message(**kwargs)
             return
 
-        # Callback mode: normalise progress into a "custom" payload so the
-        # callback JSON always contains dispatcher-like messages of the form
-        # {"custom": {...}}.
+        # Callback mode: normalise dispatcher-style kwargs into the same
+        # shape Rasa's REST channel produces, i.e. content lives under
+        # "custom".
         message: Dict[str, Any] = dict(kwargs)
-        if "progress" in message and "custom" not in message:
+
+        # Progress helper: ctx.say(progress="...") becomes
+        # {"custom": {"progress": "..."}} when there is no explicit
+        # custom/json_message override.
+        if "progress" in message and "custom" not in message and "json_message" not in message:
             progress_val = message.pop("progress")
             message = {"custom": {"progress": progress_val}}
+
+        # json_message helper: ctx.say(json_message={...}) should mirror
+        # dispatcher.utter_message(json_message=...) which surfaces the
+        # payload under "custom" in REST responses.
+        if "json_message" in message and "custom" not in message:
+            custom_val = message.pop("json_message")
+            message = {"custom": custom_val}
 
         # If a progress callback is configured, invoke it so the message is
         # streamed immediately to the frontend.

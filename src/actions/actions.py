@@ -1,4 +1,3 @@
-import asyncio
 import json
 import logging
 from typing import Any, Dict, List, cast
@@ -8,11 +7,11 @@ from src.actions.long_action.long_action_context import LongActionContext
 from src.domain.langchain import schema as lang_schema
 from src.executors import plan_executor
 from src.executors.langchain import pipeline as lang_pipeline
+from src.executors.simple_planner import HeuristicVisualizationPlanner
 from src.shared import ssot_loader
 
 logger = logging.getLogger(__name__)
 
-# Emit SSOT completeness warnings once on module import
 try:
     ssot_loader.validate_metric_metadata_complete(logger)
 except Exception as _e:
@@ -38,7 +37,6 @@ class ActionGenerateVisualization(LongAction):
 
             latest_meta = ctx.metadata
 
-            # Extract entities from the tracker snapshot
             latest_any = ctx.tracker_snapshot.get("latest_message")
             entities_list: List[Dict[str, Any]] = []
             if isinstance(latest_any, dict):
@@ -51,7 +49,6 @@ class ActionGenerateVisualization(LongAction):
                             entities_list.append(cast(Dict[str, Any], e_any))
             extracted_entities: Dict[str, Any] = {ent["entity"]: ent["value"] for ent in entities_list if isinstance(ent.get("entity"), str) and "value" in ent}
 
-            # Optional language override from Rasa (metadata.language or slot 'language').
             override_language: Any = None
             try:
                 lang_meta = latest_meta.get("language")
@@ -66,25 +63,36 @@ class ActionGenerateVisualization(LongAction):
             if isinstance(override_language, str):
                 override_language = override_language.split("-")[0].lower() or None
 
-            ctx.say(text="Got it, generating the visualization now – this may take a few seconds…")
+            def progress(msg: str) -> None:
+                ctx.say(progress=msg)
 
-            plan_obj: lang_schema.AnalysisPlan = lang_pipeline.generate_analysis_plan(
+            heuristic_plan = HeuristicVisualizationPlanner.try_plan(
                 question=user_message,
                 entities=extracted_entities,
                 language=override_language,
-                max_retries=2,
-                debug=False,
             )
+
+            if heuristic_plan is not None:
+                progress("Using simple heuristic plan (no LLM needed)")
+                plan_obj: lang_schema.AnalysisPlan = heuristic_plan
+            else:
+                progress("Calling planner LLM to build a plan")
+                plan_obj = lang_pipeline.generate_analysis_plan(
+                    question=user_message,
+                    entities=extracted_entities,
+                    language=override_language,
+                    max_retries=2,
+                    debug=False,
+                    progress_cb=progress,
+                )
 
             visualization = await plan_executor.execute_plan_async(
                 plan_obj,
                 session_token=session_token,
                 max_concurrency=4,
+                progress_cb=progress,
             )
 
-            # Send the visualization as a structured payload. In synchronous
-            # mode this goes via dispatcher.json_message; in callback mode it
-            # is forwarded in the long-action callback body.
             ctx.say(json_message=json.loads(visualization.model_dump_json()))
         except Exception as e:
             error_msg = f"Error generating visualization: {str(e)}"
@@ -92,29 +100,6 @@ class ActionGenerateVisualization(LongAction):
             ctx.say(text="❌ Error generating visualization.")
             ctx.say(text=error_msg)
         finally:
+            ctx.say(text="✅ Visualization generation complete.")
             ctx.done()
-
-        # No structured return value is required; the frontend uses messages
-        # emitted via ctx.say(...).
         return None
-
-
-class ActionDummyCountdown(LongAction):
-    """Test long action that counts down from 5 with 1s intervals."""
-
-    def name(self) -> str:
-        return "action_dummy_countdown"
-
-    async def work(self, ctx: LongActionContext) -> Any:
-        logger.info("[DummyCountdown] Starting countdown")
-
-        for i in range(5, 0, -1):
-            logger.info("[DummyCountdown] Emitting step i=%s", i)
-            ctx.say(progress=f"Countdown: {i}")
-            await asyncio.sleep(1.0)
-
-        logger.info("[DummyCountdown] Finished countdown")
-        ctx.say(text="Countdown finished.")
-        ctx.done()
-        # Dummy result object for callback mode.
-        return {"ok": True}

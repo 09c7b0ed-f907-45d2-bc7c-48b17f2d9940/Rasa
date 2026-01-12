@@ -2,7 +2,7 @@ import asyncio
 import logging
 from concurrent.futures import ThreadPoolExecutor
 from itertools import product
-from typing import Any, Dict, List, Optional, Sequence, Tuple, cast
+from typing import Any, Callable, Dict, List, Optional, Sequence, Tuple, cast
 
 from src.domain.dto.charts import BarChart, ChartDTO, LineChart, union
 from src.domain.dto.charts.types import ChartAxis, ChartMetadata, ChartPoint, ChartSeries, ChartType
@@ -239,7 +239,15 @@ def execute_plan(plan: AnalysisPlan, session_token: str) -> VisualizationRespons
         return fut.result()
 
 
-async def execute_plan_async(plan: AnalysisPlan, session_token: str, max_concurrency: int = 4) -> VisualizationResponse:
+ProgressCallback = Callable[[str], None]
+
+
+async def execute_plan_async(
+    plan: AnalysisPlan,
+    session_token: str,
+    max_concurrency: int = 4,
+    progress_cb: Optional[ProgressCallback] = None,
+) -> VisualizationResponse:
     """Async version that runs GraphQL requests concurrently.
 
     - Uses asyncio.to_thread to run the existing synchronous client in a thread pool.
@@ -312,7 +320,7 @@ async def execute_plan_async(plan: AnalysisPlan, session_token: str, max_concurr
         visit(filter_obj)
         return min_start, max_end
 
-    async def run_one(
+    async def _run_one_request(
         req: GraphQLQueryRequest,
         label_parts: List[str],
         include_metric_alias: bool,
@@ -399,6 +407,28 @@ async def execute_plan_async(plan: AnalysisPlan, session_token: str, max_concurr
                 combos_list: List[Tuple[Any, ...]] = [tuple()]
             else:
                 combos_list = list(product(*filter_categories))
+
+            total_requests = len(combos_list)
+            completed_requests = 0
+
+            if progress_cb is not None and total_requests > 0:
+                progress_cb(f"Fetching data (0/{total_requests})")
+
+            async def run_one(
+                req: GraphQLQueryRequest,
+                label_parts: List[str],
+                include_metric_alias: bool,
+                group_by_field: Optional[str],
+            ) -> List[ChartSeries]:
+                nonlocal completed_requests
+                result = await _run_one_request(req, label_parts, include_metric_alias, group_by_field)
+                if progress_cb is not None:
+                    completed_requests += 1
+                    if total_requests > 0:
+                        progress_cb(f"Fetching data ({completed_requests}/{total_requests})")
+                    else:
+                        progress_cb("Fetching data…")
+                return result
 
             tasks: List[asyncio.Task[List[ChartSeries]]] = []
             include_metric_alias = len(planChart.metrics) > 1

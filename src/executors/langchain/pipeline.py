@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Dict, List, Literal, Optional, Type, TypedDict, Union, overload
+from typing import Any, Callable, Dict, List, Literal, Optional, Type, TypedDict, Union, overload
 
 from langchain_core.runnables import RunnablePassthrough
 from langchain_openai import ChatOpenAI
@@ -120,6 +120,9 @@ class GeneratePlanDebug(TypedDict):
     final_output: Optional[AnalysisPlan]
 
 
+ProgressCallback = Callable[[str], None]
+
+
 @overload
 def generate_analysis_plan(
     question: str,
@@ -127,6 +130,7 @@ def generate_analysis_plan(
     language: Optional[str],
     max_retries: int,
     debug: Literal[True],
+    progress_cb: Optional[ProgressCallback] = None,
 ) -> GeneratePlanDebug: ...
 
 
@@ -137,6 +141,7 @@ def generate_analysis_plan(
     language: Optional[str],
     max_retries: int,
     debug: Literal[False],
+    progress_cb: Optional[ProgressCallback] = None,
 ) -> AnalysisPlan: ...
 
 
@@ -147,6 +152,7 @@ def generate_analysis_plan(
     language: Optional[str],
     max_retries: int,
     debug: bool,
+    progress_cb: Optional[ProgressCallback] = None,
 ) -> Union[AnalysisPlan, GeneratePlanDebug]: ...
 
 
@@ -156,6 +162,7 @@ def generate_analysis_plan(
     language: str | None = None,
     max_retries: int = 2,
     debug: bool = False,
+    progress_cb: Optional[ProgressCallback] = None,
 ) -> Union[AnalysisPlan, GeneratePlanDebug]:
     """
     Generate a validated AnalysisPlan from user input, with chain-of-thought reasoning and automatic
@@ -176,6 +183,10 @@ def generate_analysis_plan(
     logger = logging.getLogger(__name__)
     if not language:
         language = "auto"
+
+    # High-level notification that planning has started.
+    if progress_cb is not None:
+        progress_cb("Thinking about a plan.")
 
     input_dict: Dict[str, Any] = {
         "question": question,
@@ -228,6 +239,9 @@ def generate_analysis_plan(
     plan_prompt_rendered: str = plan_prompt.format_prompt(**plan_inputs).to_string()
     logger.info(f"[Planner] plan_prompt_rendered: {plan_prompt_rendered}")
     for attempt in range(max_retries + 1):
+        if progress_cb is not None:
+            dots = "." * (attempt + 1)
+            progress_cb(f"Thinking about a plan.{dots}")
         try:
             logger.info(f"[Planner] Attempt {attempt + 1}: invoking _chain with input_dict: {input_dict}")
             result: Any = _chain.invoke(input_dict)
@@ -252,8 +266,12 @@ def generate_analysis_plan(
                     "attempts": attempts,
                     "final_output": result if isinstance(result, AnalysisPlan) else None,
                 }
+                if progress_cb is not None:
+                    progress_cb("Finished thinking about a plan.")
                 return debug_payload
             assert isinstance(result, AnalysisPlan), "Expected AnalysisPlan from structured output"
+            if progress_cb is not None:
+                progress_cb("Finished thinking about a plan.")
             return result
         except ValidationError as ve:
             logger.error(f"[Planner] ValidationError: {ve}")
