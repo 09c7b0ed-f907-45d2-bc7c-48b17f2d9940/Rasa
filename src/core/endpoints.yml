@@ -1,5 +1,6 @@
 action_endpoint:
   url: ${ACTION_ENDPOINT_URL}
+  timeout: 300
 lock_store:
   type: redis
   url: ${LOCK_STORE_URL}

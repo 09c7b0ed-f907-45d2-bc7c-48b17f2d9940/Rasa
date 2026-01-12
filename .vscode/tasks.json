@@ -56,7 +56,7 @@
         {
             "label": "Rasa: Shell (latest)",
             "type": "shell",
-            "command": "rasa shell --model models --endpoints src/core/endpoints.yml",
+            "command": "rasa shell --model models --endpoints src/core/endpoints.yml --request-timeout 3600 --response-timeout 7200",
             "group": "test",
             "options": {
                 "cwd": "${workspaceFolder}",
@@ -69,7 +69,7 @@
         {
             "label": "Rasa: Run (latest)",
             "type": "shell",
-            "command": "rasa run --enable-api --cors '*' --model models --endpoints src/core/endpoints.yml",
+            "command": "rasa run --enable-api --cors '*' --model models --endpoints src/core/endpoints.yml --request-timeout 3600 --response-timeout 7200",
             "group": "test",
             "options": {
                 "cwd": "${workspaceFolder}",
