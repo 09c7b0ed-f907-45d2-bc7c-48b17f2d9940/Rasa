@@ -9,6 +9,7 @@ from src.executors import plan_executor
 from src.executors.langchain import pipeline as lang_pipeline
 from src.executors.simple_planner import HeuristicVisualizationPlanner
 from src.shared import ssot_loader
+from src.util.hospital_statistics import HospitalStatistics
 
 logger = logging.getLogger(__name__)
 
@@ -101,5 +102,84 @@ class ActionGenerateVisualization(LongAction):
             ctx.say(text=error_msg)
         finally:
             ctx.say(text="✅ Visualization generation complete.")
+            ctx.done()
+        return None
+
+
+class ActionCompareHospitals(LongAction):
+    """Long action that compares door-to-needle times between two hospitals.
+
+    Performs statistical analysis using Shapiro-Wilk normality tests and
+    appropriate comparison tests (t-test or Wilcoxon rank-sum test).
+    Currently uses synthetic data for demonstration purposes.
+    """
+
+    def name(self) -> str:
+        return "action_compare_hospitals"
+
+    async def work(self, ctx: LongActionContext) -> Any:
+        try:
+            user_message = ctx.text
+            logger.info("Processing hospital comparison request: '%s'", user_message)
+
+            def progress(msg: str) -> None:
+                ctx.say(progress=msg)
+
+            progress("🏥 Initializing hospital comparison analysis...")
+            
+            # Initialize the statistical analyzer
+            stats = HospitalStatistics(alpha=0.05)
+            
+            progress("📊 Generating synthetic hospital datasets...")
+            
+            # Generate synthetic data for two hospitals
+            # In production, this would be replaced with real data from a database
+            result = stats.run_analysis(n_rows=50, random_state=42)
+            
+            progress("🔬 Performing statistical tests...")
+            
+            # Get the formatted summary
+            summary = result.get_summary()
+            
+            # Send the complete analysis as text
+            ctx.say(text=summary)
+            
+            # Also send structured data for potential frontend rendering
+            result_dict = result.to_dict()
+            
+            # Create a user-friendly interpretation message
+            if result.is_significant():
+                interpretation = (
+                    f"✅ **Significant Difference Detected**\n\n"
+                    f"The statistical analysis shows a **SIGNIFICANT difference** "
+                    f"between the two hospitals (p-value = {result.test_result.p_value:.4f}).\n\n"
+                    f"Test used: **{result.test_type.upper()}**\n"
+                    f"Hospital 1: {result.expanded_size_1} observations\n"
+                    f"Hospital 2: {result.expanded_size_2} observations\n\n"
+                    f"This suggests that the door-to-needle times are statistically different between the two hospitals."
+                )
+            else:
+                interpretation = (
+                    f"ℹ️ **No Significant Difference**\n\n"
+                    f"The statistical analysis shows **NO significant difference** "
+                    f"between the two hospitals (p-value = {result.test_result.p_value:.4f}).\n\n"
+                    f"Test used: **{result.test_type.upper()}**\n"
+                    f"Hospital 1: {result.expanded_size_1} observations\n"
+                    f"Hospital 2: {result.expanded_size_2} observations\n\n"
+                    f"This suggests that the door-to-needle times are similar between the two hospitals."
+                )
+            
+            ctx.say(text=interpretation)
+            
+            # Send structured data for APIs/frontend
+            ctx.say(json_message=result_dict)
+            
+        except Exception as e:
+            error_msg = f"Error comparing hospitals: {str(e)}"
+            logger.error(error_msg)
+            ctx.say(text="❌ Error performing hospital comparison analysis.")
+            ctx.say(text=error_msg)
+        finally:
+            ctx.say(text="✅ Hospital comparison complete.")
             ctx.done()
         return None
