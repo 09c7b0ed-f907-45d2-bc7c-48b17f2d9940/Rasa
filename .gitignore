@@ -32,6 +32,7 @@
 !/src/core/**
 !/src/locales/**
 !/src/shared/**
+!/src/**
 
 .generated
 __pycache__
