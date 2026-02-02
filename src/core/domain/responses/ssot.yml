@@ -1,0 +1,21 @@
+version: "3.1"
+
+responses:
+  utter_faq_ssot_help:
+    - text: "[placeholder] localized in fallback/en-us or locale overlays"
+  utter_faq_metric_types:
+    - text: "[placeholder] localized in fallback/en-us or locale overlays"
+  utter_faq_stroke_types:
+    - text: "[placeholder] localized in fallback/en-us or locale overlays"
+  utter_faq_chart_types:
+    - text: "[placeholder] localized in fallback/en-us or locale overlays"
+  utter_faq_group_by_types:
+    - text: "[placeholder] localized in fallback/en-us or locale overlays"
+  utter_faq_statistical_test_types:
+    - text: "[placeholder] localized in fallback/en-us or locale overlays"
+  utter_faq_operator_types:
+    - text: "[placeholder] localized in fallback/en-us or locale overlays"
+  utter_faq_sex_types:
+    - text: "[placeholder] localized in fallback/en-us or locale overlays"
+  utter_faq_boolean_types:
+    - text: "[placeholder] localized in fallback/en-us or locale overlays"

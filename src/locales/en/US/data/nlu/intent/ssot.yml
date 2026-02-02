@@ -1,0 +1,75 @@
+version: "3.1"
+
+nlu:
+  - intent: faq_ssot_help
+    examples: |
+      - What kinds of clinical concepts can you explain?
+      - What data dictionary or SSOT do you use?
+      - What are your metric, stroke, and chart types?
+      - What structured types can I ask you about?
+      - Tell me about the concepts behind your KPIs and filters.
+
+  - intent: faq_metric_types
+    examples: |
+      - What metrics or KPIs can I ask about?
+      - Explain your metric types.
+      - What does metric type mean here?
+      - What kind of stroke metrics do you track?
+      - What does a KPI like DTN or DIDO represent?
+
+  - intent: faq_stroke_types
+    examples: |
+      - What stroke types do you support?
+      - What stroke subtypes are there in your data?
+      - Explain your stroke type categories.
+      - What do you mean by ischemic or hemorrhagic stroke?
+
+  - intent: faq_chart_types
+    examples: |
+      - What chart types can you show?
+      - What kinds of visualizations are available?
+      - Explain the chart types you support.
+      - Do you support line, bar, or pie charts?
+
+  - intent: faq_group_by_types
+    examples: |
+      - What can I group the data by?
+      - What group-by dimensions do you support?
+      - Explain your grouping options.
+      - What are the main grouping fields?
+
+  - intent: faq_statistical_test_types
+    examples: |
+      - What statistical tests can you run?
+      - Explain the statistical test types you support.
+      - What hypothesis tests are available?
+      - Which correlation or regression methods do you have?
+
+  - intent: faq_operator_types
+    examples: |
+      - What comparison operators can I use in filters?
+      - Explain operators like greater than or equal.
+      - What do GE and LE mean?
+      - What relational operators are supported?
+
+  - intent: faq_sex_types
+    examples: |
+      - How do you categorize sex in the data?
+      - What sex categories do you support?
+      - Explain the biological sex types you use.
+
+  - intent: faq_boolean_types
+    examples: |
+      - What kind of yes or no flags do you track?
+      - Explain your boolean types.
+      - What boolean indicators are available in the data?
+
+  - intent: ask_metric_definition
+    examples: |
+      - What is [DTN](kpi)?
+      - Can you explain [AA_DTN_LE60](kpi)?
+      - What does the metric [ONSET_TO_DOOR](kpi) mean?
+      - Describe the KPI [HOSPITAL_STAY](kpi).
+      - What does [AGE](kpi) represent in your data?
+      - Explain the metric [DIDO](kpi).
+      - What is the definition of [ADMISSION_NIHSS](kpi)?

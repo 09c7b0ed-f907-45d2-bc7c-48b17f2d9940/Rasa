@@ -1,0 +1,101 @@
+version: "3.1"
+
+responses:
+  utter_faq_ssot_help:
+    - text: >-
+        I use a structured "single source of truth" (SSOT) catalog to define
+        clinical concepts. It contains metric types (KPIs like door-to-needle
+        time, length of stay, scores such as NIHSS and mRS), stroke types,
+        chart types, grouping dimensions, operators, boolean flags, statistical
+        tests, and sex categories. You can ask me what these concepts mean or
+        use them in queries like "Show DTN by stroke type".
+
+  utter_faq_metric_types:
+    - text: >-
+        Metric types define the KPIs you can query. They cover time intervals
+        (for example door-to-needle or door-to-groin times and award metrics
+        such as AA_DTN_LE60), clinical scores (like NIHSS, mRS, and functional
+        outcome scales), visit-level measures (length of stay, readmission and
+        mortality rates), vital signs and labs (blood pressure, glucose,
+        cholesterol), treatment and workflow flags (thrombolysis,
+        thrombectomy, recanalization, imaging done, swallowing screening), and
+        many more. Each metric has a canonical code (such as AGE or
+        ADMISSION_NIHSS), a set of human-friendly synonyms, a data type
+        (numeric or categorical), and metadata like units and valid ranges.
+
+  utter_faq_stroke_types:
+    - text: >-
+        Stroke types classify the kind of cerebrovascular event. Typical
+        categories include ischaemic stroke (a blocked blood vessel),
+        intracerebral haemorrhage (bleeding into brain tissue), subarachnoid
+        haemorrhage (bleeding around the brain, often from an aneurysm),
+        cerebral venous thrombosis (a clot in a cerebral vein), transient
+        ischaemic attack or "mini-stroke" where symptoms resolve, stroke
+        mimics (conditions that look like stroke but are not), and
+        undetermined strokes where the exact type is unclear. You can use
+        these categories as filters or groupings in your queries.
+
+  utter_faq_chart_types:
+    - text: >-
+        Chart types control how results are visualised. Common options include
+        line charts for trends over time, bar charts for comparing categories,
+        box plots for distributions and outliers, histograms for frequency
+        distributions, scatter plots for relationships between two measures,
+        pie charts for composition, radar or spider charts for comparing
+        multiple KPIs across a few groups, waterfall charts for cumulative
+        effects, and area charts for stacked time series. You can choose a
+        chart type explicitly in your request or let the system pick a default
+        based on the question.
+
+  utter_faq_group_by_types:
+    - text: >-
+        Group-by types describe the dimensions you can use to break results
+        down into subgroups. Examples include EMS prenotification status,
+        first contact place or initial point of contact, the department where
+        thrombolysis was given, the department of admission, arrival mode,
+        stroke subtype, and other workflow, demographic, or organisational
+        fields. In practice, you can ask for things like "DTN by stroke type",
+        "LOS by admission department", or "mortality rate by EMS
+        prenotification".
+
+  utter_faq_statistical_test_types:
+    - text: >-
+        Statistical test types describe the methods available for comparing
+        groups or measuring associations. They include classical tests such as
+        t-tests and ANOVA for comparing means, chi-squared and Fisher's exact
+        tests for categorical associations, non-parametric tests like
+        Mann–Whitney U, Wilcoxon signed-rank, Kruskal–Wallis, and Friedman for
+        ordinal or non-normal data, correlation measures such as Pearson,
+        Spearman, and Kendall tau, regression models including linear,
+        logistic, and Cox proportional hazards regression, and diagnostic
+        tests like Shapiro–Wilk for normality and Levene's test for equality
+        of variances, plus McNemar's test for paired categorical data.
+
+  utter_faq_operator_types:
+    - text: >-
+        Operator types define how numeric or categorical filters are applied.
+        Common operators include GE (greater than or equal), LE (less than or
+        equal), GT (greater than), LT (less than), EQ (equal to), and NE (not
+        equal to). In natural language you use them when you say things like
+        "age above 65", "NIHSS less than 4", or "LOS equal to 3 days". The
+        system maps these phrases onto the appropriate operator when building
+        filters.
+
+  utter_faq_sex_types:
+    - text: >-
+        Sex types represent biological sex categories used in the data.
+        Typically these include male, female, other or non-binary, and
+        unknown or not provided. You can use them to filter or group
+        statistics, for example "DTN for female patients" or "stroke type by
+        sex".
+
+  utter_faq_boolean_types:
+    - text: >-
+        Boolean types are yes/no style indicators that describe whether a
+        particular condition or workflow step applies. Examples include flags
+        for whether thrombolysis or thrombectomy was performed, whether
+        imaging or swallowing screening was done, whether EMS prenotification
+        occurred, or whether certain risk factors or medications were present.
+        They are represented as true/false values internally but can be used
+        naturally in questions like "patients who did receive thrombolysis" or
+        "cases without EMS prenotification".
