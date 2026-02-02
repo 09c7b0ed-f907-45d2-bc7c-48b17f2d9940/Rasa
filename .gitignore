@@ -32,7 +32,7 @@
 !/src/core/**
 !/src/locales/**
 !/src/shared/**
-!/src/**
+!/src/__init__.py
 
 .generated
 __pycache__
