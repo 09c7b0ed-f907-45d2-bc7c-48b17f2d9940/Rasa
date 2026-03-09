@@ -1,15 +1,21 @@
 version: "3.1"
 
 entities:
-    - kpi
-    - sex
-    - stroke_type
-    - boolean_type
-    - group_by
-    - chart_type
-    - nihss:
-          roles: [lower, upper]
-    - age:
-          roles: [lower, upper]
-    - date:
-          roles: [lower, upper]
+        - metric
+        - sex
+        - stroke_type
+        - boolean_type
+        - group_by
+        - chart_type
+        - country_code
+        - hospital_name
+        - sort
+        - group_id
+        - limit
+        - offset
+        - nihss:
+                  roles: [lower, upper]
+        - age:
+                  roles: [lower, upper]
+        - date:
+                  roles: [lower, upper]

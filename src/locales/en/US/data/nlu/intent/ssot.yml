@@ -66,10 +66,10 @@ nlu:
 
   - intent: ask_metric_definition
     examples: |
-      - What is [DTN](kpi)?
-      - Can you explain [AA_DTN_LE60](kpi)?
-      - What does the metric [ONSET_TO_DOOR](kpi) mean?
-      - Describe the KPI [HOSPITAL_STAY](kpi).
-      - What does [AGE](kpi) represent in your data?
-      - Explain the metric [DIDO](kpi).
-      - What is the definition of [ADMISSION_NIHSS](kpi)?
+      - What is [DTN](metric)?
+      - Can you explain [AA_DTN_LE60](metric)?
+      - What does the metric [ONSET_TO_DOOR](metric) mean?
+      - Describe the KPI [HOSPITAL_STAY](metric).
+      - What does [AGE](metric) represent in your data?
+      - Explain the metric [DIDO](metric).
+      - What is the definition of [ADMISSION_NIHSS](metric)?

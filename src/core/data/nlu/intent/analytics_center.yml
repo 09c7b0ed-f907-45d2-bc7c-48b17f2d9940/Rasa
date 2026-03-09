@@ -1,0 +1,30 @@
+version: "3.1"
+
+nlu:
+  - intent: list_hospitals
+    examples: |
+      - [placeholder] localized in en/us or locale overlays
+
+  - lookup: country_code
+    examples: |
+      - [placeholder] localized in en/us or locale overlays
+
+  - synonym: US
+    examples: |
+      - [placeholder] localized in en/us or locale overlays
+
+  - synonym: ES
+    examples: |
+      - [placeholder] localized in en/us or locale overlays
+
+  - synonym: MX
+    examples: |
+      - [placeholder] localized in en/us or locale overlays
+
+  - regex: limit
+    examples: |
+      - [placeholder] localized in en/us or locale overlays
+
+  - regex: offset
+    examples: |
+      - [placeholder] localized in en/us or locale overlays
