@@ -1,0 +1,9 @@
+version: "3.1"
+
+slots:
+  awaiting_visualization_clarification:
+    type: bool
+    initial_value: false
+    influence_conversation: true
+    mappings:
+      - type: custom

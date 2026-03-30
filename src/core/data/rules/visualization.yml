@@ -1,10 +1,53 @@
 version: "3.1"
 
 rules:
-  - rule: generate visualization
+  - rule: generate visualization while not awaiting clarification
+    condition:
+      - slot_was_set:
+          - awaiting_visualization_clarification: false
     steps:
       - intent: generate_visualization
-      - action: action_generate_visualization
+      - action: action_clarify_visualization_request
+
+  - rule: generate visualization while awaiting clarification
+    condition:
+      - slot_was_set:
+          - awaiting_visualization_clarification: true
+    steps:
+      - intent: generate_visualization
+      - action: action_clarify_visualization_request
+
+  - rule: clarify visualization request while awaiting clarification
+    condition:
+      - slot_was_set:
+          - awaiting_visualization_clarification: true
+    steps:
+      - intent: clarify_visualization
+      - action: action_clarify_visualization_request
+
+  - rule: clarify visualization request while not awaiting clarification
+    condition:
+      - slot_was_set:
+          - awaiting_visualization_clarification: false
+    steps:
+      - intent: clarify_visualization
+      - action: action_clarify_visualization_request
+
+  - rule: re-ask pending visualization clarification on nlu fallback
+    condition:
+      - slot_was_set:
+          - awaiting_visualization_clarification: true
+    steps:
+      - intent: nlu_fallback
+      - action: action_clarify_visualization_request
+
+  - rule: re-ask pending visualization clarification on fallback intent
+    condition:
+      - slot_was_set:
+          - awaiting_visualization_clarification: true
+    steps:
+      - intent: fallback
+      - action: action_clarify_visualization_request
   #- rule: update visualization
   #  steps:
   #    - intent: update_visualization

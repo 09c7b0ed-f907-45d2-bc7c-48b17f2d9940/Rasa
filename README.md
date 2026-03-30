@@ -154,7 +154,7 @@ services:
 Production image runtime command:
 
 ```bash
-rasa run --endpoints src/core/endpoints.yml
+rasa run --enable-api --endpoints src/core/endpoints.yml
 ```
 
 ---

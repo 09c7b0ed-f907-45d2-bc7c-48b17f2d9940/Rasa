@@ -1,6 +1,6 @@
 services:
   rasa:
-    build: 
+    build:
       context: ..
       dockerfile: .devcontainer/Dockerfile
     volumes:
