@@ -44,6 +44,6 @@ EXPOSE 5005
 
 USER 1001
 
-# Always run with the core endpoints file (can still be overridden by supplying a new command)
-ENTRYPOINT ["rasa", "run", "--endpoints", "src/core/endpoints.yml"]
+# Always run with API, CORS, timeout settings, and core endpoints file
+ENTRYPOINT ["rasa", "run", "--enable-api", "--cors", "*", "--endpoints", "src/core/endpoints.yml", "--request-timeout", "3600", "--response-timeout", "7200"]
 CMD []
