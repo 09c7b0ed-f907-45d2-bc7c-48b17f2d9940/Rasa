@@ -1,0 +1,6 @@
+version: "3.1"
+
+actions:
+  - action_cli_router
+  - handle_affirm
+  - handle_deny

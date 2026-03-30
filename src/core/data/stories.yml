@@ -1,0 +1,11 @@
+- story: user confirms
+  steps:
+    - action: test_dispatcher_buttons
+    - intent: affirm
+    - action: handle_affirm
+
+- story: user denies
+  steps:
+    - action: test_dispatcher_buttons
+    - intent: deny
+    - action: handle_deny
