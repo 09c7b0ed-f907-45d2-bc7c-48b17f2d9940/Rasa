@@ -15,3 +15,20 @@ nlu:
       - Ενημέρωσε για να δείχνει μόνο [γυναίκες](sex)
       - Τροποποίησε το εύρος ημερομηνιών σε [2023]{"entity": "date", "role": "lower"} έως [2024]{"entity": "date", "role": "upper"}
       - Άλλαξε σε [αιμορραγικό](stroke_type) τύπο εγκεφαλικού
+  - intent: clarify_visualization
+    examples: |
+      - [DTN](metric)
+      - Χρησιμοποίησε [DIDO](metric)
+      - [NIHSS](metric) παρακαλώ
+      - Για [τον προηγούμενο μήνα](date)
+      - Από [1 Ιανουαρίου 2024]{"entity": "date", "role": "lower"} έως [31 Μαρτίου 2024]{"entity": "date", "role": "upper"}
+      - [γραμμής](chart_type)
+      - κάν' το [ράβδων](chart_type)
+      - ομαδοποίησε ανά [τύπο εγκεφαλικού](group_by)
+      - για [γυναίκες](sex) ασθενείς
+      - [ισχαιμικό](stroke_type)
+      - η μετρική είναι [door to needle](metric)
+      - ανά [μήνα](group_by)
+      - το χρονικό παράθυρο είναι [Q1 2025](date)
+      - χρησιμοποίησε [admission nihss](metric)
+      - [φέτος](date)

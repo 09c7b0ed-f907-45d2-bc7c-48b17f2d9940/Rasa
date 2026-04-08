@@ -62,8 +62,7 @@ bash scripts/layer_rasa_lang.sh en/US
 Examples:
 
 ```bash
-bash scripts/layer_rasa_lang.sh da/DK
-bash scripts/layer_rasa_lang.sh es/MX
+bash scripts/layer_rasa_lang.sh cs/CZ
 bash scripts/layer_rasa_lang.sh el/GR
 ```
 

@@ -1,0 +1,75 @@
+version: "3.1"
+
+nlu:
+  - intent: faq_ssot_help
+    examples: |
+      - Jaké klinické koncepty umíš vysvětlit?
+      - Jaký datový slovník nebo SSOT používáš?
+      - Jaké máš typy metrik, mrtvic a grafů?
+      - Na jaké strukturované typy se tě mohu ptát?
+      - Řekni mi něco o konceptech za KPI a filtry.
+
+  - intent: faq_metric_types
+    examples: |
+      - Na jaké metriky nebo KPI se mohu ptát?
+      - Vysvětli typy metrik.
+      - Co zde znamená typ metriky?
+      - Jaké typy metrik pro mrtvici sledujete?
+      - Co představuje KPI jako DTN nebo DIDO?
+
+  - intent: faq_stroke_types
+    examples: |
+      - Jaké typy mrtvice podporujete?
+      - Jaké podtypy mrtvice jsou ve vašich datech?
+      - Vysvětli kategorie typů mrtvice.
+      - Co myslíš ischemickou nebo hemoragickou mrtvicí?
+
+  - intent: faq_chart_types
+    examples: |
+      - Jaké typy grafů můžeš zobrazit?
+      - Jaké vizualizace jsou dostupné?
+      - Vysvětli, jaké typy grafů podporuješ.
+      - Podporuješ spojnicové, sloupcové nebo koláčové grafy?
+
+  - intent: faq_group_by_types
+    examples: |
+      - Podle čeho mohu data seskupit?
+      - Jaké dimenze seskupení podporujete?
+      - Vysvětli možnosti seskupení.
+      - Jaká jsou hlavní pole pro seskupení?
+
+  - intent: faq_statistical_test_types
+    examples: |
+      - Jaké statistické testy můžeš spustit?
+      - Vysvětli typy statistických testů, které podporuješ.
+      - Jaké testy hypotéz jsou k dispozici?
+      - Jaké korelační nebo regresní metody máte?
+
+  - intent: faq_operator_types
+    examples: |
+      - Jaké porovnávací operátory mohu použít ve filtrech?
+      - Vysvětli operátory jako větší nebo rovno.
+      - Co znamenají GE a LE?
+      - Jaké relační operátory jsou podporované?
+
+  - intent: faq_sex_types
+    examples: |
+      - Jak kategorizujete pohlaví v datech?
+      - Jaké kategorie pohlaví podporujete?
+      - Vysvětli biologické kategorie pohlaví, které používáte.
+
+  - intent: faq_boolean_types
+    examples: |
+      - Jaké ano/ne indikátory sledujete?
+      - Vysvětli vaše booleovské typy.
+      - Jaké booleovské indikátory jsou v datech dostupné?
+
+  - intent: ask_metric_definition
+    examples: |
+      - Co je [DTN](metric)?
+      - Můžeš vysvětlit [AA_DTN_LE60](metric)?
+      - Co znamená metrika [ONSET_TO_DOOR](metric)?
+      - Popiš KPI [HOSPITAL_STAY](metric).
+      - Co představuje [AGE](metric) ve vašich datech?
+      - Vysvětli metriku [DIDO](metric).
+      - Jaká je definice [ADMISSION_NIHSS](metric)?

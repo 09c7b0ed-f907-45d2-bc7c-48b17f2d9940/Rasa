@@ -15,3 +15,20 @@ nlu:
       - Aktualizuj tak, aby zobrazoval pouze [ženské](sex) pacienty
       - Změň rozsah dat na [2023]{"entity": "date", "role": "lower"} až [2024]{"entity": "date", "role": "upper"}
       - Přepni na [hemoragický](stroke_type) typ mrtvice
+  - intent: clarify_visualization
+    examples: |
+      - [DTN](metric)
+      - Použij [DIDO](metric)
+      - [NIHSS](metric), prosím
+      - Za [poslední měsíc](date)
+      - Od [1. ledna 2024]{"entity": "date", "role": "lower"} do [31. března 2024]{"entity": "date", "role": "upper"}
+      - [čárový](chart_type)
+      - změň to na [sloupcový](chart_type)
+      - seskup podle [typu mrtvice](group_by)
+      - pro [ženské](sex) pacienty
+      - [ischemická](stroke_type)
+      - metrika je [door to needle](metric)
+      - podle [měsíce](group_by)
+      - časové okno je [Q1 2025](date)
+      - použij [admission nihss](metric)
+      - [tento rok](date)

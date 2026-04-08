@@ -1,0 +1,97 @@
+version: "3.1"
+
+responses:
+  utter_faq_ssot_help:
+    - text: >-
+        Používám strukturovaný katalog "single source of truth" (SSOT) pro
+        definici klinických konceptů. Obsahuje typy metrik (KPI jako
+        door-to-needle time, délku hospitalizace, skóre jako NIHSS a mRS),
+        typy mrtvice, typy grafů, dimenze seskupení, operátory, booleovské
+        příznaky, statistické testy a kategorie pohlaví. Můžeš se mě ptát,
+        co tyto koncepty znamenají, nebo je použít v dotazech jako
+        "Ukaž DTN podle typu mrtvice".
+
+  utter_faq_metric_types:
+    - text: >-
+        Typy metrik definují KPI, na která se můžeš ptát. Zahrnují časové
+        intervaly (například door-to-needle nebo door-to-groin a oceněné
+        metriky jako AA_DTN_LE60), klinická skóre (například NIHSS, mRS a
+        škály funkčního výsledku), metriky na úrovni hospitalizace (délka
+        pobytu, rehospitalizace a úmrtnost), vitální funkce a laboratorní
+        hodnoty (krevní tlak, glukóza, cholesterol), léčebné a procesní
+        příznaky (trombolýza, trombektomie, rekanalizace, provedené zobrazení,
+        screening polykání) a mnoho dalšího. Každá metrika má kanonický kód
+        (například AGE nebo ADMISSION_NIHSS), sadu srozumitelných synonym,
+        datový typ (číselný nebo kategorický) a metadata jako jednotky a
+        platné rozsahy.
+
+  utter_faq_stroke_types:
+    - text: >-
+        Typy mrtvice klasifikují druh cerebrovaskulární příhody. Mezi typické
+        kategorie patří ischemická mrtvice (ucpaná céva), intracerebrální
+        hemoragie (krvácení do mozkové tkáně), subarachnoidální hemoragie
+        (krvácení kolem mozku, často z aneuryzmatu), cerebrální žilní
+        trombóza (sraženina v mozkové žíle), tranzitorní ischemická ataka neboli
+        "mini-mrtvice", kdy příznaky odezní, stavy napodobující mrtvici
+        (stavy, které mrtvici připomínají, ale nejsou jí) a neurčené mrtvice, kde přesný typ není
+        jasný. Tyto kategorie můžeš používat jako filtry nebo skupiny v dotazech.
+
+  utter_faq_chart_types:
+    - text: >-
+        Typy grafů určují, jak se výsledky vizualizují. Běžné možnosti
+        zahrnují spojnicové grafy pro trendy v čase, sloupcové grafy pro
+        porovnání kategorií, box ploty pro rozdělení a odlehlé hodnoty,
+        histogramy pro frekvenční rozdělení, bodové grafy pro vztahy mezi dvěma
+        veličinami, koláčové grafy pro složení, radarové grafy pro porovnání
+        více KPI napříč několika skupinami, waterfall grafy pro kumulativní
+        efekty a plošné grafy pro vrstvené časové řady. Typ grafu můžeš zvolit
+        přímo v dotazu, nebo systém vybere výchozí variantu podle otázky.
+
+  utter_faq_group_by_types:
+    - text: >-
+        Typy seskupení popisují dimenze, podle kterých můžeš výsledky rozdělit
+        do podskupin. Příklady zahrnují EMS prenotifikaci, místo prvního
+        kontaktu neboli initial point of contact, oddělení, kde byla podána
+        trombolýza, přijímací oddělení, způsob příjezdu, podtyp mrtvice a další
+        procesní, demografická nebo organizační pole. V praxi se můžeš ptát
+        například na "DTN podle typu mrtvice", "LOS podle přijímacího oddělení"
+        nebo "úmrtnost podle EMS prenotifikace".
+
+  utter_faq_statistical_test_types:
+    - text: >-
+        Typy statistických testů popisují metody dostupné pro porovnávání
+        skupin nebo měření vztahů. Patří mezi ně klasické testy jako t-test a
+        ANOVA pro porovnání průměrů, chí-kvadrát a Fisherův exaktní test pro
+        kategoriální asociace, neparametrické testy jako Mann-Whitney U,
+        Wilcoxonův párový test, Kruskal-Wallis a Friedman pro ordinální nebo
+        nenormální data, korelační míry jako Pearson, Spearman a Kendall tau,
+        regresní modely včetně lineární, logistické a Coxovy regresní analýzy
+        a diagnostické testy jako Shapiro-Wilk pro normalitu a Leveneho test
+        pro shodu rozptylů, plus McNemarův test pro párová kategoriální data.
+
+  utter_faq_operator_types:
+    - text: >-
+        Typy operátorů definují, jak se používají číselné nebo kategoriální
+        filtry. Běžné operátory zahrnují GE (větší nebo rovno), LE (menší nebo
+        rovno), GT (větší než), LT (menší než), EQ (rovno) a NE (není rovno).
+        V přirozeném jazyce je používáš ve větách jako "věk nad 65", "NIHSS
+        menší než 4" nebo "LOS rovno 3 dnům". Systém tyto fráze mapuje na
+        správný operátor při sestavování filtrů.
+
+  utter_faq_sex_types:
+    - text: >-
+        Typy pohlaví představují biologické kategorie pohlaví používané v
+        datech. Typicky zahrnují muže, ženy, jiné nebo nebinární a neznámé
+        či neuvedené. Můžeš je použít pro filtrování nebo seskupení statistik,
+        například "DTN pro pacientky" nebo "typ mrtvice podle pohlaví".
+
+  utter_faq_boolean_types:
+    - text: >-
+        Booleovské typy jsou indikátory ano/ne, které popisují, zda se určitý
+        stav nebo krok v procesu vztahuje na daný případ. Příklady zahrnují
+        příznaky, zda byla provedena trombolýza nebo trombektomie, zda bylo
+        provedeno zobrazování nebo screening polykání, zda proběhla EMS
+        prenotifikace nebo zda byly přítomny určité rizikové faktory či léky.
+        Interně jsou reprezentovány jako true/false, ale můžeš je používat
+        přirozeně v dotazech jako "pacienti, kteří dostali trombolýzu" nebo
+        "případy bez EMS prenotifikace".

@@ -113,15 +113,16 @@
             "description": "Choose a layer set (space-separated paths)",
             "options": [
                 "src/core src/locales/en/US",
-                "src/core src/locales/en/US src/locales/da src/locales/da/DK"
+                "src/core src/locales/en/US src/locales/el src/locales/el/GR",
+                "src/core src/locales/en/US src/locales/cs src/locales/cs/CZ"
             ],
             "default": "src/core src/locales/en/US"
         },
         {
             "id": "layersCustom",
             "type": "promptString",
-            "description": "Enter space-separated layer paths (e.g., src/core src/locales/en/US src/locales/da src/locales/da/DK)",
-            "default": "src/core src/locales/da src/locales/da/DK"
+            "description": "Enter space-separated layer paths (e.g., src/core src/locales/en/US src/locales/el src/locales/el/GR)",
+            "default": "src/core src/locales/en/US src/locales/el src/locales/el/GR"
         },
         {
             "id": "langSpec",
@@ -129,11 +130,9 @@
             "description": "Language spec (lang or lang/REGION)",
             "options": [
                 "en/US",
-                "da/DK",
-                "es/ES",
-                "es/MX",
-                "fr/FR",
-                "de/DE"
+                "en/GB",
+                "el/GR",
+                "cs/CZ"
             ],
             "default": "en/US"
         }

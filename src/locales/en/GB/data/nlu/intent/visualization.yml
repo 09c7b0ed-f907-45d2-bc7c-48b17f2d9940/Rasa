@@ -89,3 +89,20 @@ nlu:
       - Add [TIA](stroke_type) patients to the analysis
       - Show only patients above [70]{"entity": "age", "role": "lower"}
       - Filter dates after [2024-01-01]{"entity": "date", "role": "lower"}
+  - intent: clarify_visualization
+    examples: |
+      - [DTN](metric)
+      - Use [DIDO](metric)
+      - [NIHSS](metric), please
+      - For [last month](date)
+      - From [1 January 2024]{"entity": "date", "role": "lower"} to [31 March 2024]{"entity": "date", "role": "upper"}
+      - [line](chart_type)
+      - make it [bar](chart_type)
+      - group by [stroke type](group_by)
+      - for [female](sex) patients
+      - [ischaemic](stroke_type)
+      - The metric is [door to needle](metric)
+      - By [month](group_by)
+      - Time window is [Q1 2025](date)
+      - Use [admission nihss](metric)
+      - [this year](date)
