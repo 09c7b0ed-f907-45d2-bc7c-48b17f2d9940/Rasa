@@ -1,3 +1,4 @@
+# pyright: reportMissingTypeStubs=false, reportMissingModuleSource=false
 from __future__ import annotations
 
 import logging
@@ -7,12 +8,11 @@ import tempfile
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Set, Tuple, cast
 
-import yaml
+import yaml  # type: ignore[import-untyped]  # pyright: ignore[reportMissingModuleSource, reportMissingTypeStubs]
 from rasa.shared.core.domain import Domain  # type: ignore
 from rasa.shared.core.training_data.structures import StoryGraph  # type: ignore
 from rasa.shared.importers.importer import TrainingDataImporter  # type: ignore
 from rasa.shared.nlu.training_data import loading as nlu_loading  # type: ignore
-from rasa.shared.nlu.training_data.training_data import TrainingData  # type: ignore
 
 try:  # story reader imports (robust across minor Rasa versions)
     from rasa.shared.core.training_data.story_reader.yaml_story_reader import YAMLStoryReader  # type: ignore
@@ -336,7 +336,24 @@ def _to_existing_strs(paths: List[Path]) -> List[str]:
     return out
 
 
-class OverlayImporter(TrainingDataImporter):
+def _load_domain_as_dict(path: Path) -> Dict[str, Any]:
+    loaded_domain = cast(Any, Domain).load(str(path))
+    return cast(Dict[str, Any], loaded_domain.as_dict())
+
+
+def _build_domain(domain_data: Dict[str, Any]) -> Any:
+    return cast(Any, Domain).from_dict(domain_data)
+
+
+def _load_training_data(path: Path) -> Any:
+    return cast(Any, nlu_loading).load_data(str(path))
+
+
+def _build_story_graph(steps: List[Any]) -> Any:
+    return cast(Any, StoryGraph)(steps)
+
+
+class OverlayImporter(TrainingDataImporter):  # pyright: ignore[reportUntypedBaseClass]
     def __init__(self, *args: Any, base_domain: Optional[List[str]] = None, overlay_domain: Optional[List[str]] = None, **kwargs: Any):
         cfg: Dict[str, Any] = {}
         if args and isinstance(args[0], dict):
@@ -449,21 +466,21 @@ class OverlayImporter(TrainingDataImporter):
         if self._overlay_config_paths:
             logger.info(f"Overlay config files: {[str(p) for p in self._overlay_config_paths]}")
 
-    def get_domain(self) -> Domain:
+    def get_domain(self) -> Any:
         base_docs: List[Dict[str, Any]] = []
         for p in self._base_domain_paths:
             if not _has_yaml_under(p):
                 logger.info(f"Skipping base domain path with no YAML: {p}")
                 continue
             logger.info(f"Loading base domain: {p}")
-            base_docs.append(Domain.load(str(p)).as_dict())
+            base_docs.append(_load_domain_as_dict(p))
         overlay_docs: List[Dict[str, Any]] = []
         for p in self._overlay_domain_paths:
             if not _has_yaml_under(p):
                 logger.info(f"Skipping overlay domain path with no YAML: {p}")
                 continue
             logger.info(f"Loading overlay domain: {p}")
-            overlay_docs.append(Domain.load(str(p)).as_dict())
+            overlay_docs.append(_load_domain_as_dict(p))
         logger.info("Merging domains...")
         merged = _merge_domain_docs(base_docs, overlay_docs)
         logger.info(f"Merged domain keys: {list(merged.keys())}")
@@ -485,9 +502,9 @@ class OverlayImporter(TrainingDataImporter):
                     logger.info(f"Dumped merged domain to {out_path}")
             except Exception as e:
                 logger.warning(f"Failed to dump merged domain: {e}")
-        return Domain.from_dict(merged)  # type: ignore[arg-type]
+        return _build_domain(merged)
 
-    def get_nlu_data(self, language: Optional[str] = None) -> TrainingData:
+    def get_nlu_data(self, language: Optional[str] = None) -> Any:
         base_paths = _to_existing_strs(self._base_nlu_paths)
         overlay_paths = _to_existing_strs(self._overlay_nlu_paths)
 
@@ -496,7 +513,7 @@ class OverlayImporter(TrainingDataImporter):
                 tmp = Path(td) / "empty_nlu.yml"
                 with tmp.open("w", encoding="utf-8") as f:
                     yaml.safe_dump({"version": "3.1", "nlu": []}, f, sort_keys=False, allow_unicode=True)
-                return nlu_loading.load_data(str(tmp))
+                return _load_training_data(tmp)
 
         logger.info(f"Merging NLU from base={base_paths} overlays={overlay_paths}")
         base_docs = _load_yaml_docs([Path(p) for p in base_paths])
@@ -525,9 +542,9 @@ class OverlayImporter(TrainingDataImporter):
                 except Exception as e:
                     logger.warning(f"Failed to dump merged NLU: {e}")
 
-            return nlu_loading.load_data(str(tmp))
+            return _load_training_data(tmp)
 
-    def get_stories(self, exclusion_percentage: Optional[int] = None) -> StoryGraph:
+    def get_stories(self, exclusion_percentage: Optional[int] = None) -> Any:
         # Aggregate story & rule files from base then overlays
         story_files: List[Path] = []
 
@@ -549,13 +566,13 @@ class OverlayImporter(TrainingDataImporter):
             _collect(r)
 
         if not story_files or YAMLStoryReader is None:
-            return StoryGraph([])
+            return _build_story_graph([])
 
         all_steps: List[Any] = []
         for fp in story_files:
             try:
-                reader = YAMLStoryReader(domain=None)  # type: ignore[arg-type]
-                reader.read_from_file(str(fp))  # type: ignore[attr-defined]
+                reader = cast(Any, YAMLStoryReader)(domain=None)
+                reader.read_from_file(str(fp))
                 steps = getattr(reader, "story_steps", [])
                 if steps and isinstance(steps, list):
                     all_steps.extend(cast(List[Any], steps))
@@ -568,7 +585,7 @@ class OverlayImporter(TrainingDataImporter):
                 cut = 1
             all_steps = all_steps[:cut]
 
-        return StoryGraph(all_steps)
+        return _build_story_graph(all_steps)
 
     def get_config(self) -> Dict[str, Any]:
         base_docs: List[Dict[str, Any]] = []
@@ -622,4 +639,4 @@ if __name__ == "__main__":
         sys.exit(1)
     importer = OverlayImporter(base_domain=[sys.argv[1]], overlay_domain=[sys.argv[2]])
     merged_domain = importer.get_domain()
-    yaml.safe_dump(merged_domain.as_dict(), sys.stdout, sort_keys=False, allow_unicode=True)
+    yaml.safe_dump(cast(Dict[str, Any], merged_domain.as_dict()), sys.stdout, sort_keys=False, allow_unicode=True)

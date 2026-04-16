@@ -1,0 +1,44 @@
+version: "3.1"
+
+nlu:
+  - intent: request_guided_visualization
+    examples: |
+      - ano
+      - ano prosím
+      - jistě
+      - dobře
+      - pojďme na to
+      - pomoz mi vytvořit graf
+      - proveď mě vytvořením grafu
+      - ukaž mi to krok za krokem
+      - pomoz mi vytvořit vizualizaci
+      - můžeš mě tím provést krok po kroku
+
+  - intent: request_freeform_visualization
+    examples: |
+      - popíšu to sám
+      - nech mě napsat požadavek
+      - chci to zadat volně
+      - prostě řeknu, co chci
+      - napíšu to v jedné zprávě
+
+  - intent: cancel_guided_visualization
+    examples: |
+      - přepni na volný režim
+      - přepni na režim jedné zprávy
+      - ukonči vedený režim
+      - zastav vedený režim
+      - zruš vedený postup
+      - zruš vedený režim
+
+  - intent: skip_guided_step
+    examples: |
+      - přeskočit
+      - přeskoč to
+      - ne
+      - ne díky
+      - teď ne
+      - možná později
+      - bez filtru
+      - žádné
+      - nechat prázdné

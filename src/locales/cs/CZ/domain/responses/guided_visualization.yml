@@ -1,0 +1,62 @@
+version: "3.1"
+
+responses:
+  utter_greet_guided_offer:
+    - text: >-
+        Ahoj! Mohu ti pomoci vytvořit graf krok za krokem, nebo ho můžeš
+        popsat jednou zprávou. Chceš zkusit vedený postup?
+      buttons:
+        - title: Vytvořit graf krok za krokem
+          payload: /request_guided_visualization
+        - title: Popíšu to sám
+          payload: /request_freeform_visualization
+
+  utter_freeform_visualization_tip:
+    - text: >-
+        Dobře. Popiš graf, který chceš, v jedné zprávě a já se ho pokusím
+        sestavit.
+
+  utter_cancel_guided_before_freeform:
+    - text: >-
+        Právě jsi ve vedeném režimu. Napiš "zruš vedený režim" pro ukončení
+        a pak tě přepnu do volného režimu jedné zprávy.
+
+  utter_ask_guided_visualization_form_metric:
+    - text: Jaký je hlavní KPI nebo metrika, kterou chceš vizualizovat?
+
+  utter_ask_guided_visualization_form_guided_hospital_scope:
+    - text: Kterou nemocnici, zemi nebo skupinu nemocnic mám použít?
+
+  utter_ask_guided_visualization_form_stroke_type:
+    - text: Chceš filtrovat podle typu mrtvice? Můžeš odpovědět, nebo tento krok přeskočit.
+      buttons:
+        - title: Přeskočit
+          payload: /skip_guided_step
+
+  utter_ask_guided_visualization_form_sex:
+    - text: Chceš filtrovat podle pohlaví? Můžeš odpovědět, nebo tento krok přeskočit.
+      buttons:
+        - title: Přeskočit
+          payload: /skip_guided_step
+
+  utter_ask_guided_visualization_form_group_by:
+    - text: >-
+        Chceš graf seskupit podle něčeho, například podle měsíce, typu
+        mrtvice nebo nemocnice? Můžeš odpovědět, nebo krok přeskočit.
+      buttons:
+        - title: Přeskočit
+          payload: /skip_guided_step
+
+  utter_ask_guided_visualization_form_chart_type:
+    - text: >-
+        Chceš konkrétní typ grafu, například spojnicový, sloupcový nebo
+        koláčový? Můžeš odpovědět, nebo krok přeskočit.
+      buttons:
+        - title: Přeskočit
+          payload: /skip_guided_step
+
+  utter_guided_visualization_summary:
+    - text: >-
+        Skvělé. Hlavní metriku mám jako "{metric}" a rozsah nemocnic jako
+        "{guided_hospital_scope}". Teď se pokusím vizualizaci vytvořit a
+        potom ji můžeš dále upřesnit.

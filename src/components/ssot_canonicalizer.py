@@ -1,3 +1,4 @@
+# pyright: reportMissingTypeStubs=false, reportMissingModuleSource=false, reportUntypedClassDecorator=false, reportUntypedBaseClass=false, reportUnknownMemberType=false, reportUnknownParameterType=false, reportUnknownArgumentType=false, reportUnknownVariableType=false
 from __future__ import annotations
 
 import logging
@@ -6,11 +7,9 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Text, cast
 
-import yaml
-from rasa.engine.graph import ExecutionContext, GraphComponent  # type: ignore
+import yaml  # type: ignore[import-untyped]  # pyright: ignore[reportMissingModuleSource, reportMissingTypeStubs]
+from rasa.engine.graph import GraphComponent  # type: ignore
 from rasa.engine.recipes.default_recipe import DefaultV1Recipe  # type: ignore
-from rasa.engine.storage.resource import Resource  # type: ignore
-from rasa.engine.storage.storage import ModelStorage  # type: ignore
 from rasa.shared.nlu.training_data.message import Message  # type: ignore
 
 logger = logging.getLogger(__name__)
@@ -167,15 +166,15 @@ class SSOTCanonicalizer(GraphComponent):
     def create(
         cls,
         config: Dict[Text, Any],
-        model_storage: ModelStorage,
-        resource: Resource,
-        execution_context: ExecutionContext,
+        model_storage: Any,
+        resource: Any,
+        execution_context: Any,
     ) -> "SSOTCanonicalizer":
         return cls(config)
 
     def process(self, messages: List[Message]) -> List[Message]:  # type: ignore[override]
-        for message in messages:
-            entities_any = message.get("entities")
+        for message_any in cast(List[Any], messages):
+            entities_any = message_any.get("entities")
             if not isinstance(entities_any, list) or not entities_any:
                 continue
 
@@ -219,6 +218,6 @@ class SSOTCanonicalizer(GraphComponent):
                     ent["value"] = mapped
                 new_entities.append(ent)
 
-            message.set("entities", new_entities)
+            message_any.set("entities", new_entities)
 
         return messages

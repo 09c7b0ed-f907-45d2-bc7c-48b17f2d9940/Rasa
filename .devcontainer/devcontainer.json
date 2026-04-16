@@ -16,7 +16,7 @@
 				"redhat.vscode-yaml"
 			],
 			"settings": {
-				"python.defaultInterpreterPath": "/usr/local/bin/python",
+				"python.defaultInterpreterPath": "/usr/bin/python",
 				"editor.formatOnSave": true,
 				"editor.codeActionsOnSave": {
 					"source.fixAll": "always",
@@ -29,5 +29,5 @@
 			}
 		}
 	},
-	"postCreateCommand": "pip install -e . && mypy --strict . && ruff check ."
+	"postCreateCommand": "pip install -r requirements.txt && mypy --strict . && ruff check ."
 }

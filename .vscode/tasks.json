@@ -104,6 +104,32 @@
                 }
             },
             "problemMatcher": []
+        },
+        {
+            "label": "Rasa: Train + Run (lang spec)",
+            "type": "shell",
+            "command": "bash scripts/layer_rasa_lang.sh ${input:langSpec} && rasa run --enable-api --cors '*' --model models --endpoints src/core/endpoints.yml --request-timeout 3600 --response-timeout 7200",
+            "group": "test",
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "env": {
+                    "PYTHONPATH": "${workspaceFolder}"
+                }
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Rasa: Train + Shell (lang spec)",
+            "type": "shell",
+            "command": "bash scripts/layer_rasa_lang.sh ${input:langSpec} && rasa shell --enable-api --cors '*' --model models --endpoints src/core/endpoints.yml --request-timeout 3600 --response-timeout 7200",
+            "group": "test",
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "env": {
+                    "PYTHONPATH": "${workspaceFolder}"
+                }
+            },
+            "problemMatcher": []
         }
     ],
     "inputs": [

@@ -1,0 +1,8 @@
+version: "3.1"
+
+intents:
+  - request_guided_visualization
+  - request_freeform_visualization
+  - cancel_guided_visualization
+  - provide_guided_hospital_scope
+  - skip_guided_step

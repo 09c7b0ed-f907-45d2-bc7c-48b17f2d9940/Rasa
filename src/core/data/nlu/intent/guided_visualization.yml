@@ -1,0 +1,22 @@
+version: "3.1"
+
+nlu:
+  - intent: request_guided_visualization
+    examples: |
+      - [placeholder] localized in en/us or locale overlays
+
+  - intent: request_freeform_visualization
+    examples: |
+      - [placeholder] localized in en/us or locale overlays
+
+  - intent: cancel_guided_visualization
+    examples: |
+      - [placeholder] localized in en/us or locale overlays
+
+  - intent: provide_guided_hospital_scope
+    examples: |
+      - [placeholder] localized in en/us or locale overlays
+
+  - intent: skip_guided_step
+    examples: |
+      - [placeholder] localized in en/us or locale overlays

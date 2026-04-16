@@ -1,0 +1,68 @@
+version: "3.1"
+
+rules:
+  - rule: Start guided visualization mode
+    steps:
+      - intent: request_guided_visualization
+      - action: guided_visualization_form
+      - active_loop: guided_visualization_form
+
+  - rule: Request freeform while guided mode is active
+    condition:
+      - active_loop: guided_visualization_form
+    steps:
+      - intent: request_freeform_visualization
+      - action: utter_cancel_guided_before_freeform
+      - action: guided_visualization_form
+      - active_loop: guided_visualization_form
+
+  - rule: Handle clarify intent while guided mode is active
+    condition:
+      - active_loop: guided_visualization_form
+    steps:
+      - intent: clarify_visualization
+      - action: guided_visualization_form
+      - active_loop: guided_visualization_form
+
+  - rule: Handle generate intent while guided mode is active
+    condition:
+      - active_loop: guided_visualization_form
+    steps:
+      - intent: generate_visualization
+      - action: guided_visualization_form
+      - active_loop: guided_visualization_form
+
+  - rule: Handle guided hospital scope intent while guided mode is active
+    condition:
+      - active_loop: guided_visualization_form
+    steps:
+      - intent: provide_guided_hospital_scope
+      - action: guided_visualization_form
+      - active_loop: guided_visualization_form
+
+  - rule: Cancel guided mode and switch to freeform mode
+    condition:
+      - active_loop: guided_visualization_form
+    steps:
+      - intent: cancel_guided_visualization
+      - action: action_deactivate_loop
+      - active_loop: null
+      - slot_was_set:
+          - requested_slot: null
+      - action: utter_freeform_visualization_tip
+
+  - rule: Prompt for freeform visualization mode
+    steps:
+      - intent: request_freeform_visualization
+      - action: utter_freeform_visualization_tip
+
+  - rule: Submit guided visualization form
+    condition:
+      - active_loop: guided_visualization_form
+    steps:
+      - action: guided_visualization_form
+      - active_loop: null
+      - slot_was_set:
+          - requested_slot: null
+      - action: utter_guided_visualization_summary
+      - action: action_guided_generate_visualization

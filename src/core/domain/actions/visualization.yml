@@ -1,6 +1,8 @@
 version: "3.1"
 
 actions:
-  - action_generate_visualization
+  - action_oneshot_generate_visualization
   - action_clarify_visualization_request
+  - action_guided_generate_visualization
+  - validate_guided_visualization_form
   #- action_update_visualization

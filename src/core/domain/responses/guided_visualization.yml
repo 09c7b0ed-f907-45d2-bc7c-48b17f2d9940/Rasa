@@ -1,0 +1,49 @@
+version: "3.1"
+
+responses:
+  utter_greet_guided_offer:
+    - text: "[placeholder] localized in en/us or locale overlays"
+      buttons:
+        - title: "[placeholder] localized in en/us or locale overlays"
+          payload: "/request_guided_visualization"
+        - title: "[placeholder] localized in en/us or locale overlays"
+          payload: "/request_freeform_visualization"
+
+  utter_freeform_visualization_tip:
+    - text: "[placeholder] localized in en/us or locale overlays"
+
+  utter_cancel_guided_before_freeform:
+    - text: "[placeholder] localized in en/us or locale overlays"
+
+  utter_ask_guided_visualization_form_metric:
+    - text: "[placeholder] localized in en/us or locale overlays"
+
+  utter_ask_guided_visualization_form_guided_hospital_scope:
+    - text: "[placeholder] localized in en/us or locale overlays"
+
+  utter_ask_guided_visualization_form_stroke_type:
+    - text: "[placeholder] localized in en/us or locale overlays"
+      buttons:
+        - title: "[placeholder] localized in en/us or locale overlays"
+          payload: "/skip_guided_step"
+
+  utter_ask_guided_visualization_form_sex:
+    - text: "[placeholder] localized in en/us or locale overlays"
+      buttons:
+        - title: "[placeholder] localized in en/us or locale overlays"
+          payload: "/skip_guided_step"
+
+  utter_ask_guided_visualization_form_group_by:
+    - text: "[placeholder] localized in en/us or locale overlays"
+      buttons:
+        - title: "[placeholder] localized in en/us or locale overlays"
+          payload: "/skip_guided_step"
+
+  utter_ask_guided_visualization_form_chart_type:
+    - text: "[placeholder] localized in en/us or locale overlays"
+      buttons:
+        - title: "[placeholder] localized in en/us or locale overlays"
+          payload: "/skip_guided_step"
+
+  utter_guided_visualization_summary:
+    - text: "[placeholder] localized in en/us or locale overlays"

@@ -1,9 +1,154 @@
 version: "3.1"
 
 slots:
+  guided_offer_shown:
+    type: bool
+    initial_value: false
+    influence_conversation: true
+    mappings:
+      - type: custom
+
   awaiting_visualization_clarification:
     type: bool
     initial_value: false
     influence_conversation: true
     mappings:
       - type: custom
+
+  metric:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: metric
+        conditions:
+          - active_loop: guided_visualization_form
+            requested_slot: metric
+      - type: from_text
+        conditions:
+          - active_loop: guided_visualization_form
+            requested_slot: metric
+
+  guided_hospital_scope:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: hospital_scope_reference
+        conditions:
+          - active_loop: guided_visualization_form
+            requested_slot: guided_hospital_scope
+      - type: from_entity
+        entity: country_code
+        conditions:
+          - active_loop: guided_visualization_form
+            requested_slot: guided_hospital_scope
+      - type: from_entity
+        entity: hospital_name
+        conditions:
+          - active_loop: guided_visualization_form
+            requested_slot: guided_hospital_scope
+      - type: from_entity
+        entity: group_id
+        conditions:
+          - active_loop: guided_visualization_form
+            requested_slot: guided_hospital_scope
+      - type: from_text
+        not_intent:
+          - request_freeform_visualization
+          - cancel_guided_visualization
+        conditions:
+          - active_loop: guided_visualization_form
+            requested_slot: guided_hospital_scope
+
+  stroke_type:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_intent
+        intent: skip_guided_step
+        value: "skip"
+        conditions:
+          - active_loop: guided_visualization_form
+            requested_slot: stroke_type
+      - type: from_entity
+        entity: stroke_type
+        conditions:
+          - active_loop: guided_visualization_form
+            requested_slot: stroke_type
+      - type: from_text
+        not_intent:
+          - skip_guided_step
+          - request_freeform_visualization
+        conditions:
+          - active_loop: guided_visualization_form
+            requested_slot: stroke_type
+
+  sex:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_intent
+        intent: skip_guided_step
+        value: "skip"
+        conditions:
+          - active_loop: guided_visualization_form
+            requested_slot: sex
+      - type: from_entity
+        entity: sex
+        conditions:
+          - active_loop: guided_visualization_form
+            requested_slot: sex
+      - type: from_text
+        not_intent:
+          - skip_guided_step
+          - request_freeform_visualization
+        conditions:
+          - active_loop: guided_visualization_form
+            requested_slot: sex
+
+  group_by:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_intent
+        intent: skip_guided_step
+        value: "skip"
+        conditions:
+          - active_loop: guided_visualization_form
+            requested_slot: group_by
+      - type: from_entity
+        entity: group_by
+        conditions:
+          - active_loop: guided_visualization_form
+            requested_slot: group_by
+      - type: from_text
+        not_intent:
+          - skip_guided_step
+          - request_freeform_visualization
+        conditions:
+          - active_loop: guided_visualization_form
+            requested_slot: group_by
+
+  chart_type:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_intent
+        intent: skip_guided_step
+        value: "skip"
+        conditions:
+          - active_loop: guided_visualization_form
+            requested_slot: chart_type
+      - type: from_entity
+        entity: chart_type
+        conditions:
+          - active_loop: guided_visualization_form
+            requested_slot: chart_type
+      - type: from_text
+        not_intent:
+          - skip_guided_step
+          - request_freeform_visualization
+        conditions:
+          - active_loop: guided_visualization_form
+            requested_slot: chart_type

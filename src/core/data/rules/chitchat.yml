@@ -1,10 +1,24 @@
 version: "3.1"
 
 rules:
-  - rule: Greet
+  - rule: Greet with guided offer on first greeting
+    condition:
+      - slot_was_set:
+          - guided_offer_shown: false
+    steps:
+      - intent: greet
+      - action: utter_greet_guided_offer
+      - slot_was_set:
+          - guided_offer_shown: true
+
+  - rule: Greet after guided offer has been shown
+    condition:
+      - slot_was_set:
+          - guided_offer_shown: true
     steps:
       - intent: greet
       - action: utter_greet
+
   - rule: goodbye
     steps:
       - intent: goodbye

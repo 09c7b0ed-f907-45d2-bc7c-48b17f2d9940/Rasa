@@ -1,3 +1,4 @@
+# pyright: reportUntypedClassDecorator=false, reportUntypedBaseClass=false, reportUnknownMemberType=false, reportUnknownParameterType=false, reportUnknownArgumentType=false, reportUnknownVariableType=false
 import logging
 from typing import Any, Dict, List, Optional, Text, Tuple, cast
 

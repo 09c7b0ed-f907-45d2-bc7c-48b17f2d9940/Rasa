@@ -9,6 +9,7 @@ entities:
         - chart_type
         - country_code
         - hospital_name
+        - hospital_scope_reference
         - sort
         - group_id
         - limit

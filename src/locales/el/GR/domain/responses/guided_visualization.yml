@@ -1,0 +1,64 @@
+version: "3.1"
+
+responses:
+  utter_greet_guided_offer:
+    - text: >-
+        Γεια σου! Μπορώ να σε βοηθήσω να φτιάξεις ένα γράφημα βήμα βήμα ή
+        μπορείς να το περιγράψεις με ένα μόνο μήνυμα. Θέλεις να δοκιμάσεις
+        την καθοδηγούμενη επιλογή;
+      buttons:
+        - title: Δημιουργία γραφήματος βήμα βήμα
+          payload: /request_guided_visualization
+        - title: Θα το περιγράψω μόνος μου
+          payload: /request_freeform_visualization
+
+  utter_freeform_visualization_tip:
+    - text: >-
+        Εντάξει. Περιέγραψε το γράφημα που θέλεις με ένα μήνυμα και θα
+        προσπαθήσω να το δημιουργήσω.
+
+  utter_cancel_guided_before_freeform:
+    - text: >-
+        Βρίσκεσαι σε καθοδηγούμενη λειτουργία. Πες "ακύρωσε την καθοδηγούμενη
+        ροή" για έξοδο και μετά μπορώ να σε μεταφέρω σε ελεύθερη λειτουργία
+        ενός μηνύματος.
+
+  utter_ask_guided_visualization_form_metric:
+    - text: Ποιο είναι το βασικό KPI ή η μετρική που θέλεις να οπτικοποιήσεις;
+
+  utter_ask_guided_visualization_form_guided_hospital_scope:
+    - text: Ποιο νοσοκομείο, χώρα ή ομάδα νοσοκομείων θέλεις να χρησιμοποιήσω;
+
+  utter_ask_guided_visualization_form_stroke_type:
+    - text: Θέλεις φίλτρο ανά τύπο εγκεφαλικού; Μπορείς να απαντήσεις ή να παραλείψεις αυτό το βήμα.
+      buttons:
+        - title: Παράλειψη
+          payload: /skip_guided_step
+
+  utter_ask_guided_visualization_form_sex:
+    - text: Θέλεις φίλτρο ανά φύλο; Μπορείς να απαντήσεις ή να παραλείψεις αυτό το βήμα.
+      buttons:
+        - title: Παράλειψη
+          payload: /skip_guided_step
+
+  utter_ask_guided_visualization_form_group_by:
+    - text: >-
+        Θέλεις να ομαδοποιηθεί το γράφημα με κάτι, όπως μήνα, τύπο
+        εγκεφαλικού ή νοσοκομείο; Μπορείς να απαντήσεις ή να παραλείψεις.
+      buttons:
+        - title: Παράλειψη
+          payload: /skip_guided_step
+
+  utter_ask_guided_visualization_form_chart_type:
+    - text: >-
+        Θέλεις συγκεκριμένο τύπο γραφήματος, όπως γραμμής, ράβδων ή πίτας;
+        Μπορείς να απαντήσεις ή να παραλείψεις.
+      buttons:
+        - title: Παράλειψη
+          payload: /skip_guided_step
+
+  utter_guided_visualization_summary:
+    - text: >-
+        Ωραία. Έχω ως βασική μετρική το "{metric}" και ως πεδίο νοσοκομείων
+        το "{guided_hospital_scope}". Τώρα θα προσπαθήσω να δημιουργήσω την
+        οπτικοποίηση και μετά μπορείς να την βελτιώσεις περισσότερο.

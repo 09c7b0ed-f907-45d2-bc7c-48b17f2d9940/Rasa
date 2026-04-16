@@ -1,0 +1,65 @@
+version: "3.1"
+
+responses:
+  utter_greet_guided_offer:
+    - text: >-
+        Hi! I can help you build a graph step by step, or you can describe it
+        in one message. Would you like to try the guided option?
+      buttons:
+        - title: Build a graph step by step
+          payload: /request_guided_visualization
+        - title: I'll describe it myself
+          payload: /request_freeform_visualization
+
+  utter_freeform_visualization_tip:
+    - text: >-
+        Okay. Describe the graph you want in one message, and I'll try to
+        build it.
+
+  utter_cancel_guided_before_freeform:
+    - text: >-
+        You're currently in guided mode. Say "cancel guided mode" to exit,
+        then I can switch you to one-message freeform mode.
+
+  utter_ask_guided_visualization_form_metric:
+    - text: What is the main KPI or metric you want to visualize?
+
+  utter_ask_guided_visualization_form_guided_hospital_scope:
+    - text: >-
+        Which hospital scope should I use? You can provide a country code
+        (for example US or ES), a hospital name, a hospital group ID, or say
+        all hospitals. You can also say "mine".
+
+  utter_ask_guided_visualization_form_stroke_type:
+    - text: Do you want to filter by stroke type? You can answer or skip this step.
+      buttons:
+        - title: Skip
+          payload: /skip_guided_step
+
+  utter_ask_guided_visualization_form_sex:
+    - text: Do you want to filter by sex? You can answer or skip this step.
+      buttons:
+        - title: Skip
+          payload: /skip_guided_step
+
+  utter_ask_guided_visualization_form_group_by:
+    - text: >-
+        Would you like to group the graph by something such as month, stroke
+        type, or hospital? You can answer or skip.
+      buttons:
+        - title: Skip
+          payload: /skip_guided_step
+
+  utter_ask_guided_visualization_form_chart_type:
+    - text: >-
+        Do you want a specific chart type, such as line, bar, or pie? You can
+        answer or skip.
+      buttons:
+        - title: Skip
+          payload: /skip_guided_step
+
+  utter_guided_visualization_summary:
+    - text: >-
+        Great. I have the main metric as "{metric}" and the hospital scope as
+        "{guided_hospital_scope}". I'll try to generate the visualization now,
+        and you can refine it afterwards.

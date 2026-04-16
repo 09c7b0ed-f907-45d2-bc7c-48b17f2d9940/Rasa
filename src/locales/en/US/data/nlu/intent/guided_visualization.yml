@@ -1,0 +1,68 @@
+version: "3.1"
+
+nlu:
+  - intent: request_guided_visualization
+    examples: |
+      - yes
+      - yes please
+      - sure
+      - okay
+      - let's do it
+      - help me build a graph
+      - guide me through creating a graph
+      - walk me through a visualization
+      - help me make a chart
+      - can you guide me step by step
+
+  - intent: request_freeform_visualization
+    examples: |
+      - I'll describe it myself
+      - let me type the request
+      - I want to do it freeform
+      - I'll just say what I want
+      - I'll do it in one message
+
+  - intent: cancel_guided_visualization
+    examples: |
+      - switch to freeform mode
+      - switch to one-shot mode
+      - exit guided mode
+      - stop guided mode
+      - cancel the guided flow
+      - cancel guided mode
+      - end guided mode
+
+  - intent: provide_guided_hospital_scope
+    examples: |
+      - use [US](country_code)
+      - [United States](country_code)
+      - [ES](country_code)
+      - [Spain](country_code)
+      - [Mexico](country_code)
+      - use hospital [Memorial](hospital_name)
+      - [General](hospital_name)
+      - hospital group [10](group_id)
+      - group [25](group_id)
+      - [all hospitals](hospital_scope_reference)
+      - [all](hospital_scope_reference)
+      - [my hospital](hospital_scope_reference)
+      - [mine](hospital_scope_reference)
+      - [ours](hospital_scope_reference)
+      - [our hospital](hospital_scope_reference)
+
+  - intent: skip_guided_step
+    examples: |
+      - skip
+      - skip this
+      - next
+      - continue
+      - move on
+      - no
+      - no thanks
+      - not now
+      - maybe later
+      - nope
+      - nah
+      - no filter
+      - none
+      - leave it blank
