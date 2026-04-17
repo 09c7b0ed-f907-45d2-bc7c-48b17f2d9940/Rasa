@@ -80,6 +80,19 @@
             "problemMatcher": []
         },
         {
+            "label": "Rasa: Run (latest) - DEBUG",
+            "type": "shell",
+            "command": "rasa run --enable-api --cors '*' --model models --endpoints src/core/endpoints.yml --request-timeout 3600 --response-timeout 7200 --debug",
+            "group": "test",
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "env": {
+                    "PYTHONPATH": "${workspaceFolder}"
+                }
+            },
+            "problemMatcher": []
+        },
+        {
             "label": "Rasa: Dry Run (lang spec)",
             "type": "shell",
             "command": "bash scripts/layer_rasa_lang.sh --dry-run=stdout ${input:langSpec}",
