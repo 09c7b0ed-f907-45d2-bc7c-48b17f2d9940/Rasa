@@ -74,11 +74,13 @@ jobs:
           CHANGED="${{ steps.diff.outputs.files }}"
           CHANGED_LANGS=()
           FALLBACK_REGION="us"
-          # If global-impact files changed, rebuild all languages
+          # If global-impact files changed, rebuild all languages.
+          # Runtime entrypoint/API changes (e.g. thread endpoints) must fan out
+          # to every language image because all variants share the same runtime.
           if [ "${FORCE_ALL}" = "true" ]; then
             IFS=',' read -ra ALL <<< "$LANGS"
             CHANGED_LANGS=("${ALL[@]}")
-          elif echo "$CHANGED" | grep -qE "^(Dockerfile|scripts/|src/components/|src/core/|src/locales/en/)"; then
+          elif echo "$CHANGED" | grep -qE "^(Dockerfile|scripts/|src/components/|src/core/|src/run_rasa\.py|src/thread_index\.py|src/locales/en/)"; then
             IFS=',' read -ra ALL <<< "$LANGS"
             CHANGED_LANGS=("${ALL[@]}")
           else
