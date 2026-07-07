@@ -1,10 +1,19 @@
+# mypy: ignore_missing_imports = True
+# pyright: reportMissingImports=false, reportMissingModuleSource=false, reportMissingTypeStubs=false
+
 import os
 import sys
 import warnings
 from datetime import datetime, timezone
-from typing import Optional
+from inspect import isawaitable
+from typing import Any, Optional, cast
 from urllib.parse import urlsplit
 
+import rasa  # type: ignore
+import rasa.__main__ as rasa_main  # type: ignore
+import rasa.core.run as core_run  # type: ignore
+from sanic import response  # type: ignore
+from sanic_routing.exceptions import RouteExists  # type: ignore
 
 os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "2")
 os.environ.setdefault("MPLCONFIGDIR", "/tmp/matplotlib")
@@ -12,13 +21,7 @@ os.environ.setdefault("MPLCONFIGDIR", "/tmp/matplotlib")
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 warnings.filterwarnings("ignore", message="Matplotlib created a temporary config/cache directory*")
 
-import rasa
-import rasa.__main__ as rasa_main
-import rasa.core.run as core_run
-from sanic import response
-from sanic_routing.exceptions import RouteExists
-
-from src.thread_index import (
+from src.thread_index import (  # noqa: E402
     apply_index_action,
     build_thread_list_from_payload,
     build_thread_list_response,
@@ -71,14 +74,14 @@ def _install_custom_routes() -> None:
             except RouteExists:
                 pass
 
-        async def _get_tracker_store():
+        async def _get_tracker_store() -> tuple[Any | None, Any | None]:
             agent = getattr(getattr(app, "ctx", None), "agent", None)
             if not agent:
                 return None, response.json({"error": "Agent not initialized"}, status=500)
             tracker_store = getattr(agent, "tracker_store", None)
             if not tracker_store:
                 return None, response.json({"error": "Tracker store not available"}, status=500)
-            return tracker_store, None
+            return cast(Any, tracker_store), None
 
         def _authorized(request) -> bool:
             expected = _read_env("RASA_AUTH_TOKEN")
@@ -97,6 +100,8 @@ def _install_custom_routes() -> None:
             tracker_store, err = await _get_tracker_store()
             if err:
                 return err
+            if tracker_store is None:
+                return response.json({"error": "Tracker store not available"}, status=500)
 
             tracker = await tracker_store.retrieve(get_thread_index_tracker_id(user_sub))
             if not tracker:
@@ -113,6 +118,8 @@ def _install_custom_routes() -> None:
             tracker_store, err = await _get_tracker_store()
             if err:
                 return err
+            if tracker_store is None:
+                return response.json({"error": "Tracker store not available"}, status=500)
 
             tracker = await tracker_store.retrieve(get_thread_index_tracker_id(user_sub))
             payload = extract_index_payload_from_events(list(tracker.events)) if tracker else {}
@@ -135,8 +142,10 @@ def _install_custom_routes() -> None:
             thread_id_raw = payload.get("thread_id")
             action = payload.get("action")
             name = payload.get("name", "")
+            if thread_id_raw is None:
+                return response.json({"error": "Missing or invalid thread_id, action"}, status=400)
             try:
-                thread_id = int(thread_id_raw)
+                thread_id = int(str(thread_id_raw))
             except (TypeError, ValueError):
                 thread_id = None
 
@@ -146,18 +155,20 @@ def _install_custom_routes() -> None:
             tracker_store, err = await _get_tracker_store()
             if err:
                 return err
+            if tracker_store is None:
+                return response.json({"error": "Tracker store not available"}, status=500)
 
             sender_id = get_thread_index_tracker_id(user_sub)
             tracker = await tracker_store.retrieve(sender_id)
             if tracker is None:
-                from rasa.shared.core.trackers import DialogueStateTracker
+                from rasa.shared.core.trackers import DialogueStateTracker  # type: ignore[import-untyped]
 
                 tracker = DialogueStateTracker(sender_id, [])
 
             current_payload = extract_index_payload_from_events(list(tracker.events))
             next_payload = apply_index_action(current_payload, thread_id, action, str(name))
 
-            from rasa.shared.core.events import UserUttered
+            from rasa.shared.core.events import UserUttered  # type: ignore[import-untyped]
 
             tracker.update(
                 UserUttered(
@@ -194,6 +205,8 @@ def _install_custom_routes() -> None:
             tracker_store, err = await _get_tracker_store()
             if err:
                 return err
+            if tracker_store is None:
+                return response.json({"error": "Tracker store not available"}, status=500)
 
             # Check the thread exists in the index first.
             index_sender_id = get_thread_index_tracker_id(user_sub)
@@ -213,8 +226,8 @@ def _install_custom_routes() -> None:
             if callable(delete_fn):
                 try:
                     result = delete_fn(conversation_sender_id)
-                    if hasattr(result, "__await__"):
-                        result = await result
+                    if isawaitable(result):
+                        result = await cast(Any, result)
                     physically_deleted = bool(result)
                 except Exception:
                     pass
@@ -286,10 +299,7 @@ def _resolve_auth_token() -> str:
     require_auth = _env_flag("RASA_REQUIRE_AUTH_TOKEN", default=True)
     token = _read_env("RASA_AUTH_TOKEN")
     if require_auth and not token:
-        raise RuntimeError(
-            "RASA_AUTH_TOKEN is required when RASA_REQUIRE_AUTH_TOKEN is enabled. "
-            "Set RASA_AUTH_TOKEN or set RASA_REQUIRE_AUTH_TOKEN=false only for local debugging."
-        )
+        raise RuntimeError("RASA_AUTH_TOKEN is required when RASA_REQUIRE_AUTH_TOKEN is enabled. Set RASA_AUTH_TOKEN or set RASA_REQUIRE_AUTH_TOKEN=false only for local debugging.")
     return token or ""
 
 
