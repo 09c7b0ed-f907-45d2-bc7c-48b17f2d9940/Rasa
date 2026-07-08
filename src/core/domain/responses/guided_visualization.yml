@@ -25,11 +25,31 @@ responses:
     - text: "[placeholder] localized in en/us or locale overlays"
       buttons:
         - title: "[placeholder] localized in en/us or locale overlays"
+          payload: "[placeholder] localized in en/us or locale overlays"
+        - title: "[placeholder] localized in en/us or locale overlays"
+          payload: "[placeholder] localized in en/us or locale overlays"
+        - title: "[placeholder] localized in en/us or locale overlays"
+          payload: "[placeholder] localized in en/us or locale overlays"
+        - title: "[placeholder] localized in en/us or locale overlays"
+          payload: "[placeholder] localized in en/us or locale overlays"
+        - title: "[placeholder] localized in en/us or locale overlays"
+          payload: "[placeholder] localized in en/us or locale overlays"
+        - title: "[placeholder] localized in en/us or locale overlays"
+          payload: "[placeholder] localized in en/us or locale overlays"
+        - title: "[placeholder] localized in en/us or locale overlays"
+          payload: "[placeholder] localized in en/us or locale overlays"
+        - title: "[placeholder] localized in en/us or locale overlays"
           payload: "/skip_guided_step"
 
   utter_ask_guided_visualization_form_sex:
     - text: "[placeholder] localized in en/us or locale overlays"
       buttons:
+        - title: "[placeholder] localized in en/us or locale overlays"
+          payload: "[placeholder] localized in en/us or locale overlays"
+        - title: "[placeholder] localized in en/us or locale overlays"
+          payload: "[placeholder] localized in en/us or locale overlays"
+        - title: "[placeholder] localized in en/us or locale overlays"
+          payload: "[placeholder] localized in en/us or locale overlays"
         - title: "[placeholder] localized in en/us or locale overlays"
           payload: "/skip_guided_step"
 
@@ -42,6 +62,16 @@ responses:
   utter_ask_guided_visualization_form_chart_type:
     - text: "[placeholder] localized in en/us or locale overlays"
       buttons:
+        - title: "[placeholder] localized in en/us or locale overlays"
+          payload: "[placeholder] localized in en/us or locale overlays"
+        - title: "[placeholder] localized in en/us or locale overlays"
+          payload: "[placeholder] localized in en/us or locale overlays"
+        - title: "[placeholder] localized in en/us or locale overlays"
+          payload: "[placeholder] localized in en/us or locale overlays"
+        - title: "[placeholder] localized in en/us or locale overlays"
+          payload: "[placeholder] localized in en/us or locale overlays"
+        - title: "[placeholder] localized in en/us or locale overlays"
+          payload: "[placeholder] localized in en/us or locale overlays"
         - title: "[placeholder] localized in en/us or locale overlays"
           payload: "/skip_guided_step"
 

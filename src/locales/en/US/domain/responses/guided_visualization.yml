@@ -33,12 +33,32 @@ responses:
   utter_ask_guided_visualization_form_stroke_type:
     - text: Do you want to filter by stroke type? You can answer or skip this step.
       buttons:
+        - title: Ischemic stroke
+          payload: ischemic stroke
+        - title: Intracerebral hemorrhage
+          payload: ich
+        - title: Transient ischemic attack
+          payload: tia
+        - title: Subarachnoid hemorrhage
+          payload: sah
+        - title: Cerebral venous thrombosis
+          payload: cvt
+        - title: Stroke mimics
+          payload: mimics
+        - title: Undetermined stroke
+          payload: unknown stroke type
         - title: Skip
           payload: /skip_guided_step
 
   utter_ask_guided_visualization_form_sex:
     - text: Do you want to filter by sex? You can answer or skip this step.
       buttons:
+        - title: Male
+          payload: male
+        - title: Female
+          payload: female
+        - title: Other
+          payload: other
         - title: Skip
           payload: /skip_guided_step
 
@@ -55,6 +75,16 @@ responses:
         Do you want a specific chart type, such as line, bar, or pie? You can
         answer or skip.
       buttons:
+        - title: Line chart
+          payload: line chart
+        - title: Bar chart
+          payload: bar chart
+        - title: Histogram
+          payload: histogram
+        - title: Waterfall chart
+          payload: waterfall chart
+        - title: Area chart
+          payload: area chart
         - title: Skip
           payload: /skip_guided_step
 

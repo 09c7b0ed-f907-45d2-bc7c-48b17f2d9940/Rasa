@@ -32,12 +32,32 @@ responses:
   utter_ask_guided_visualization_form_stroke_type:
     - text: Θέλεις φίλτρο ανά τύπο εγκεφαλικού; Μπορείς να απαντήσεις ή να παραλείψεις αυτό το βήμα.
       buttons:
+        - title: Ισχαιμικό εγκεφαλικό
+          payload: ισχαιμικό εγκεφαλικό
+        - title: Ενδοεγκεφαλική αιμορραγία
+          payload: ενδοεγκεφαλική αιμορραγία
+        - title: Παροδική ισχαιμική προσβολή
+          payload: παροδική ισχαιμική προσβολή
+        - title: Υπαραχνοειδής αιμορραγία
+          payload: αιμορραγία υποαραχνοειδούς χώρου
+        - title: Φλεβικό εγκεφαλικό
+          payload: φλεβικό εγκεφαλικό
+        - title: Μιμητές εγκεφαλικού
+          payload: mimics
+        - title: Απροσδιόριστο εγκεφαλικό
+          payload: απροσδιόριστο εγκεφαλικό τύπο
         - title: Παράλειψη
           payload: /skip_guided_step
 
   utter_ask_guided_visualization_form_sex:
     - text: Θέλεις φίλτρο ανά φύλο; Μπορείς να απαντήσεις ή να παραλείψεις αυτό το βήμα.
       buttons:
+        - title: Άνδρες
+          payload: άνδρες
+        - title: Γυναίκες
+          payload: γυναίκες
+        - title: Άλλο
+          payload: μη δυοφυλο
         - title: Παράλειψη
           payload: /skip_guided_step
 
@@ -54,6 +74,16 @@ responses:
         Θέλεις συγκεκριμένο τύπο γραφήματος, όπως γραμμής, ράβδων ή πίτας;
         Μπορείς να απαντήσεις ή να παραλείψεις.
       buttons:
+        - title: Γράφημα γραμμής
+          payload: γραμμής
+        - title: Γράφημα ράβδων
+          payload: ράβδων
+        - title: Ιστόγραμμα
+          payload: ιστόγραμμα
+        - title: Waterfall
+          payload: waterfall chart
+        - title: Περιοχή
+          payload: περιοχή
         - title: Παράλειψη
           payload: /skip_guided_step
 

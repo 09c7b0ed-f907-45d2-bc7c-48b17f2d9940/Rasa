@@ -30,12 +30,32 @@ responses:
   utter_ask_guided_visualization_form_stroke_type:
     - text: Chceš filtrovat podle typu mrtvice? Můžeš odpovědět, nebo tento krok přeskočit.
       buttons:
+        - title: Ischemická mrtvice
+          payload: ischemická mrtvice
+        - title: Intracerebrální krvácení
+          payload: ICH
+        - title: TIA
+          payload: TIA
+        - title: Subarachnoidální krvácení
+          payload: krvácení do subarachnoidálního prostoru
+        - title: Žilní mrtvice
+          payload: žilní mrtvice
+        - title: Mimics
+          payload: mimics
+        - title: Neurčený typ mrtvice
+          payload: neurčený typ mrtvice
         - title: Přeskočit
           payload: /skip_guided_step
 
   utter_ask_guided_visualization_form_sex:
     - text: Chceš filtrovat podle pohlaví? Můžeš odpovědět, nebo tento krok přeskočit.
       buttons:
+        - title: Muži
+          payload: muži
+        - title: Ženy
+          payload: ženy
+        - title: Jiné
+          payload: jiné
         - title: Přeskočit
           payload: /skip_guided_step
 
@@ -52,6 +72,16 @@ responses:
         Chceš konkrétní typ grafu, například spojnicový, sloupcový nebo
         koláčový? Můžeš odpovědět, nebo krok přeskočit.
       buttons:
+        - title: Spojnicový graf
+          payload: čárový
+        - title: Sloupcový graf
+          payload: sloupcový
+        - title: Histogram
+          payload: histogram
+        - title: Waterfall
+          payload: waterfall chart
+        - title: Area
+          payload: area chart
         - title: Přeskočit
           payload: /skip_guided_step
 
