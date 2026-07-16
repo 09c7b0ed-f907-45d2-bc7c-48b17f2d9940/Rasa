@@ -30,7 +30,12 @@ nlu:
       - Give me data from [Q1 2023]{"entity": "date", "role": "lower"} onwards
       - Show recent data since [last month]{"entity": "date", "role": "lower"}
       - Show a [line](chart_type) graph of [DTN](metric)
+      - Show [SEX](metric) as [percent]{"entity": "kpi", "value": "percent"} in a [bar](chart_type) chart
+      - Give me [STROKE TYPE](metric) in [percentage]{"entity": "kpi", "value": "percent"} using a [line](chart_type) chart
+      - Display [Hospitalized in](metric) as [per cent]{"entity": "kpi", "value": "percent"}
       - Give me a [bar](chart_type) chart of [DIDO](metric) for [female](sex) patients
+      - Show me patient [sex](metric) in a [bar](chart_type) chart grouped by [quarter](group_by)
+      - Show me patient [stroke type](metric) in a [bar](chart_type) chart grouped by [quarter](group_by)
       - Display a [pie](chart_type) chart of [NIHSS](metric) grouped by [stroke type](group_by)
       - Show a [line](chart_type) graph for [DTN](metric) and [DIDO](metric) for [male](sex) and [female](sex) patients between [40]{"entity": "age", "role": "lower"} and [60]{"entity": "age", "role": "upper"}
       - Give me a chart of [age](metric) of patients grouped by [initial point of contact](group_by), excluding [ischaemic](stroke_type) strokes, between ages [18]{"entity": "age", "role": "lower"} to [90]{"entity": "age", "role": "upper"}
@@ -77,6 +82,8 @@ nlu:
       - Compare my hospital [DTN](metric) with the UK national average using Mann Whitney
       - Display data from [Q1 2023]{"entity": "date", "role": "lower"} to [Q2 2023]{"entity": "date", "role": "upper"} vs [Q3 2023]{"entity": "date", "role": "lower"} to [Q4 2023]{"entity": "date", "role": "upper"}
       - Compare patients aged [30]{"entity": "age", "role": "lower"} to [45]{"entity": "age", "role": "upper"} with those aged [60]{"entity": "age", "role": "lower"} to [80]{"entity": "age", "role": "upper"}
+      - Show me a line chart of [dtn](metric) grouped by [inr measurement mode](group_by)
+
   - intent: update_visualization
     examples: |
       - Change the chart to a [bar](chart_type) graph
@@ -90,7 +97,12 @@ nlu:
       - Update chart type to [pie](chart_type)
       - Filter for [ischaemic](stroke_type) strokes only
       - Modify grouping to [admission source](group_by)
+      - Group the data by [stroke type](group_by)
+      - Also group the data by [sex](group_by)
+      - Group by [quarter](group_by)
+      - Change grouping to [quarters](group_by)
       - Change KPI to [AdmissionNihss](metric)
+      - Set KPI to [percent]{"entity": "kpi", "value": "percent"}
       - Update date filter to last [6 months]{"entity": "date", "role": "lower"}
       - Switch to [scatter](chart_type) plot visualisation
       - Add [TIA](stroke_type) patients to the analysis
@@ -112,4 +124,5 @@ nlu:
       - By [month](group_by)
       - Time window is [Q1 2025](date)
       - Use [admission nihss](metric)
+      - [percent]{"entity": "kpi", "value": "percent"}
       - [this year](date)
