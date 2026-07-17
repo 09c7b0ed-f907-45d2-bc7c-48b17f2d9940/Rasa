@@ -179,6 +179,26 @@ nlu:
       - Break down [DTN](metric) by [stroke type](stroke_type)
       - Group [LOS](metric) by [stroke type](stroke_type)
 
+      - Show me [door to needle](metric) and [DIDO](metric) scores
+      - Show [DTN](metric) excluding [ischaemic](stroke_type) stroke patients
+      - Chart [DIDO](metric) for [haemorrhagic](stroke_type) strokes
+      - Show [DTN](metric) between [4 March 2023]{"entity": "date", "role": "lower"} and [5 July 2024]{"entity": "date", "role": "upper"}
+      - Chart [DIDO](metric) from [1 January 2022]{"entity": "date", "role": "lower"} to [31 December 2022]{"entity": "date", "role": "upper"}
+      - Show [SEX](metric) as [percent]{"entity": "kpi", "value": "percent"} in a [bar](chart_type) chart
+      - Give me [STROKE TYPE](metric) in [percentage]{"entity": "kpi", "value": "percent"} using a [line](chart_type) chart
+      - Display [Hospitalized in](metric) as [per cent]{"entity": "kpi", "value": "percent"}
+      - Show me patient [sex](metric) in a [bar](chart_type) chart grouped by [quarter](group_by)
+      - Show me patient [stroke type](metric) in a [bar](chart_type) chart grouped by [quarter](group_by)
+      - Give me a chart of [age](metric) of patients grouped by [initial point of contact](group_by), excluding [ischaemic](stroke_type) strokes, between ages [18]{"entity": "age", "role": "lower"} to [90]{"entity": "age", "role": "upper"}
+      - Can you show [LOS](metric) for [ischaemic](stroke_type) stroke patients?
+      - Give me [mRS](metric) scores for [haemorrhagic](stroke_type) strokes from [2023-01-01]{"entity": "date", "role": "lower"} to [2023-12-31]{"entity": "date", "role": "upper"}
+      - Chart [functional outcome](metric) for [ischaemic](stroke_type) patients by [sex](group_by)
+      - Show [emergency response time](metric) for [haemorrhagic](stroke_type) cases
+      - Compare [ischaemic](stroke_type) and [haemorrhagic](stroke_type) stroke data
+      - Show a [line](chart_type) graph of [DTN](metric) for my hospital vs UK national mean
+      - Show me a line chart of [dtn](metric) grouped by [inr measurement mode](group_by)
+      - Make me a bar chart of [physiotherapy received](metric) grouped by [stroke type](group_by)
+
   - intent: update_visualization
     examples: |
       - Change the chart to a [bar](chart_type) graph
@@ -293,6 +313,17 @@ nlu:
       - Keep everything else the same, just show [women](sex)
       - Leave the chart as is, but use [2025]{"entity":"date","role":"lower"}
 
+      - Switch to [haemorrhagic](stroke_type) stroke type
+      - Add [DIDO](metric) to the current visualisation
+      - Filter for [ischaemic](stroke_type) strokes only
+      - Group the data by [stroke type](group_by)
+      - Also group the data by [sex](group_by)
+      - Group by [quarter](group_by)
+      - Change grouping to [quarters](group_by)
+      - Set KPI to [percent]{"entity": "kpi", "value": "percent"}
+      - Switch to [scatter](chart_type) plot visualisation
+      - Show [initial blood glucose](metric)
+
   - intent: clarify_visualization
     examples: |
       - [DTN](metric)
@@ -347,3 +378,11 @@ nlu:
       - second quarter
       - third quarter
       - fourth quarter
+
+      - [swallowing screening performed](metric)
+      - [NIHSS](metric), please
+      - From [1 January 2024]{"entity": "date", "role": "lower"} to [31 March 2024]{"entity": "date", "role": "upper"}
+      - group by [stroke type](group_by)
+      - [ischaemic](stroke_type)
+      - By [month](group_by)
+      - [percent]{"entity": "kpi", "value": "percent"}
