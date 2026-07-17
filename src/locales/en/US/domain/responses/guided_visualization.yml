@@ -67,6 +67,22 @@ responses:
         Would you like to group the graph by something such as month, stroke
         type, or hospital? You can answer or skip.
       buttons:
+        - title: Month
+          payload: month
+        - title: Quarter
+          payload: quarter
+        - title: Stroke type
+          payload: stroke type
+        - title: Patient sex
+          payload: patient sex
+        - title: EMS Prenotification
+          payload: ems prenotification
+        - title: First contact place
+          payload: first contact place
+        - title: IVT application department
+          payload: ivt application department
+        - title: INR measurement mode
+          payload: inr measurement mode
         - title: Skip
           payload: /skip_guided_step
 

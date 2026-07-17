@@ -323,6 +323,8 @@ nlu:
       - Set KPI to [percent]{"entity": "kpi", "value": "percent"}
       - Switch to [scatter](chart_type) plot visualisation
       - Show [initial blood glucose](metric)
+      - show me [discharge nihss](metric) in a [bar chart](chart_type) grouped by [stroke type](group_by)
+      - make me a [ich score](metric), [line chart](chart_type) grouped by [stroke type](group_by)
 
   - intent: clarify_visualization
     examples: |
