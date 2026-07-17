@@ -1,0 +1,50 @@
+version: "3.1"
+
+nlu:
+  - lookup: group_by
+    examples: |
+      - EMS_PRENOTIFICATION
+      - ems prenotification
+      - ems notified
+      - emergency pre-alert
+      - ambulance notified
+      - FIRST_CONTACT_PLACE
+      - first contact place
+      - place of first contact
+      - initial point of contact
+      - first seen
+      - IVT_APPLICATION_DEPARTMENT
+      - ivt department
+      - thrombolysis department
+      - tpa department
+      - treatment department
+      - INR_MODE
+      - inr measurement method
+      - coagulation mode
+      - how inr was measured
+      - inr method
+      - STROKE_TYPE
+      - stroke type
+      - stroke classification
+      - stroke category
+      - stroke subtype
+      - SEX_TYPE
+      - sex type
+      - gender classification
+      - gender
+      - sex
+      - MONTH
+      - month
+      - calendar month
+      - month of the year
+      - monthly period
+      - QUARTER
+      - quarter
+      - fiscal quarter
+      - quarter of the year
+      - three-month period
+      - YEAR
+      - year
+      - yearly
+      - HOSPITAL
+      - hospital
