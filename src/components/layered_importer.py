@@ -172,18 +172,30 @@ def _merge_domain_docs(base_docs: List[Dict[str, Any]], overlay_docs: List[Dict[
     return base
 
 
-def _split_intent_op(item: Dict[str, Any], inherited: str = REPLACE) -> Tuple[Dict[str, Any], str, Optional[str]]:
-    intent_key = next((k for k in item.keys() if k.startswith("intent")), None)
-    if not intent_key:
-        return item, inherited, None
-    _, op = _parse_key(intent_key, inherited)
+# NLU list items are keyed by one of these type markers (optionally suffixed with
+# ".add"/".replace", e.g. "lookup.add"). Anything outside this set (intent-only,
+# historically) was silently dropped by the merge below, which meant lookup/synonym/
+# regex tables never survived the base+overlay merge despite being valid Rasa NLU YAML.
+_NLU_ITEM_TYPES = ("intent", "lookup", "synonym", "regex")
+
+
+def _split_nlu_item_op(
+    item: Dict[str, Any], inherited: str = REPLACE
+) -> Tuple[Dict[str, Any], str, Optional[str], Optional[str]]:
+    type_key = next(
+        (k for k in item.keys() if k in _NLU_ITEM_TYPES or any(k.startswith(f"{t}.") for t in _NLU_ITEM_TYPES)),
+        None,
+    )
+    if not type_key:
+        return item, inherited, None, None
+    base_key, op = _parse_key(type_key, inherited)
     new_item = dict(item)
-    new_item["intent"] = new_item.pop(intent_key)
-    return new_item, op, None
+    new_item[base_key] = new_item.pop(type_key)
+    return new_item, op, base_key, cast(Optional[str], new_item.get(base_key))
 
 
 def _merge_nlu_docs(base_docs: List[Dict[str, Any]], overlay_docs: List[Dict[str, Any]]) -> Dict[str, Any]:
-    by_intent: Dict[str, List[Dict[str, Any]]] = {}
+    by_key: Dict[Tuple[str, str], List[Dict[str, Any]]] = {}
     version = "3.1"
 
     def _feed(doc: Dict[str, Any]):
@@ -193,8 +205,9 @@ def _merge_nlu_docs(base_docs: List[Dict[str, Any]], overlay_docs: List[Dict[str
         for it in cast(List[Any], doc.get("nlu") or []):
             if isinstance(it, dict):
                 item = cast(Dict[str, Any], it)
-                if "intent" in item:
-                    by_intent.setdefault(cast(str, item["intent"]), []).append(item)
+                item_type = next((t for t in _NLU_ITEM_TYPES if t in item), None)
+                if item_type:
+                    by_key.setdefault((item_type, cast(str, item[item_type])), []).append(item)
 
     for d in base_docs:
         clean, _ = _normalize_ops(d, REPLACE)
@@ -204,19 +217,19 @@ def _merge_nlu_docs(base_docs: List[Dict[str, Any]], overlay_docs: List[Dict[str
         clean, parent_op = _normalize_ops(d, REPLACE)
         for raw in cast(List[Any], clean.get("nlu") or []):
             item_raw = cast(Dict[str, Any], raw)
-            item, item_op, name_from_marker = _split_intent_op(item_raw, inherited=parent_op)
-            intent = cast(Optional[str], name_from_marker or item.get("intent"))
-            if not intent:
+            item, item_op, item_type, name = _split_nlu_item_op(item_raw, inherited=parent_op)
+            if not item_type or not name:
                 continue
+            key = (item_type, name)
             if item_op == REPLACE:
-                if intent not in by_intent:
-                    raise ValueError(f"Overlay attempted to replace unknown intent '{intent}'")
-                by_intent[intent] = [item]
+                if key not in by_key:
+                    raise ValueError(f"Overlay attempted to replace unknown {item_type} '{name}'")
+                by_key[key] = [item]
             else:
-                by_intent.setdefault(intent, []).append(item)
+                by_key.setdefault(key, []).append(item)
 
     merged_items: List[Dict[str, Any]] = []
-    for items in by_intent.values():
+    for items in by_key.values():
         merged_items.extend(items)
     return {"version": version, "nlu": merged_items}
 

@@ -21,6 +21,30 @@ nlu:
     examples: |
       - [placeholder] localized in en/us or locale overlays
 
+  - synonym: GB
+    examples: |
+      - [placeholder] localized in en/us or locale overlays
+
+  - synonym: CA
+    examples: |
+      - [placeholder] localized in en/us or locale overlays
+
+  - synonym: AU
+    examples: |
+      - [placeholder] localized in en/us or locale overlays
+
+  - synonym: DE
+    examples: |
+      - [placeholder] localized in en/us or locale overlays
+
+  - synonym: FR
+    examples: |
+      - [placeholder] localized in en/us or locale overlays
+
+  - synonym: JP
+    examples: |
+      - [placeholder] localized in en/us or locale overlays
+
   - regex: limit
     examples: |
       - [placeholder] localized in en/us or locale overlays
