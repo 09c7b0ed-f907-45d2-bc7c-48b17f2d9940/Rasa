@@ -1,0 +1,6 @@
+versversion: "3.1"
+
+nlu:
+  - lookup: metric
+    examples: |
+      - [placeholder] see en/us or locale overlays
