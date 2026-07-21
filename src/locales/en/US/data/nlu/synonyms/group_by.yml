@@ -1,0 +1,63 @@
+version: "3.1"
+
+nlu:
+  - synonym: EMS_PRENOTIFICATION
+    examples: |
+      - ems prenotification
+      - ems notified
+      - emergency pre-alert
+      - ambulance notified
+  - synonym: FIRST_CONTACT_PLACE
+    examples: |
+      - first contact place
+      - place of first contact
+      - initial point of contact
+      - first seen
+  - synonym: IVT_APPLICATION_DEPARTMENT
+    examples: |
+      - ivt department
+      - thrombolysis department
+      - tpa department
+      - treatment department
+  - synonym: INR_MODE
+    examples: |
+      - inr measurement method
+      - coagulation mode
+      - how inr was measured
+      - inr method
+  - synonym: STROKE_TYPE
+    examples: |
+      - stroke type
+      - stroke classification
+      - stroke category
+      - stroke subtype
+  - synonym: SEX_TYPE
+    examples: |
+      - sex type
+      - gender classification
+      - gender
+      - sex
+  - synonym: MONTH
+    examples: |
+      - month
+      - calendar month
+      - month of the year
+      - monthly period
+  - synonym: QUARTER
+    examples: |
+      - quarter
+      - fiscal quarter
+      - quarter of the year
+      - three-month period
+  - synonym: YEAR
+    examples: |
+      - year
+      - calendar year
+      - year of the event
+      - annual period
+  - synonym: HOSPITAL
+    examples: |
+      - hospital
+      - medical center
+      - healthcare facility
+      - inpatient facility

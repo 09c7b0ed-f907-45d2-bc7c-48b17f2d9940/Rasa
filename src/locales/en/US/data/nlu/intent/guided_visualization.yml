@@ -30,6 +30,10 @@ nlu:
       - cancel the guided flow
       - cancel guided mode
       - end guided mode
+      - stop
+      - cancel
+      - halt
+      - exit
 
   - intent: provide_guided_hospital_scope
     examples: |

@@ -1,0 +1,445 @@
+version: "3.1"
+
+nlu:
+  - synonym: AA_DTN_LE60
+    examples: |
+      - θρομβόλυση ≤60 λεπτά
+      - door-to-needle ≤60 λεπτά
+  - synonym: AA_DTN_LE45
+    examples: |
+      - θρομβόλυση ≤45 λεπτά
+      - door-to-needle ≤45 λεπτά
+  - synonym: AA_DTG_LE120
+    examples: |
+      - θρομβεκτομή ≤120 λεπτά
+      - door-to-groin ≤120 λεπτά
+  - synonym: AA_DTG_LE90
+    examples: |
+      - θρομβεκτομή ≤90 λεπτά
+      - door-to-groin ≤90 λεπτά
+  - synonym: AA_RECANALIZATION
+    examples: |
+      - επανακαναλοποίηση (awards metric)
+  - synonym: AA_IMAGING
+    examples: |
+      - απεικόνιση at first hospital (awards metric)
+  - synonym: AA_SWALLOWING_SCREENING
+    examples: |
+      - έλεγχος κατάποσης (awards metric)
+  - synonym: AA_ANTICOAGULANTS
+    examples: |
+      - αντιπηκτικά κατά το εξιτήριο (awards metric)
+  - synonym: AA_ANTITHROMBOTICS
+    examples: |
+      - αντιθρομβωτικά κατά το εξιτήριο (awards metric)
+  - synonym: AA_STROKE_UNIT
+    examples: |
+      - μονάδα εγκεφαλικών or εντατική θεραπεία (awards metric)
+  - synonym: AGE
+    examples: |
+      - age at stroke onset
+      - age
+  - synonym: WAKEUP_STROKE
+    examples: |
+      - εγκεφαλικό επεισόδιο αφύπνισης
+      - εγκεφαλικό επεισόδιο κατά τη διάρκεια του ύπνου
+  - synonym: INHOSPITAL_STROKE
+    examples: |
+      - in-hospital stroke
+      - εγκεφαλικό επεισόδιο κατά τη νοσηλεία
+  - synonym: ARRIVAL_MODE
+    examples: |
+      - τρόπος άφιξης
+      - οδός άφιξης
+  - synonym: EMS_PRENOTIFICATION
+    examples: |
+      - ems prenotification
+      - ems pre-alert
+  - synonym: ADMISSION_DEPARTMENT
+    examples: |
+      - τμήμα εισαγωγής
+  - synonym: FIRST_CONTACT_PLACE
+    examples: |
+      - τόπος πρώτης επαφής
+  - synonym: HOSPITALIZED_IN
+    examples: |
+      - ένταση παρακολούθησης first day
+      - τύπος κλίνης της πρώτης ημέρας
+  - synonym: SEX
+    examples: |
+      - βιολογικό φύλο
+      - sex
+  - synonym: RISK_FACTORS_TYPE
+    examples: |
+      - τύπος παραγόντων κινδύνου
+      - προηγούμενοι ιατρικοί παράγοντες κινδύνου
+  - synonym: BEFORE_ONSET_MEDICATION
+    examples: |
+      - φαρμακευτική αγωγή πριν από την έναρξη
+  - synonym: BEFORE_ONSET_MEDICATION_AIS_TIA
+    examples: |
+      - φαρμακευτική αγωγή πριν από την έναρξη in ais or tia
+  - synonym: BEFORE_ONSET_MEDICATION_ICH
+    examples: |
+      - φαρμακευτική αγωγή πριν από την έναρξη in ich
+  - synonym: BEFORE_ONSET_ANTIPLATELET_TYPE
+    examples: |
+      - αντιαιμοπεταλιακό type πριν από την έναρξη
+  - synonym: BEFORE_ONSET_ANTICOAGULANT_TYPE
+    examples: |
+      - αντιπηκτικό type πριν από την έναρξη
+  - synonym: ADMISSION_NIHSS
+    examples: |
+      - admission nihss
+      - nihss at admission
+  - synonym: PRESTROKE_MRS
+    examples: |
+      - pre-stroke mrs
+      - mrs before stroke
+  - synonym: GLUCOSE
+    examples: |
+      - initial blood glucose
+      - initial glucose
+  - synonym: CHOLESTEROL
+    examples: |
+      - initial ldl cholesterol
+      - initial cholesterol
+  - synonym: SYSTOLIC_PRESSURE
+    examples: |
+      - initial systolic blood pressure
+      - systolic pressure
+  - synonym: DIASTOLIC_PRESSURE
+    examples: |
+      - initial diastolic blood pressure
+      - diastolic pressure
+  - synonym: INR_MODE
+    examples: |
+      - inr measurement mode
+      - inr device type
+  - synonym: IMAGING_DONE
+    examples: |
+      - απεικόνιση εγκεφάλου done
+      - απεικόνιση ct ή mr
+  - synonym: IMAGING_TYPE
+    examples: |
+      - απεικόνιση εγκεφάλου type
+  - synonym: OCCLUSION_FOUND
+    examples: |
+      - occlusion found on cta or mra
+  - synonym: OCCLUSION_SITE
+    examples: |
+      - occlusion site
+  - synonym: OLD_INFARCTS_SEEN
+    examples: |
+      - old infarcts seen
+  - synonym: OLD_INFARCTS_TYPE
+    examples: |
+      - old infarcts type
+  - synonym: PERFUSION_DEFICIT_TYPE
+    examples: |
+      - perfusion deficit territory
+  - synonym: PERFUSION_CORE
+    examples: |
+      - perfusion core volume
+  - synonym: HYPOPERFUSION
+    examples: |
+      - hypoperfusion volume
+  - synonym: STROKE_TYPE
+    examples: |
+      - stroke type
+      - stroke diagnosis
+  - synonym: STROKE_MIMICS_DIAGNOSIS
+    examples: |
+      - stroke mimics diagnosis
+  - synonym: THROMBOLYSIS
+    examples: |
+      - ενδοφλέβια θρομβόλυση
+      - ivt
+  - synonym: THROMBECTOMY
+    examples: |
+      - μηχανική θρομβεκτομή
+      - mt
+  - synonym: THROMBECTOMY_ONLY
+    examples: |
+      - μόνο θρομβεκτομή
+  - synonym: THROMBOLYSIS_ONLY
+    examples: |
+      - μόνο θρομβόλυση
+  - synonym: THROMBOLYSIS_AND_THROMBECTOMY
+    examples: |
+      - θρομβόλυση και θρομβεκτομή
+  - synonym: RECANALIZATION
+    examples: |
+      - θεραπεία επανακαναλοποίησης
+  - synonym: DTN
+    examples: |
+      - door-to-needle
+      - χρόνος door-to-needle
+      - time to θρομβόλυση
+      - time until thrombolytic treatment
+      - time to iv tpa
+      - χρόνος έως τη θεραπεία
+      - καθυστέρηση θεραπείας
+  - synonym: DTG_PRIMARY
+    examples: |
+      - πρωτογενές door-to-groin
+      - πρωτογενές dtg
+  - synonym: DTG_SECONDARY
+    examples: |
+      - δευτερογενές door-to-groin
+      - δευτερογενές dtg
+  - synonym: DIDO
+    examples: |
+      - door-in-door-out
+  - synonym: DOOR_TO_REPERFUSION
+    examples: |
+      - χρόνος door-to-reperfusion
+  - synonym: MTICI_SCORE
+    examples: |
+      - mtici score
+  - synonym: NO_THROMBOLYSIS_REASON
+    examples: |
+      - λόγος μη θρομβόλυση
+  - synonym: NO_THROMBECTOMY_REASON
+    examples: |
+      - λόγος μη θρομβεκτομή
+  - synonym: MT_COMPLICATIONS_TYPE
+    examples: |
+      - θρομβεκτομή complications type
+  - synonym: MT_COMPLICATIONS
+    examples: |
+      - θρομβεκτομή complications
+      - mt complications present
+  - synonym: THROMBOLYSIS_DRUGS
+    examples: |
+      - θρομβόλυση drugs
+      - ivt drugs
+  - synonym: THROMBOLYSIS_DRUG_DOSE
+    examples: |
+      - θρομβόλυση drug dose
+      - ivt dose
+  - synonym: THROMBOLYSIS_APPLICATION_DEPARTMENT
+    examples: |
+      - θρομβόλυση application department
+  - synonym: POST_RECANALIZATION_FINDINGS
+    examples: |
+      - post-επανακαναλοποίηση findings present
+  - synonym: POST_RECANALIZATION_FINDING_TYPE
+    examples: |
+      - post-επανακαναλοποίηση finding type
+  - synonym: HEMORRHAGIC_TRANSFORMATION
+    examples: |
+      - αιμορραγική μετατροπή type
+  - synonym: TIA_CLINICAL_SYMPTOMS
+    examples: |
+      - tia clinical symptoms
+  - synonym: TIA_SYMPTOMS_DURATION
+    examples: |
+      - tia symptoms duration
+  - synonym: BLEEDING_SOURCE_FOUND
+    examples: |
+      - bleeding source found
+  - synonym: ICH_BLEEDING_VOLUME
+    examples: |
+      - ενδοεγκεφαλική αιμορραγία bleeding volume
+      - ich bleeding volume
+  - synonym: ICH_SCORE
+    examples: |
+      - ενδοεγκεφαλική αιμορραγία score
+      - ich score
+  - synonym: ICH_TREATMENT
+    examples: |
+      - ενδοεγκεφαλική αιμορραγία treatment performed
+      - ich treatment performed
+  - synonym: ICH_TREATMENT_TYPE
+    examples: |
+      - ενδοεγκεφαλική αιμορραγία treatment type
+      - ich treatment type
+  - synonym: BLEEDING_REASON_FOUND
+    examples: |
+      - bleeding reason found
+  - synonym: BLEEDING_REASON_TYPE
+    examples: |
+      - bleeding reason type
+  - synonym: BLEEDING_ANTIDOTE_TO_ANTICOAGULANTS
+    examples: |
+      - antidote to αντιπηκτικά
+  - synonym: INTRAVENTRICULAR_HEMORRHAGE
+    examples: |
+      - intraventricular hemorrhage
+  - synonym: INFRATENTORIAL_HEMORRHAGE
+    examples: |
+      - infratentorial hemorrhage
+  - synonym: SAH_TREATMENT
+    examples: |
+      - υπαραχνοειδής αιμορραγία treatment performed
+      - sah treatment performed
+  - synonym: SAH_TREATMENT_TYPE
+    examples: |
+      - υπαραχνοειδής αιμορραγία treatment type
+      - sah treatment type
+  - synonym: NIMODIPINE
+    examples: |
+      - nimodipine given
+  - synonym: HUNT_HESS_SCORE
+    examples: |
+      - hunt-hess score
+  - synonym: CVT_TREATMENT
+    examples: |
+      - φλεβική θρόμβωση εγκεφάλου treatment performed
+      - cvt treatment performed
+  - synonym: CVT_TREATMENT_TYPE
+    examples: |
+      - φλεβική θρόμβωση εγκεφάλου treatment type
+      - cvt treatment type
+  - synonym: POST_ACUTE_CARE
+    examples: |
+      - post-acute care in hospital
+  - synonym: CRANIECTOMY
+    examples: |
+      - decompressive craniectomy performed
+  - synonym: CRANIECTOMY_AGE_GT60
+    examples: |
+      - decompressive craniectomy age ≥60
+  - synonym: CAROTID_ARTERIES_IMAGING
+    examples: |
+      - carotid arteries απεικόνιση performed
+  - synonym: CAROTID_STENOSIS
+    examples: |
+      - carotid stenosis present
+  - synonym: CAROTID_STENOSIS_LEVEL
+    examples: |
+      - carotid stenosis level
+  - synonym: CAROTID_ENDARTERECTOMY
+    examples: |
+      - carotid endarterectomy or stenting within two weeks
+  - synonym: CAROTID_ENDARTERECTOMY_STENOSIS_GT70
+    examples: |
+      - carotid endarterectomy stenosis >70 τοις εκατό
+  - synonym: ATRIAL_FIBRILATION_FLUTTER
+    examples: |
+      - κολπική μαρμαρυγή or flutter status
+  - synonym: STROKE_ETIOLOGY_KNOWN_AIS
+    examples: |
+      - stroke etiology known (ais)
+  - synonym: STROKE_ETIOLOGY_TYPE_AIS
+    examples: |
+      - stroke etiology type (ais)
+  - synonym: STROKE_ETIOLOGY_KNOWN_AIS_TIA
+    examples: |
+      - stroke etiology known (ais or tia)
+  - synonym: STROKE_ETIOLOGY_TYPE_AIS_TIA
+    examples: |
+      - stroke etiology type (ais or tia)
+  - synonym: VTE_INTERVENTION_AIS
+    examples: |
+      - πρόληψη φλεβικής θρομβοεμβολής in οξύ ισχαιμικό εγκεφαλικό επεισόδιο
+      - vte prevention in ais
+  - synonym: VTE_INTERVENTION_ICH
+    examples: |
+      - πρόληψη φλεβικής θρομβοεμβολής in ενδοεγκεφαλική αιμορραγία
+      - vte prevention in ich
+  - synonym: VTE_INTERVENTION_TYPE_AIS
+    examples: |
+      - πρόληψη φλεβικής θρομβοεμβολής type in οξύ ισχαιμικό εγκεφαλικό επεισόδιο
+      - vte prevention type in ais
+  - synonym: VTE_INTERVENTION_TYPE_ICH
+    examples: |
+      - πρόληψη φλεβικής θρομβοεμβολής type in ενδοεγκεφαλική αιμορραγία
+      - vte prevention type in ich
+  - synonym: POST_STROKE_COMPLICATIONS
+    examples: |
+      - μετά το εγκεφαλικό complications present
+  - synonym: POST_STROKE_COMPLICATIONS_TYPE
+    examples: |
+      - μετά το εγκεφαλικό complications type
+  - synonym: DAY_1_TEMPERATURE_CHECKS
+    examples: |
+      - day 1 έλεγχοι θερμοκρασίας
+  - synonym: DAY_2_TEMPERATURE_CHECKS
+    examples: |
+      - day 2 έλεγχοι θερμοκρασίας
+  - synonym: DAY_3_TEMPERATURE_CHECKS
+    examples: |
+      - day 3 έλεγχοι θερμοκρασίας
+  - synonym: PARACETAMOL_ON_FEVER
+    examples: |
+      - παρακεταμόλη σε πυρετό
+  - synonym: DAY_1_HYPERGLYCEMIA_CHECKS
+    examples: |
+      - day 1 έλεγχοι υπεργλυκαιμίας
+  - synonym: DAY_2_HYPERGLYCEMIA_CHECKS
+    examples: |
+      - day 2 έλεγχοι υπεργλυκαιμίας
+  - synonym: DAY_3_HYPERGLYCEMIA_CHECKS
+    examples: |
+      - day 3 έλεγχοι υπεργλυκαιμίας
+  - synonym: INSULIN_ON_HYPERGLYCEMIA
+    examples: |
+      - ινσουλίνη σε υπεργλυκαιμία
+  - synonym: SWALLOWING_SCREENING
+    examples: |
+      - έλεγχος κατάποσης performed
+  - synonym: SWALLOWING_SCREENING_TYPE
+    examples: |
+      - έλεγχος κατάποσης type
+  - synonym: SWALLOWING_SCREENING_PERFORMER
+    examples: |
+      - έλεγχος κατάποσης performer
+  - synonym: PHYSIOTHERAPY
+    examples: |
+      - φυσιοθεραπεία received
+  - synonym: OCCUPATIONAL_THERAPY
+    examples: |
+      - εργοθεραπεία received
+  - synonym: SPEECH_THERAPY
+    examples: |
+      - λογοθεραπεία received
+  - synonym: DISCHARGE_DESTINATION
+    examples: |
+      - προορισμός εξιτηρίου
+  - synonym: DISCHARGE_MEDICATIONS
+    examples: |
+      - φαρμακευτικές αγωγές κατά το εξιτήριο
+  - synonym: DISCHARGE_ANTICOAGULANTS_AFIB
+    examples: |
+      - αντιπηκτικά κατά το εξιτήριο in κολπική μαρμαρυγή
+  - synonym: DISCHARGE_ANTICOAGULANT_TYPE_AFIB
+    examples: |
+      - αντιπηκτικό type κατά το εξιτήριο in κολπική μαρμαρυγή
+  - synonym: DISCHARGE_ANTIPLATELETS_NO_AFIB
+    examples: |
+      - αντιαιμοπεταλιακά κατά το εξιτήριο without κολπική μαρμαρυγή
+  - synonym: DISCHARGE_ANTIPLATELET_TYPE_NO_AFIB
+    examples: |
+      - αντιαιμοπεταλιακό type κατά το εξιτήριο without κολπική μαρμαρυγή
+  - synonym: DISCHARGE_MRS
+    examples: |
+      - discharge τροποποιημένη κλίμακα rankin
+      - mrs εξιτηρίου
+  - synonym: SMOKING_CESSATION
+    examples: |
+      - smoking cessation recommended
+  - synonym: STROKE_MANAGEMENT_APPOINTMENT
+    examples: |
+      - stroke management appointment
+  - synonym: THREE_MONTH_MRS
+    examples: |
+      - τριών μηνών τροποποιημένη κλίμακα rankin
+      - τριών μηνών mrs
+      - 3-month mrs
+  - synonym: HOSPITAL_STAY
+    examples: |
+      - διάρκεια νοσηλείας
+  - synonym: DISCHARGE_NIHSS
+    examples: |
+      - discharge nih stroke scale
+      - nihss εξιτηρίου
+  - synonym: DTI
+    examples: |
+      - door to απεικόνιση
+      - door to απεικόνιση time
+  - synonym: ONSET_TO_DOOR
+    examples: |
+      - έναρξη έως πόρτα
+      - time from έναρξη έως πόρτα

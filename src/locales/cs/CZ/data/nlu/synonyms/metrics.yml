@@ -1,0 +1,445 @@
+version: "3.1"
+
+nlu:
+  - synonym: AA_DTN_LE60
+    examples: |
+      - trombolýza ≤60 minut
+      - door-to-needle ≤60 minut
+  - synonym: AA_DTN_LE45
+    examples: |
+      - trombolýza ≤45 minut
+      - door-to-needle ≤45 minut
+  - synonym: AA_DTG_LE120
+    examples: |
+      - trombektomie ≤120 minut
+      - door-to-groin ≤120 minut
+  - synonym: AA_DTG_LE90
+    examples: |
+      - trombektomie ≤90 minut
+      - door-to-groin ≤90 minut
+  - synonym: AA_RECANALIZATION
+    examples: |
+      - rekanalizace (awards metric)
+  - synonym: AA_IMAGING
+    examples: |
+      - zobrazení at first hospital (awards metric)
+  - synonym: AA_SWALLOWING_SCREENING
+    examples: |
+      - screening polykání (awards metric)
+  - synonym: AA_ANTICOAGULANTS
+    examples: |
+      - antikoagulancia při propuštění (awards metric)
+  - synonym: AA_ANTITHROMBOTICS
+    examples: |
+      - antitrombotika při propuštění (awards metric)
+  - synonym: AA_STROKE_UNIT
+    examples: |
+      - iktová jednotka or intenzivní péče (awards metric)
+  - synonym: AGE
+    examples: |
+      - age at stroke onset
+      - age
+  - synonym: WAKEUP_STROKE
+    examples: |
+      - iktus po probuzení
+      - iktus během spánku
+  - synonym: INHOSPITAL_STROKE
+    examples: |
+      - in-hospital stroke
+      - iktus během hospitalizace
+  - synonym: ARRIVAL_MODE
+    examples: |
+      - způsob příjezdu
+      - cesta příjezdu
+  - synonym: EMS_PRENOTIFICATION
+    examples: |
+      - ems prenotification
+      - ems pre-alert
+  - synonym: ADMISSION_DEPARTMENT
+    examples: |
+      - přijímací oddělení
+  - synonym: FIRST_CONTACT_PLACE
+    examples: |
+      - místo prvního kontaktu
+  - synonym: HOSPITALIZED_IN
+    examples: |
+      - intenzita monitorace first day
+      - typ lůžka prvního dne
+  - synonym: SEX
+    examples: |
+      - biologické pohlaví
+      - sex
+  - synonym: RISK_FACTORS_TYPE
+    examples: |
+      - typ rizikových faktorů
+      - předchozí zdravotní rizikové faktory
+  - synonym: BEFORE_ONSET_MEDICATION
+    examples: |
+      - medikace před vznikem
+  - synonym: BEFORE_ONSET_MEDICATION_AIS_TIA
+    examples: |
+      - medikace před vznikem in ais or tia
+  - synonym: BEFORE_ONSET_MEDICATION_ICH
+    examples: |
+      - medikace před vznikem in ich
+  - synonym: BEFORE_ONSET_ANTIPLATELET_TYPE
+    examples: |
+      - antiagregans type před vznikem
+  - synonym: BEFORE_ONSET_ANTICOAGULANT_TYPE
+    examples: |
+      - antikoagulans type před vznikem
+  - synonym: ADMISSION_NIHSS
+    examples: |
+      - admission nihss
+      - nihss at admission
+  - synonym: PRESTROKE_MRS
+    examples: |
+      - pre-stroke mrs
+      - mrs before stroke
+  - synonym: GLUCOSE
+    examples: |
+      - initial blood glucose
+      - initial glucose
+  - synonym: CHOLESTEROL
+    examples: |
+      - initial ldl cholesterol
+      - initial cholesterol
+  - synonym: SYSTOLIC_PRESSURE
+    examples: |
+      - initial systolic blood pressure
+      - systolic pressure
+  - synonym: DIASTOLIC_PRESSURE
+    examples: |
+      - initial diastolic blood pressure
+      - diastolic pressure
+  - synonym: INR_MODE
+    examples: |
+      - inr measurement mode
+      - inr device type
+  - synonym: IMAGING_DONE
+    examples: |
+      - zobrazení mozku done
+      - zobrazení ct nebo mr
+  - synonym: IMAGING_TYPE
+    examples: |
+      - zobrazení mozku type
+  - synonym: OCCLUSION_FOUND
+    examples: |
+      - occlusion found on cta or mra
+  - synonym: OCCLUSION_SITE
+    examples: |
+      - occlusion site
+  - synonym: OLD_INFARCTS_SEEN
+    examples: |
+      - old infarcts seen
+  - synonym: OLD_INFARCTS_TYPE
+    examples: |
+      - old infarcts type
+  - synonym: PERFUSION_DEFICIT_TYPE
+    examples: |
+      - perfusion deficit territory
+  - synonym: PERFUSION_CORE
+    examples: |
+      - perfusion core volume
+  - synonym: HYPOPERFUSION
+    examples: |
+      - hypoperfusion volume
+  - synonym: STROKE_TYPE
+    examples: |
+      - stroke type
+      - stroke diagnosis
+  - synonym: STROKE_MIMICS_DIAGNOSIS
+    examples: |
+      - stroke mimics diagnosis
+  - synonym: THROMBOLYSIS
+    examples: |
+      - intravenózní trombolýza
+      - ivt
+  - synonym: THROMBECTOMY
+    examples: |
+      - mechanická trombektomie
+      - mt
+  - synonym: THROMBECTOMY_ONLY
+    examples: |
+      - pouze trombektomie
+  - synonym: THROMBOLYSIS_ONLY
+    examples: |
+      - pouze trombolýza
+  - synonym: THROMBOLYSIS_AND_THROMBECTOMY
+    examples: |
+      - trombolýza a trombektomie
+  - synonym: RECANALIZATION
+    examples: |
+      - rekanalizační léčba
+  - synonym: DTN
+    examples: |
+      - door-to-needle
+      - čas door-to-needle
+      - time to trombolýza
+      - time until thrombolytic treatment
+      - time to iv tpa
+      - čas do léčby
+      - zpoždění léčby
+  - synonym: DTG_PRIMARY
+    examples: |
+      - primární door-to-groin
+      - primární dtg
+  - synonym: DTG_SECONDARY
+    examples: |
+      - sekundární door-to-groin
+      - sekundární dtg
+  - synonym: DIDO
+    examples: |
+      - door-in-door-out
+  - synonym: DOOR_TO_REPERFUSION
+    examples: |
+      - čas door-to-reperfusion
+  - synonym: MTICI_SCORE
+    examples: |
+      - mtici score
+  - synonym: NO_THROMBOLYSIS_REASON
+    examples: |
+      - důvod nepodání trombolýza
+  - synonym: NO_THROMBECTOMY_REASON
+    examples: |
+      - důvod nepodání trombektomie
+  - synonym: MT_COMPLICATIONS_TYPE
+    examples: |
+      - trombektomie complications type
+  - synonym: MT_COMPLICATIONS
+    examples: |
+      - trombektomie complications
+      - mt complications present
+  - synonym: THROMBOLYSIS_DRUGS
+    examples: |
+      - trombolýza drugs
+      - ivt drugs
+  - synonym: THROMBOLYSIS_DRUG_DOSE
+    examples: |
+      - trombolýza drug dose
+      - ivt dose
+  - synonym: THROMBOLYSIS_APPLICATION_DEPARTMENT
+    examples: |
+      - trombolýza application department
+  - synonym: POST_RECANALIZATION_FINDINGS
+    examples: |
+      - post-rekanalizace findings present
+  - synonym: POST_RECANALIZATION_FINDING_TYPE
+    examples: |
+      - post-rekanalizace finding type
+  - synonym: HEMORRHAGIC_TRANSFORMATION
+    examples: |
+      - hemoragická transformace type
+  - synonym: TIA_CLINICAL_SYMPTOMS
+    examples: |
+      - tia clinical symptoms
+  - synonym: TIA_SYMPTOMS_DURATION
+    examples: |
+      - tia symptoms duration
+  - synonym: BLEEDING_SOURCE_FOUND
+    examples: |
+      - bleeding source found
+  - synonym: ICH_BLEEDING_VOLUME
+    examples: |
+      - intracerebrální krvácení bleeding volume
+      - ich bleeding volume
+  - synonym: ICH_SCORE
+    examples: |
+      - intracerebrální krvácení score
+      - ich score
+  - synonym: ICH_TREATMENT
+    examples: |
+      - intracerebrální krvácení treatment performed
+      - ich treatment performed
+  - synonym: ICH_TREATMENT_TYPE
+    examples: |
+      - intracerebrální krvácení treatment type
+      - ich treatment type
+  - synonym: BLEEDING_REASON_FOUND
+    examples: |
+      - bleeding reason found
+  - synonym: BLEEDING_REASON_TYPE
+    examples: |
+      - bleeding reason type
+  - synonym: BLEEDING_ANTIDOTE_TO_ANTICOAGULANTS
+    examples: |
+      - antidote to antikoagulancia
+  - synonym: INTRAVENTRICULAR_HEMORRHAGE
+    examples: |
+      - intraventricular hemorrhage
+  - synonym: INFRATENTORIAL_HEMORRHAGE
+    examples: |
+      - infratentorial hemorrhage
+  - synonym: SAH_TREATMENT
+    examples: |
+      - subarachnoidální krvácení treatment performed
+      - sah treatment performed
+  - synonym: SAH_TREATMENT_TYPE
+    examples: |
+      - subarachnoidální krvácení treatment type
+      - sah treatment type
+  - synonym: NIMODIPINE
+    examples: |
+      - nimodipine given
+  - synonym: HUNT_HESS_SCORE
+    examples: |
+      - hunt-hess score
+  - synonym: CVT_TREATMENT
+    examples: |
+      - cerebrální žilní trombóza treatment performed
+      - cvt treatment performed
+  - synonym: CVT_TREATMENT_TYPE
+    examples: |
+      - cerebrální žilní trombóza treatment type
+      - cvt treatment type
+  - synonym: POST_ACUTE_CARE
+    examples: |
+      - post-acute care in hospital
+  - synonym: CRANIECTOMY
+    examples: |
+      - decompressive craniectomy performed
+  - synonym: CRANIECTOMY_AGE_GT60
+    examples: |
+      - decompressive craniectomy age ≥60
+  - synonym: CAROTID_ARTERIES_IMAGING
+    examples: |
+      - carotid arteries zobrazení performed
+  - synonym: CAROTID_STENOSIS
+    examples: |
+      - carotid stenosis present
+  - synonym: CAROTID_STENOSIS_LEVEL
+    examples: |
+      - carotid stenosis level
+  - synonym: CAROTID_ENDARTERECTOMY
+    examples: |
+      - carotid endarterectomy or stenting within two weeks
+  - synonym: CAROTID_ENDARTERECTOMY_STENOSIS_GT70
+    examples: |
+      - carotid endarterectomy stenosis >70 procent
+  - synonym: ATRIAL_FIBRILATION_FLUTTER
+    examples: |
+      - fibrilace síní or flutter status
+  - synonym: STROKE_ETIOLOGY_KNOWN_AIS
+    examples: |
+      - stroke etiology known (ais)
+  - synonym: STROKE_ETIOLOGY_TYPE_AIS
+    examples: |
+      - stroke etiology type (ais)
+  - synonym: STROKE_ETIOLOGY_KNOWN_AIS_TIA
+    examples: |
+      - stroke etiology known (ais or tia)
+  - synonym: STROKE_ETIOLOGY_TYPE_AIS_TIA
+    examples: |
+      - stroke etiology type (ais or tia)
+  - synonym: VTE_INTERVENTION_AIS
+    examples: |
+      - prevence žilní tromboembolie in akutní ischemický iktus
+      - vte prevention in ais
+  - synonym: VTE_INTERVENTION_ICH
+    examples: |
+      - prevence žilní tromboembolie in intracerebrální krvácení
+      - vte prevention in ich
+  - synonym: VTE_INTERVENTION_TYPE_AIS
+    examples: |
+      - prevence žilní tromboembolie type in akutní ischemický iktus
+      - vte prevention type in ais
+  - synonym: VTE_INTERVENTION_TYPE_ICH
+    examples: |
+      - prevence žilní tromboembolie type in intracerebrální krvácení
+      - vte prevention type in ich
+  - synonym: POST_STROKE_COMPLICATIONS
+    examples: |
+      - po iktu complications present
+  - synonym: POST_STROKE_COMPLICATIONS_TYPE
+    examples: |
+      - po iktu complications type
+  - synonym: DAY_1_TEMPERATURE_CHECKS
+    examples: |
+      - day 1 kontroly teploty
+  - synonym: DAY_2_TEMPERATURE_CHECKS
+    examples: |
+      - day 2 kontroly teploty
+  - synonym: DAY_3_TEMPERATURE_CHECKS
+    examples: |
+      - day 3 kontroly teploty
+  - synonym: PARACETAMOL_ON_FEVER
+    examples: |
+      - paracetamol při horečce
+  - synonym: DAY_1_HYPERGLYCEMIA_CHECKS
+    examples: |
+      - day 1 kontroly hyperglykémie
+  - synonym: DAY_2_HYPERGLYCEMIA_CHECKS
+    examples: |
+      - day 2 kontroly hyperglykémie
+  - synonym: DAY_3_HYPERGLYCEMIA_CHECKS
+    examples: |
+      - day 3 kontroly hyperglykémie
+  - synonym: INSULIN_ON_HYPERGLYCEMIA
+    examples: |
+      - inzulin při hyperglykémii
+  - synonym: SWALLOWING_SCREENING
+    examples: |
+      - screening polykání performed
+  - synonym: SWALLOWING_SCREENING_TYPE
+    examples: |
+      - screening polykání type
+  - synonym: SWALLOWING_SCREENING_PERFORMER
+    examples: |
+      - screening polykání performer
+  - synonym: PHYSIOTHERAPY
+    examples: |
+      - fyzioterapie received
+  - synonym: OCCUPATIONAL_THERAPY
+    examples: |
+      - ergoterapie received
+  - synonym: SPEECH_THERAPY
+    examples: |
+      - logopedie received
+  - synonym: DISCHARGE_DESTINATION
+    examples: |
+      - místo propuštění
+  - synonym: DISCHARGE_MEDICATIONS
+    examples: |
+      - léky při propuštění
+  - synonym: DISCHARGE_ANTICOAGULANTS_AFIB
+    examples: |
+      - antikoagulancia při propuštění in fibrilace síní
+  - synonym: DISCHARGE_ANTICOAGULANT_TYPE_AFIB
+    examples: |
+      - antikoagulans type při propuštění in fibrilace síní
+  - synonym: DISCHARGE_ANTIPLATELETS_NO_AFIB
+    examples: |
+      - antiagregancia při propuštění without fibrilace síní
+  - synonym: DISCHARGE_ANTIPLATELET_TYPE_NO_AFIB
+    examples: |
+      - antiagregans type při propuštění without fibrilace síní
+  - synonym: DISCHARGE_MRS
+    examples: |
+      - discharge škála modified rankin
+      - mrs při propuštění
+  - synonym: SMOKING_CESSATION
+    examples: |
+      - smoking cessation recommended
+  - synonym: STROKE_MANAGEMENT_APPOINTMENT
+    examples: |
+      - stroke management appointment
+  - synonym: THREE_MONTH_MRS
+    examples: |
+      - tříměsíční škála modified rankin
+      - tříměsíční mrs
+      - 3-month mrs
+  - synonym: HOSPITAL_STAY
+    examples: |
+      - délka hospitalizace
+  - synonym: DISCHARGE_NIHSS
+    examples: |
+      - discharge nih stroke scale
+      - nihss při propuštění
+  - synonym: DTI
+    examples: |
+      - door to zobrazení
+      - door to zobrazení time
+  - synonym: ONSET_TO_DOOR
+    examples: |
+      - začátek až dveře
+      - time from začátek až dveře

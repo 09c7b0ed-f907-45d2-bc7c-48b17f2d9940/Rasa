@@ -1,0 +1,63 @@
+version: "3.1"
+
+nlu:
+  - synonym: EMS_PRENOTIFICATION
+    examples: |
+      - předběžné oznámení záchranné služby
+      - záchranná služba informována
+      - nouzové předběžné upozornění
+      - záchranná služba upozorněna
+  - synonym: FIRST_CONTACT_PLACE
+    examples: |
+      - místo prvního kontaktu
+      - místo prvního kontaktu
+      - počáteční bod kontaktu
+      - první spatření
+  - synonym: IVT_APPLICATION_DEPARTMENT
+    examples: |
+      - oddělení ivt
+      - oddělení trombolytické terapie
+      - oddělení tpa
+      - oddělení léčby
+  - synonym: INR_MODE
+    examples: |
+      - metoda měření INR
+      - režim koagulace
+      - jak bylo měřeno INR
+      - metoda INR
+  - synonym: STROKE_TYPE
+    examples: |
+      - typ mrtvice
+      - klasifikace mrtvice
+      - kategorie mrtvice
+      - podtyp mrtvice
+  - synonym: SEX_TYPE
+    examples: |
+      - typ pohlaví
+      - klasifikace pohlaví
+      - pohlaví
+      - sex
+  - synonym: MONTH
+    examples: |
+      - měsíc
+      - kalendářní měsíc
+      - měsíc v roce
+      - měsíční období
+  - synonym: QUARTER
+    examples: |
+      - čtvrtletí
+      - fiskální čtvrtletí
+      - čtvrtletí roku
+      - tříměsíční období
+  - synonym: YEAR
+    examples: |
+      - rok
+      - kalendářní rok
+      - rok události
+      - roční období
+  - synonym: HOSPITAL
+    examples: |
+      - nemocnice
+      - lékařské centrum
+      - zdravotnické zařízení
+      - lůžkové zařízení

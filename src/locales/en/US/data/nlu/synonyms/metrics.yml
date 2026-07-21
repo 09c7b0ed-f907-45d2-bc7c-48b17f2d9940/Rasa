@@ -1,153 +1,195 @@
 version: "3.1"
 
 nlu:
-  - lookup: metric
+  - synonym: AA_DTN_LE60
     examples: |
-      - AA_DTN_LE60
       - thrombolysis ≤60 minutes
       - door-to-needle ≤60 minutes
-      - AA_DTN_LE45
+  - synonym: AA_DTN_LE45
+    examples: |
       - thrombolysis ≤45 minutes
       - door-to-needle ≤45 minutes
-      - AA_DTG_LE120
+  - synonym: AA_DTG_LE120
+    examples: |
       - thrombectomy ≤120 minutes
       - door-to-groin ≤120 minutes
-      - AA_DTG_LE90
+  - synonym: AA_DTG_LE90
+    examples: |
       - thrombectomy ≤90 minutes
       - door-to-groin ≤90 minutes
-      - AA_RECANALIZATION
+  - synonym: AA_RECANALIZATION
+    examples: |
       - recanalization (awards metric)
-      - AA_IMAGING
+  - synonym: AA_IMAGING
+    examples: |
       - imaging at first hospital (awards metric)
-      - AA_SWALLOWING_SCREENING
+  - synonym: AA_SWALLOWING_SCREENING
+    examples: |
       - swallowing screening (awards metric)
-      - AA_ANTICOAGULANTS
+  - synonym: AA_ANTICOAGULANTS
+    examples: |
       - anticoagulants at discharge (awards metric)
-      - AA_ANTITHROMBOTICS
+  - synonym: AA_ANTITHROMBOTICS
+    examples: |
       - antithrombotics at discharge (awards metric)
-      - AA_STROKE_UNIT
+  - synonym: AA_STROKE_UNIT
+    examples: |
       - stroke unit or intensive care (awards metric)
-      - AGE
+  - synonym: AGE
+    examples: |
       - age at stroke onset
       - age
-      - WAKEUP_STROKE
+  - synonym: WAKEUP_STROKE
+    examples: |
       - wakeup stroke
       - stroke during sleep
-      - INHOSPITAL_STROKE
+  - synonym: INHOSPITAL_STROKE
+    examples: |
       - in-hospital stroke
       - stroke during hospitalization
       - stroke occurrence in hospital
       - hospital-acquired stroke
-      - ARRIVAL_MODE
+  - synonym: ARRIVAL_MODE
+    examples: |
       - arrival mode
       - arrival pathway
-      - EMS_PRENOTIFICATION
+  - synonym: EMS_PRENOTIFICATION
+    examples: |
       - ems prenotification
       - ems pre-alert
       - pre-hospital notification
       - notification before arrival
       - advance notice
       - pre-arrival alert
-      - ADMISSION_DEPARTMENT
+  - synonym: ADMISSION_DEPARTMENT
+    examples: |
       - admission department
-      - FIRST_CONTACT_PLACE
+  - synonym: FIRST_CONTACT_PLACE
+    examples: |
       - first contact place
-      - HOSPITALIZED_IN
+  - synonym: HOSPITALIZED_IN
+    examples: |
       - monitoring intensity first day
       - first-day bed type
-      - SEX
+  - synonym: SEX
+    examples: |
       - biological sex
       - sex
       - patient's sex
       - gender identity
-      - RISK_FACTORS_TYPE
+  - synonym: RISK_FACTORS_TYPE
+    examples: |
       - risk factors type
       - previous medical risk factors
-      - BEFORE_ONSET_MEDICATION
+  - synonym: BEFORE_ONSET_MEDICATION
+    examples: |
       - medication before onset
-      - BEFORE_ONSET_MEDICATION_AIS_TIA
+  - synonym: BEFORE_ONSET_MEDICATION_AIS_TIA
+    examples: |
       - medication before onset in ais or tia
-      - BEFORE_ONSET_MEDICATION_ICH
+  - synonym: BEFORE_ONSET_MEDICATION_ICH
+    examples: |
       - medication before onset in ich
-      - BEFORE_ONSET_ANTIPLATELET_TYPE
+  - synonym: BEFORE_ONSET_ANTIPLATELET_TYPE
+    examples: |
       - antiplatelet type before onset
-      - BEFORE_ONSET_ANTICOAGULANT_TYPE
+  - synonym: BEFORE_ONSET_ANTICOAGULANT_TYPE
+    examples: |
       - anticoagulant type before onset
-      - ADMISSION_NIHSS
+  - synonym: ADMISSION_NIHSS
+    examples: |
       - admission nihss
       - admission nihss score
       - admission stroke severity score
       - nihss at admission
       - admission neurological assessment score
-      - PRESTROKE_MRS
+  - synonym: PRESTROKE_MRS
+    examples: |
       - pre-stroke mrs
       - mrs before stroke
       - modified Rankin Scale before stroke
       - functional status before stroke
-      - GLUCOSE
+  - synonym: GLUCOSE
+    examples: |
       - initial blood glucose
       - initial glucose
       - blood sugar
       - sugar level
       - glucose level
       - blood glucose concentration
-      - CHOLESTEROL
+  - synonym: CHOLESTEROL
+    examples: |
       - initial ldl cholesterol
       - initial cholesterol
       - lipid profile
       - lipid panel
       - cholesterol level
       - lipid concentration
-      - SYSTOLIC_PRESSURE
+  - synonym: SYSTOLIC_PRESSURE
+    examples: |
       - initial systolic blood pressure
       - systolic pressure
       - systolic bp
       - SBP
-      - DIASTOLIC_PRESSURE
+  - synonym: DIASTOLIC_PRESSURE
+    examples: |
       - initial diastolic blood pressure
       - diastolic pressure
       - diastolic BP
       - DBP
-      - INR_MODE
+  - synonym: INR_MODE
+    examples: |
       - inr measurement mode
       - inr device type
-      - IMAGING_DONE
+  - synonym: IMAGING_DONE
+    examples: |
       - brain imaging done
       - ct or mr imaging
       - imaging performed
       - diagnostic imaging done
       - radiological scans completed
       - imaging studies carried out
-      - IMAGING_TYPE
+  - synonym: IMAGING_TYPE
+    examples: |
       - brain imaging type
-      - OCCLUSION_FOUND
+  - synonym: OCCLUSION_FOUND
+    examples: |
       - occlusion found on cta or mra
-      - OCCLUSION_SITE
+  - synonym: OCCLUSION_SITE
+    examples: |
       - occlusion site
-      - OLD_INFARCTS_SEEN
+  - synonym: OLD_INFARCTS_SEEN
+    examples: |
       - old infarcts seen
-      - OLD_INFARCTS_TYPE
+  - synonym: OLD_INFARCTS_TYPE
+    examples: |
       - old infarcts type
-      - PERFUSION_DEFICIT_TYPE
+  - synonym: PERFUSION_DEFICIT_TYPE
+    examples: |
       - perfusion deficit territory
-      - PERFUSION_CORE
+  - synonym: PERFUSION_CORE
+    examples: |
       - perfusion core volume
       - perfusion imaging core
       - core infarct volume
       - perfusion deficit volume
       - ischemic core volume
-      - HYPOPERFUSION
+  - synonym: HYPOPERFUSION
+    examples: |
       - hypoperfusion volume
       - hypoperfused tissue volume
       - hypoperfused core volume
       - tissue at risk volume
       - hypoperfusion imaging core
-      - STROKE_TYPE
+  - synonym: STROKE_TYPE
+    examples: |
       - stroke type
       - stroke diagnosis
-      - STROKE_MIMICS_DIAGNOSIS
+  - synonym: STROKE_MIMICS_DIAGNOSIS
+    examples: |
       - stroke mimics diagnosis
-      - THROMBOLYSIS
+  - synonym: THROMBOLYSIS
+    examples: |
       - intravenous thrombolysis
       - ivt
       - clot-busting therapy
@@ -155,18 +197,24 @@ nlu:
       - tissue plasminogen activator (tPA) therapy
       - fibrinolytic therapy
       - thrombolysis
-      - THROMBECTOMY
+  - synonym: THROMBECTOMY
+    examples: |
       - mechanical thrombectomy
       - mt
-      - THROMBECTOMY_ONLY
+  - synonym: THROMBECTOMY_ONLY
+    examples: |
       - thrombectomy only
-      - THROMBOLYSIS_ONLY
+  - synonym: THROMBOLYSIS_ONLY
+    examples: |
       - thrombolysis only
-      - THROMBOLYSIS_AND_THROMBECTOMY
+  - synonym: THROMBOLYSIS_AND_THROMBECTOMY
+    examples: |
       - thrombolysis and thrombectomy
-      - RECANALIZATION
+  - synonym: RECANALIZATION
+    examples: |
       - recanalization therapy
-      - DTN
+  - synonym: DTN
+    examples: |
       - door to needle
       - door to needle time
       - time to thrombolysis
@@ -176,202 +224,281 @@ nlu:
       - treatment delay
       - needle time
       - thrombolysis time
-      - DTG_PRIMARY
+  - synonym: DTG_PRIMARY
+    examples: |
       - primary door to groin
       - primary dtg
-      - DTG_SECONDARY
+  - synonym: DTG_SECONDARY
+    examples: |
       - secondary door to groin
       - secondary dtg
-      - DIDO
+  - synonym: DIDO
+    examples: |
       - door in door out
-      - DOOR_TO_REPERFUSION
+  - synonym: DOOR_TO_REPERFUSION
+    examples: |
       - door to reperfusion time
-      - MTICI_SCORE
+  - synonym: MTICI_SCORE
+    examples: |
       - mtici score
-      - NO_THROMBOLYSIS_REASON
+  - synonym: NO_THROMBOLYSIS_REASON
+    examples: |
       - reason for no thrombolysis
-      - NO_THROMBECTOMY_REASON
+  - synonym: NO_THROMBECTOMY_REASON
+    examples: |
       - reason for no thrombectomy
-      - MT_COMPLICATIONS_TYPE
+  - synonym: MT_COMPLICATIONS_TYPE
+    examples: |
       - thrombectomy complications type
-      - MT_COMPLICATIONS
+  - synonym: MT_COMPLICATIONS
+    examples: |
       - thrombectomy complications
       - mt complications present
-      - THROMBOLYSIS_DRUGS
+  - synonym: THROMBOLYSIS_DRUGS
+    examples: |
       - thrombolysis drugs
       - ivt drugs
-      - THROMBOLYSIS_DRUG_DOSE
+  - synonym: THROMBOLYSIS_DRUG_DOSE
+    examples: |
       - thrombolysis drug dose
       - ivt dose
-      - THROMBOLYSIS_APPLICATION_DEPARTMENT
+  - synonym: THROMBOLYSIS_APPLICATION_DEPARTMENT
+    examples: |
       - thrombolysis application department
-      - POST_RECANALIZATION_FINDINGS
+  - synonym: POST_RECANALIZATION_FINDINGS
+    examples: |
       - post-recanalization findings present
-      - POST_RECANALIZATION_FINDING_TYPE
+  - synonym: POST_RECANALIZATION_FINDING_TYPE
+    examples: |
       - post-recanalization finding type
-      - HEMORRHAGIC_TRANSFORMATION
+  - synonym: HEMORRHAGIC_TRANSFORMATION
+    examples: |
       - hemorrhagic transformation type
-      - TIA_CLINICAL_SYMPTOMS
+  - synonym: TIA_CLINICAL_SYMPTOMS
+    examples: |
       - tia clinical symptoms
-      - TIA_SYMPTOMS_DURATION
+  - synonym: TIA_SYMPTOMS_DURATION
+    examples: |
       - tia symptoms duration
-      - BLEEDING_SOURCE_FOUND
+  - synonym: BLEEDING_SOURCE_FOUND
+    examples: |
       - bleeding source found
-      - ICH_BLEEDING_VOLUME
+  - synonym: ICH_BLEEDING_VOLUME
+    examples: |
       - intracerebral hemorrhage bleeding volume
       - ich bleeding volume
       - hemorrhage volume
       - bleed volume
       - bleeding amount
       - hemorrhagic volume
-      - ICH_SCORE
+  - synonym: ICH_SCORE
+    examples: |
       - intracerebral hemorrhage score
       - ich score
       - ICH grading
       - hemorrhage severity score
       - bleeding severity assessment
-      - ICH_TREATMENT
+  - synonym: ICH_TREATMENT
+    examples: |
       - intracerebral hemorrhage treatment performed
       - ich treatment performed
-      - ICH_TREATMENT_TYPE
+  - synonym: ICH_TREATMENT_TYPE
+    examples: |
       - intracerebral hemorrhage treatment type
       - ich treatment type
-      - BLEEDING_REASON_FOUND
+  - synonym: BLEEDING_REASON_FOUND
+    examples: |
       - bleeding reason found
-      - BLEEDING_REASON_TYPE
+  - synonym: BLEEDING_REASON_TYPE
+    examples: |
       - bleeding reason type
-      - BLEEDING_ANTIDOTE_TO_ANTICOAGULANTS
+  - synonym: BLEEDING_ANTIDOTE_TO_ANTICOAGULANTS
+    examples: |
       - antidote to anticoagulants
-      - INTRAVENTRICULAR_HEMORRHAGE
+  - synonym: INTRAVENTRICULAR_HEMORRHAGE
+    examples: |
       - intraventricular hemorrhage
-      - INFRATENTORIAL_HEMORRHAGE
+  - synonym: INFRATENTORIAL_HEMORRHAGE
+    examples: |
       - infratentorial hemorrhage
-      - SAH_TREATMENT
+  - synonym: SAH_TREATMENT
+    examples: |
       - subarachnoid hemorrhage treatment performed
       - sah treatment performed
-      - SAH_TREATMENT_TYPE
+  - synonym: SAH_TREATMENT_TYPE
+    examples: |
       - subarachnoid hemorrhage treatment type
       - sah treatment type
-      - NIMODIPINE
+  - synonym: NIMODIPINE
+    examples: |
       - nimodipine given
-      - HUNT_HESS_SCORE
+  - synonym: HUNT_HESS_SCORE
+    examples: |
       - hunt-hess score
-      - CVT_TREATMENT
+  - synonym: CVT_TREATMENT
+    examples: |
       - cerebral venous thrombosis treatment performed
       - cvt treatment performed
-      - CVT_TREATMENT_TYPE
+  - synonym: CVT_TREATMENT_TYPE
+    examples: |
       - cerebral venous thrombosis treatment type
       - cvt treatment type
-      - POST_ACUTE_CARE
+  - synonym: POST_ACUTE_CARE
+    examples: |
       - post-acute care in hospital
-      - CRANIECTOMY
+  - synonym: CRANIECTOMY
+    examples: |
       - decompressive craniectomy performed
-      - CRANIECTOMY_AGE_GT60
+  - synonym: CRANIECTOMY_AGE_GT60
+    examples: |
       - decompressive craniectomy age ≥60
-      - CAROTID_ARTERIES_IMAGING
+  - synonym: CAROTID_ARTERIES_IMAGING
+    examples: |
       - carotid arteries imaging performed
-      - CAROTID_STENOSIS
+  - synonym: CAROTID_STENOSIS
+    examples: |
       - carotid stenosis present
-      - CAROTID_STENOSIS_LEVEL
+  - synonym: CAROTID_STENOSIS_LEVEL
+    examples: |
       - carotid stenosis level
-      - CAROTID_ENDARTERECTOMY
+  - synonym: CAROTID_ENDARTERECTOMY
+    examples: |
       - carotid endarterectomy or stenting within two weeks
-      - CAROTID_ENDARTERECTOMY_STENOSIS_GT70
+  - synonym: CAROTID_ENDARTERECTOMY_STENOSIS_GT70
+    examples: |
       - carotid endarterectomy stenosis >70 percent
-      - ATRIAL_FIBRILATION_FLUTTER
+  - synonym: ATRIAL_FIBRILATION_FLUTTER
+    examples: |
       - atrial fibrillation or flutter status
-      - STROKE_ETIOLOGY_KNOWN_AIS
+  - synonym: STROKE_ETIOLOGY_KNOWN_AIS
+    examples: |
       - stroke etiology known (ais)
-      - STROKE_ETIOLOGY_TYPE_AIS
+  - synonym: STROKE_ETIOLOGY_TYPE_AIS
+    examples: |
       - stroke etiology type (ais)
-      - STROKE_ETIOLOGY_KNOWN_AIS_TIA
+  - synonym: STROKE_ETIOLOGY_KNOWN_AIS_TIA
+    examples: |
       - stroke etiology known (ais or tia)
-      - STROKE_ETIOLOGY_TYPE_AIS_TIA
+  - synonym: STROKE_ETIOLOGY_TYPE_AIS_TIA
+    examples: |
       - stroke etiology type (ais or tia)
-      - VTE_INTERVENTION_AIS
+  - synonym: VTE_INTERVENTION_AIS
+    examples: |
       - venous thromboembolism prevention in acute ischemic stroke
       - vte prevention in ais
-      - VTE_INTERVENTION_ICH
+  - synonym: VTE_INTERVENTION_ICH
+    examples: |
       - venous thromboembolism prevention in intracerebral hemorrhage
       - vte prevention in ich
-      - VTE_INTERVENTION_TYPE_AIS
+  - synonym: VTE_INTERVENTION_TYPE_AIS
+    examples: |
       - venous thromboembolism prevention type in acute ischemic stroke
       - vte prevention type in ais
-      - VTE_INTERVENTION_TYPE_ICH
+  - synonym: VTE_INTERVENTION_TYPE_ICH
+    examples: |
       - venous thromboembolism prevention type in intracerebral hemorrhage
       - vte prevention type in ich
-      - POST_STROKE_COMPLICATIONS
+  - synonym: POST_STROKE_COMPLICATIONS
+    examples: |
       - post-stroke complications present
-      - POST_STROKE_COMPLICATIONS_TYPE
+  - synonym: POST_STROKE_COMPLICATIONS_TYPE
+    examples: |
       - post-stroke complications type
-      - DAY_1_TEMPERATURE_CHECKS
+  - synonym: DAY_1_TEMPERATURE_CHECKS
+    examples: |
       - day 1 temperature checks
-      - DAY_2_TEMPERATURE_CHECKS
+  - synonym: DAY_2_TEMPERATURE_CHECKS
+    examples: |
       - day 2 temperature checks
-      - DAY_3_TEMPERATURE_CHECKS
+  - synonym: DAY_3_TEMPERATURE_CHECKS
+    examples: |
       - day 3 temperature checks
-      - PARACETAMOL_ON_FEVER
+  - synonym: PARACETAMOL_ON_FEVER
+    examples: |
       - paracetamol on fever
-      - DAY_1_HYPERGLYCEMIA_CHECKS
+  - synonym: DAY_1_HYPERGLYCEMIA_CHECKS
+    examples: |
       - day 1 hyperglycemia checks
-      - DAY_2_HYPERGLYCEMIA_CHECKS
+  - synonym: DAY_2_HYPERGLYCEMIA_CHECKS
+    examples: |
       - day 2 hyperglycemia checks
-      - DAY_3_HYPERGLYCEMIA_CHECKS
+  - synonym: DAY_3_HYPERGLYCEMIA_CHECKS
+    examples: |
       - day 3 hyperglycemia checks
-      - INSULIN_ON_HYPERGLYCEMIA
+  - synonym: INSULIN_ON_HYPERGLYCEMIA
+    examples: |
       - insulin on hyperglycemia
-      - SWALLOWING_SCREENING
+  - synonym: SWALLOWING_SCREENING
+    examples: |
       - swallowing screening performed
       - dysphagia screening performed
       - swallowing assessment done
       - dysphagia screening completed
       - assessment for swallowing done
-      - SWALLOWING_SCREENING_TYPE
+
+  - synonym: SWALLOWING_SCREENING_TYPE
+    examples: |
       - swallowing screening type
-      - SWALLOWING_SCREENING_PERFORMER
+  - synonym: SWALLOWING_SCREENING_PERFORMER
+    examples: |
       - swallowing screening performer
-      - PHYSIOTHERAPY
+  - synonym: PHYSIOTHERAPY
+    examples: |
       - physiotherapy received
       - PT started
       - physiotherapy initiatiated
       - physical therapy
-      - OCCUPATIONAL_THERAPY
+  - synonym: OCCUPATIONAL_THERAPY
+    examples: |
       - occupational therapy received
       - occupational PT given
       - OT therapy provided
       - occupation-related physical therapy given
-      - SPEECH_THERAPY
+  - synonym: SPEECH_THERAPY
+    examples: |
       - speech therapy received
-      - DISCHARGE_DESTINATION
+  - synonym: DISCHARGE_DESTINATION
+    examples: |
       - discharge destination
-      - DISCHARGE_MEDICATIONS
+  - synonym: DISCHARGE_MEDICATIONS
+    examples: |
       - medications at discharge
-      - DISCHARGE_ANTICOAGULANTS_AFIB
+  - synonym: DISCHARGE_ANTICOAGULANTS_AFIB
+    examples: |
       - anticoagulants at discharge in atrial fibrillation
-      - DISCHARGE_ANTICOAGULANT_TYPE_AFIB
+  - synonym: DISCHARGE_ANTICOAGULANT_TYPE_AFIB
+    examples: |
       - anticoagulant type at discharge in atrial fibrillation
-      - DISCHARGE_ANTIPLATELETS_NO_AFIB
+  - synonym: DISCHARGE_ANTIPLATELETS_NO_AFIB
+    examples: |
       - antiplatelets at discharge without atrial fibrillation
-      - DISCHARGE_ANTIPLATELET_TYPE_NO_AFIB
+  - synonym: DISCHARGE_ANTIPLATELET_TYPE_NO_AFIB
+    examples: |
       - antiplatelet type at discharge without atrial fibrillation
-      - DISCHARGE_MRS
+  - synonym: DISCHARGE_MRS
+    examples: |
       - discharge Modified Rankin Scale
       - discharge mrs
       - post-stroke mRS
       - modified Rankin Scale at discharge
       - functional status at discharge
-      - SMOKING_CESSATION
+  - synonym: SMOKING_CESSATION
+    examples: |
       - smoking cessation recommended
-      - STROKE_MANAGEMENT_APPOINTMENT
+  - synonym: STROKE_MANAGEMENT_APPOINTMENT
+    examples: |
       - stroke management appointment
-      - THREE_MONTH_MRS
+  - synonym: THREE_MONTH_MRS
+    examples: |
       - three-month Modified Rankin Scale
       - three-month mrs
       - 3-month mrs
       - mrs at 3 months
-      - HOSPITAL_STAY
+  - synonym: HOSPITAL_STAY
+    examples: |
       - length of hospital stay
-      - DISCHARGE_NIHSS
+  - synonym: DISCHARGE_NIHSS
+    examples: |
       - discharge NIH Stroke Scale
       - discharge NIHSS
       - discharge stroke severity score
@@ -380,13 +507,15 @@ nlu:
       - NIH Stroke Scale at discharge
       - post-treatment NIHSS
       - neurological assessment score at discharge
-      - DTI
+  - synonym: DTI
+    examples: |
       - door to imaging
       - door to imaging time
-      - ONSET_TO_DOOR
+  - synonym: ONSET_TO_DOOR
+    examples: |
       - onset to door
-      - time from onset to door
       - OTD
+      - time from onset to door
       - symptom onset to door
       - arrival time after symptoms
       - time from symptoms to ER
