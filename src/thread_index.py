@@ -1,4 +1,9 @@
-"""Thread index helpers for Rasa custom thread routes."""
+"""Thread index helpers for Rasa custom thread routes.
+
+Pure, storage-agnostic functions only. Persistence lives in
+thread_index_store.py (a plain Redis key-value store, one JSON value per
+user) -- these functions just transform already-loaded payload dicts.
+"""
 
 from __future__ import annotations
 
@@ -7,35 +12,12 @@ from datetime import datetime, timezone
 from typing import Any
 
 
-INDEX_MARKER = "__thread_index__"
-
-
 def utcnow_iso() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
-def get_thread_index_tracker_id(user_sub: str) -> str:
-    """Return the dedicated tracker ID used to store a user's thread index."""
-    return f"{user_sub}:threads:index"
-
-
-def extract_index_payload_from_events(events: list[Any]) -> dict[str, Any]:
-    """Extract the latest serialized index payload from tracker events."""
-    for event in reversed(list(events)):
-        text = getattr(event, "text", None)
-        if not isinstance(text, str) or not text.startswith(INDEX_MARKER):
-            continue
-        payload = text[len(INDEX_MARKER) :]
-        try:
-            data = json.loads(payload)
-        except (json.JSONDecodeError, TypeError):
-            return {}
-        return data if isinstance(data, dict) else {}
-    return {}
-
-
 def build_thread_list_from_payload(payload: Any) -> dict[int, dict[str, Any]]:
-    """Build active thread records from a JSON payload persisted in the index tracker."""
+    """Build active thread records from a JSON payload persisted in the index store."""
     if not payload:
         return {}
 
@@ -140,8 +122,3 @@ def apply_index_action(payload: dict[str, Any], thread_id: int, action: str, nam
         raise ValueError(f"Unsupported action: {action}")
 
     return next_payload
-
-
-def serialize_index_payload(payload: dict[str, Any]) -> str:
-    """Serialize index payload using the marker expected by event parser."""
-    return f"{INDEX_MARKER}{json.dumps(payload)}"

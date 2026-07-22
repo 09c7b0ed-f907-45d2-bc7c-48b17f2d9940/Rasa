@@ -25,11 +25,9 @@ from src.thread_index import (  # noqa: E402
     apply_index_action,
     build_thread_list_from_payload,
     build_thread_list_response,
-    extract_index_payload_from_events,
-    get_thread_index_tracker_id,
     next_thread_id_from_payload,
-    serialize_index_payload,
 )
+from src.thread_index_store import get_index_payload, set_index_payload  # noqa: E402
 
 
 def _read_env(name: str) -> Optional[str]:
@@ -97,17 +95,7 @@ def _install_custom_routes() -> None:
             if not _authorized(request):
                 return response.json({"error": "Unauthorized"}, status=401)
 
-            tracker_store, err = await _get_tracker_store()
-            if err:
-                return err
-            if tracker_store is None:
-                return response.json({"error": "Tracker store not available"}, status=500)
-
-            tracker = await tracker_store.retrieve(get_thread_index_tracker_id(user_sub))
-            if not tracker:
-                return response.json(build_thread_list_response({}), status=200)
-
-            payload = extract_index_payload_from_events(list(tracker.events))
+            payload = get_index_payload(user_sub)
             threads = build_thread_list_from_payload(payload)
             return response.json(build_thread_list_response(threads), status=200)
 
@@ -115,14 +103,7 @@ def _install_custom_routes() -> None:
             if not _authorized(request):
                 return response.json({"error": "Unauthorized"}, status=401)
 
-            tracker_store, err = await _get_tracker_store()
-            if err:
-                return err
-            if tracker_store is None:
-                return response.json({"error": "Tracker store not available"}, status=500)
-
-            tracker = await tracker_store.retrieve(get_thread_index_tracker_id(user_sub))
-            payload = extract_index_payload_from_events(list(tracker.events)) if tracker else {}
+            payload = get_index_payload(user_sub)
             return response.json(
                 {
                     "next_thread_id": next_thread_id_from_payload(payload),
@@ -152,32 +133,9 @@ def _install_custom_routes() -> None:
             if thread_id is None or action not in {"create", "rename", "delete"}:
                 return response.json({"error": "Missing or invalid thread_id, action"}, status=400)
 
-            tracker_store, err = await _get_tracker_store()
-            if err:
-                return err
-            if tracker_store is None:
-                return response.json({"error": "Tracker store not available"}, status=500)
-
-            sender_id = get_thread_index_tracker_id(user_sub)
-            tracker = await tracker_store.retrieve(sender_id)
-            if tracker is None:
-                from rasa.shared.core.trackers import DialogueStateTracker  # type: ignore[import-untyped]
-
-                tracker = DialogueStateTracker(sender_id, [])
-
-            current_payload = extract_index_payload_from_events(list(tracker.events))
+            current_payload = get_index_payload(user_sub)
             next_payload = apply_index_action(current_payload, thread_id, action, str(name))
-
-            from rasa.shared.core.events import UserUttered  # type: ignore[import-untyped]
-
-            tracker.update(
-                UserUttered(
-                    text=serialize_index_payload(next_payload),
-                    intent={"name": "__thread_index_update__", "confidence": 1.0},
-                    entities=[],
-                )
-            )
-            await tracker_store.save(tracker)
+            set_index_payload(user_sub, next_payload)
 
             threads = build_thread_list_from_payload(next_payload)
             thread_record = threads.get(thread_id)
@@ -202,22 +160,17 @@ def _install_custom_routes() -> None:
             except (TypeError, ValueError):
                 return response.json({"error": "Invalid thread_id"}, status=400)
 
+            # Check the thread exists in the index first.
+            current_payload = get_index_payload(user_sub)
+            threads = build_thread_list_from_payload(current_payload)
+            if thread_id_int not in threads:
+                return response.json({"error": "Thread not found"}, status=404)
+
             tracker_store, err = await _get_tracker_store()
             if err:
                 return err
             if tracker_store is None:
                 return response.json({"error": "Tracker store not available"}, status=500)
-
-            # Check the thread exists in the index first.
-            index_sender_id = get_thread_index_tracker_id(user_sub)
-            index_tracker = await tracker_store.retrieve(index_sender_id)
-            if index_tracker is None:
-                return response.json({"error": "Thread not found"}, status=404)
-
-            current_payload = extract_index_payload_from_events(list(index_tracker.events))
-            threads = build_thread_list_from_payload(current_payload)
-            if thread_id_int not in threads:
-                return response.json({"error": "Thread not found"}, status=404)
 
             # Attempt hard-delete of the conversation tracker for this thread.
             conversation_sender_id = f"{user_sub}:thread:{thread_id_int}"
@@ -243,19 +196,9 @@ def _install_custom_routes() -> None:
                     except Exception:
                         pass
 
-            # Soft-mark as deleted in the index tracker regardless of hard-delete outcome.
+            # Soft-mark as deleted in the index regardless of hard-delete outcome.
             next_payload = apply_index_action(current_payload, thread_id_int, "delete")
-
-            from rasa.shared.core.events import UserUttered
-
-            index_tracker.update(
-                UserUttered(
-                    text=serialize_index_payload(next_payload),
-                    intent={"name": "__thread_index_update__", "confidence": 1.0},
-                    entities=[],
-                )
-            )
-            await tracker_store.save(index_tracker)
+            set_index_payload(user_sub, next_payload)
 
             return response.json(
                 {
