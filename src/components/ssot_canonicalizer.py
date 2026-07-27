@@ -126,7 +126,6 @@ class SSOTCanonicalizer(GraphComponent):
     Behavior:
       - For configured entity types, if extracted value matches a SSOT synonym, rewrite `value` to SSOT canonical.
       - If strict for an entity type and no mapping exists, drop that entity.
-      - Also supports migrating old entity name `kpi` -> `metric`.
 
     This is intended to ensure downstream consumers only see canonical SSOT codes.
     """
@@ -207,11 +206,6 @@ class SSOTCanonicalizer(GraphComponent):
                 if not entity_name:
                     new_entities.append(ent)
                     continue
-
-                # Migration shim: kpi -> metric
-                if entity_name == "kpi":
-                    ent["entity"] = "metric"
-                    entity_name = "metric"
 
                 idx = self._indexes.get(entity_name)
                 if idx is None:

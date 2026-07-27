@@ -196,9 +196,9 @@ nlu:
       - Chart [DIDO](metric) for [haemorrhagic](stroke_type) strokes
       - Show [DTN](metric) between [4 March 2023]{"entity": "date", "role": "lower"} and [5 July 2024]{"entity": "date", "role": "upper"}
       - Chart [DIDO](metric) from [1 January 2022]{"entity": "date", "role": "lower"} to [31 December 2022]{"entity": "date", "role": "upper"}
-      - Show [SEX](metric) as [percent]{"entity": "kpi", "value": "percent"} in a [bar](chart_type) chart
-      - Give me [STROKE TYPE](metric) in [percentage]{"entity": "kpi", "value": "percent"} using a [line](chart_type) chart
-      - Display [Hospitalized in](metric) as [per cent]{"entity": "kpi", "value": "percent"}
+      - Show [SEX](metric) as percent in a [bar](chart_type) chart
+      - Give me [STROKE TYPE](metric) in percentage using a [line](chart_type) chart
+      - Display [Hospitalized in](metric) as per cent
       - Show me patient [sex](metric) in a [bar](chart_type) chart grouped by [quarter](group_by)
       - Show me patient [stroke type](metric) in a [bar](chart_type) chart grouped by [quarter](group_by)
       - Give me a chart of [age](metric) of patients grouped by [initial point of contact](group_by), excluding [ischaemic](stroke_type) strokes, between ages [18]{"entity": "age", "role": "lower"} to [90]{"entity": "age", "role": "upper"}
@@ -333,7 +333,7 @@ nlu:
       - Also group the data by [sex](group_by)
       - Group by [quarter](group_by)
       - Change grouping to [quarters](group_by)
-      - Set KPI to [percent]{"entity": "kpi", "value": "percent"}
+      - Set KPI to percent
       - Switch to [scatter](chart_type) plot visualisation
       - Show [initial blood glucose](metric)
       - show me [discharge nihss](metric) in a [bar chart](chart_type) grouped by [stroke type](group_by)
@@ -403,4 +403,4 @@ nlu:
       - group by [stroke type](group_by)
       - [ischaemic](stroke_type)
       - By [month](group_by)
-      - [percent]{"entity": "kpi", "value": "percent"}
+      - percent

@@ -291,7 +291,10 @@ def _merge_config_docs(base_docs: List[Dict[str, Any]], overlay_docs: List[Dict[
             else:
                 # Scalar or list (non-recognized list handled by deep add semantics)
                 if op == REPLACE:
-                    merged[k] = v if k in merged else v  # allow introducing new key even on replace for simplicity
+                    # Scalars always take the overlay value outright, even for keys
+                    # not yet present in the base -- REPLACE's strict-keys check
+                    # only applies to dict/list sections above.
+                    merged[k] = v
                 else:
                     existing_any = merged.get(k)
                     if isinstance(existing_any, list) and isinstance(v, list):

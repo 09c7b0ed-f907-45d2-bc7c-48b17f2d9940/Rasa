@@ -87,6 +87,12 @@ pipeline:
   #  url: http://duckling:8000
   #  dimensions: ["time"]
 
+  # Entity consolidation -- kept last so it runs after CLIIntentSetter/
+  # ResponseSelector/SSOTCanonicalizer, on the final entity set. Previously
+  # registered twice (once configured, once bare "keep this LAST"); the bare
+  # second pass silently re-ran consolidation under Rasa's defaults
+  # (position_tolerance 0, confidence_strategy "highest"), discarding the
+  # confidence_entity_all/confidence_role_all data the configured pass built.
   - name: src.components.entity_consolidator.EntityConsolidator
     # Position matching strategy: "exact", "overlap", "ignore"
     position_matching: "exact"
@@ -120,8 +126,6 @@ pipeline:
 
     # Collect consolidation statistics
     collect_stats: false
-
-  - name: src.components.entity_consolidator.EntityConsolidator # keep this LAST
 
   # Fallback handling
   - name: FallbackClassifier
