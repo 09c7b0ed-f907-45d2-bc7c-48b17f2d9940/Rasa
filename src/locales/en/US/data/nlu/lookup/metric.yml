@@ -187,9 +187,7 @@ nlu:
       - bleeding reason found
       - BLEEDING_REASON_TYPE
       - bleeding reason type
-      - BLEEDING_ANTIDOTE_TO_ANTICOAGULANTS
-      - antidote to anticoagulants
-      - INTRAVENTRICULAR_HEMORRHAGE
+      - INTRAVENTICULAR_HEMORRHAGE
       - intraventricular hemorrhage
       - INFRATENTORIAL_HEMORRHAGE
       - infratentorial hemorrhage

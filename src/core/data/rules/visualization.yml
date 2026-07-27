@@ -21,6 +21,21 @@ rules:
       - intent: update_visualization
       - action: action_clarify_visualization_request
 
+  # Terse follow-ups like "Group by X" or "filter by Y" sometimes classify as
+  # clarify_visualization even when there's no pending clarification question
+  # (it's the same style of short instruction the intent is trained on). Without
+  # this rule those fall through with no match: RulePolicy has
+  # enable_fallback_prediction disabled, so it silently predicts action_listen
+  # and the bot never responds. Route it the same place generate/update go.
+  - rule: clarify-intent follow-up while not mid-clarification
+    condition:
+      - active_loop: null
+      - slot_was_set:
+          - awaiting_visualization_clarification: false
+    steps:
+      - intent: clarify_visualization
+      - action: action_clarify_visualization_request
+
   # Any user reply while we're waiting for clarification
   # (covers generate_visualization, update_visualization, clarify_visualization,
   #  and any reasonably recognised intent that is a clarification answer)

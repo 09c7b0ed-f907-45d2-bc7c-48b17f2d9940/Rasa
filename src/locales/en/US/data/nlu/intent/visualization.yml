@@ -6,6 +6,15 @@ nlu:
       - Show me [doot to needle](metric) and [DIDO](metric) scores
       - I want [NIHSS](metric) for all patients
       - Give me [AdmissionNihss](metric) and [DischargeNihss](metric)
+      - Show me a [bar](chart_type) chart for [SEX](metric)
+      - Chart of [sex](metric)
+      - Give me a chart of [biological sex](metric)
+      - Visualize the [sex](metric) distribution
+      - Plot the [sex](metric) breakdown
+      - Show [sex](metric) counts
+      - Make a [pie](chart_type) chart of [sex](metric)
+      - I want to see [sex](metric) as a chart
+      - Display a [bar](chart_type) chart of [biological sex](metric)
       - Show me [DTN](metric) for [male](sex) patients
       - Chart of [DIDO](metric) in [female](sex) stroke patients
       - Give me [NIHSS](metric) data for [men](sex) and [women](sex) patients
@@ -84,6 +93,9 @@ nlu:
       - Perform a Mann-Whitney test for [DTN](metric) against the national benchmark
       - Is my hospital's [DTN](metric) significantly different from the national average?
       - Test whether my hospital differs from the national average for [DTN](metric)
+      - Compare [my hospital](hospital_scope_reference) [DTN](metric) against [Army Alhama de Murcia Hospital](hospital_name) using a Mann Whitney U test
+      - Can you compare [mine](hospital_scope_reference) [DTN](metric) against [Army Alhama de Murcia Hospital](hospital_name) using Mann Whitney
+      - Run a Mann Whitney U test comparing [my hospital](hospital_scope_reference) with [Army Alhama de Murcia Hospital](hospital_name) for [DTN](metric)
       - Compare [DTN](metric) for [Q1 2023]{"entity": "date", "role": "lower"} to [Q2 2023]{"entity": "date", "role": "upper"} using Mann Whitney
       - Run a Mann Whitney U test comparing [Q1 2023]{"entity": "date", "role": "lower"} to [Q2 2023]{"entity": "date", "role": "upper"} for [DTN](metric)
       - Perform a Mann Whitney test on [DTN](metric) between [Q1 2023]{"entity": "date", "role": "lower"} and [Q2 2023]{"entity": "date", "role": "upper"}
@@ -287,6 +299,7 @@ nlu:
       - I'd like to look at [mortality rate](metric) instead
       - Use [AdmissionNihss](metric) instead
       - Change the metric to [thrombolysis rate](metric)
+      - Change the metric to [sex](metric)
       - Add [sex](group_by)
       - Add [hospital](group_by)
       - Include [stroke subtype](group_by)
@@ -331,6 +344,10 @@ nlu:
       - [DTN](metric)
       - Use [DIDO](metric)
       - [NIHSS](metric) please
+      - [SEX](metric)
+      - [sex](metric)
+      - [biological sex](metric)
+      - categorical [sex](metric)
       - For [last month](date)
       - From [January 1, 2024]{"entity": "date", "role": "lower"} to [March 31, 2024]{"entity": "date", "role": "upper"}
       - [line](chart_type)
@@ -380,7 +397,6 @@ nlu:
       - second quarter
       - third quarter
       - fourth quarter
-
       - [swallowing screening performed](metric)
       - [NIHSS](metric), please
       - From [1 January 2024]{"entity": "date", "role": "lower"} to [31 March 2024]{"entity": "date", "role": "upper"}
