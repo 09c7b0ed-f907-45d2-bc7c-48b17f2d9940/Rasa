@@ -1,0 +1,1754 @@
+version: "3.1"
+
+nlu:
+  - lookup: country_code
+    examples: |
+      - Αφγανιστάν
+      - AF
+      - Αλβανία
+      - AL
+      - Αλγερία
+      - DZ
+      - Αμερικανική Σαμόα
+      - AS
+      - Ανδόρα
+      - AD
+      - Αγκόλα
+      - AO
+      - Ανγκουίλα
+      - AI
+      - Ανταρκτική
+      - AQ
+      - Αντίγκουα και Μπαρμπούντα
+      - AG
+      - Αργεντινή
+      - AR
+      - Αρμενία
+      - AM
+      - Αρούμπα
+      - AW
+      - Αυστραλία
+      - AU
+      - Αυστρία
+      - AT
+      - Αζερμπαϊτζάν
+      - AZ
+      - Μπαχάμες
+      - BS
+      - Μπαχρέιν
+      - BH
+      - Μπανγκλαντές
+      - BD
+      - Μπαρμπέιντος
+      - BB
+      - Λευκορωσία
+      - BY
+      - Βέλγιο
+      - BE
+      - Μπελίζ
+      - BZ
+      - Μπενίν
+      - BJ
+      - Βερμούδες
+      - BM
+      - Μπουτάν
+      - BT
+      - Βολιβία
+      - BO
+      - Ολλανδία Καραϊβικής
+      - BQ
+      - Βοσνία - Ερζεγοβίνη
+      - BA
+      - Μποτσουάνα
+      - BW
+      - Νήσος Μπουβέ
+      - BV
+      - Βραζιλία
+      - BR
+      - Βρετανικά Εδάφη Ινδικού Ωκεανού
+      - IO
+      - Μπρουνέι
+      - BN
+      - Βουλγαρία
+      - BG
+      - Μπουρκίνα Φάσο
+      - BF
+      - Μπουρούντι
+      - BI
+      - Πράσινο Ακρωτήριο
+      - CV
+      - Καμπότζη
+      - KH
+      - Καμερούν
+      - CM
+      - Καναδάς
+      - CA
+      - Νήσοι Κέιμαν
+      - KY
+      - Κεντροαφρικανική Δημοκρατία
+      - CF
+      - Τσαντ
+      - TD
+      - Χιλή
+      - CL
+      - Κίνα
+      - CN
+      - Νήσος των Χριστουγέννων
+      - CX
+      - Νήσοι Κόκος (Κίλινγκ)
+      - CC
+      - Κολομβία
+      - CO
+      - Κομόρες
+      - KM
+      - Κονγκό - Κινσάσα
+      - CD
+      - Κονγκό - Μπραζαβίλ
+      - CG
+      - Νήσοι Κουκ
+      - CK
+      - Κόστα Ρίκα
+      - CR
+      - Κροατία
+      - HR
+      - Κούβα
+      - CU
+      - Κουρασάο
+      - CW
+      - Κύπρος
+      - CY
+      - Τσεχία
+      - CZ
+      - Ακτή Ελεφαντοστού
+      - CI
+      - Δανία
+      - DK
+      - Τζιμπουτί
+      - DJ
+      - Ντομίνικα
+      - DM
+      - Δομινικανή Δημοκρατία
+      - DO
+      - Ισημερινός
+      - EC
+      - Αίγυπτος
+      - EG
+      - Ελ Σαλβαδόρ
+      - SV
+      - Ισημερινή Γουινέα
+      - GQ
+      - Ερυθραία
+      - ER
+      - Εσθονία
+      - EE
+      - Σουαζιλάνδη
+      - SZ
+      - Αιθιοπία
+      - ET
+      - Νήσοι Φόκλαντ
+      - FK
+      - Νήσοι Φερόες
+      - FO
+      - Φίτζι
+      - FJ
+      - Φινλανδία
+      - FI
+      - Γαλλία
+      - FR
+      - Γαλλική Γουιάνα
+      - GF
+      - Γαλλική Πολυνησία
+      - PF
+      - Γαλλικά Νότια Εδάφη
+      - TF
+      - Γκαμπόν
+      - GA
+      - Γκάμπια
+      - GM
+      - Γεωργία
+      - GE
+      - Γερμανία
+      - DE
+      - Γκάνα
+      - GH
+      - Γιβραλτάρ
+      - GI
+      - Ελλάδα
+      - GR
+      - Γροιλανδία
+      - GL
+      - Γρενάδα
+      - GD
+      - Γουαδελούπη
+      - GP
+      - Γκουάμ
+      - GU
+      - Γουατεμάλα
+      - GT
+      - Γκέρνζι
+      - GG
+      - Γουινέα
+      - GN
+      - Γουινέα Μπισάου
+      - GW
+      - Γουιάνα
+      - GY
+      - Αϊτή
+      - HT
+      - Νήσοι Χερντ και Μακντόναλντ
+      - HM
+      - Βατικανό
+      - VA
+      - Ονδούρα
+      - HN
+      - Χονγκ Κονγκ ΕΔΠ Κίνας
+      - HK
+      - Ουγγαρία
+      - HU
+      - Ισλανδία
+      - IS
+      - Ινδία
+      - IN
+      - Ινδονησία
+      - ID
+      - Ιράν
+      - IR
+      - Ιράκ
+      - IQ
+      - Ιρλανδία
+      - IE
+      - Νήσος του Μαν
+      - IM
+      - Ισραήλ
+      - IL
+      - Ιταλία
+      - IT
+      - Τζαμάικα
+      - JM
+      - Ιαπωνία
+      - JP
+      - Τζέρζι
+      - JE
+      - Ιορδανία
+      - JO
+      - Καζακστάν
+      - KZ
+      - Κένυα
+      - KE
+      - Κιριμπάτι
+      - KI
+      - Βόρεια Κορέα
+      - KP
+      - Νότια Κορέα
+      - KR
+      - Κουβέιτ
+      - KW
+      - Κιργιστάν
+      - KG
+      - Λάος
+      - LA
+      - Λετονία
+      - LV
+      - Λίβανος
+      - LB
+      - Λεσότο
+      - LS
+      - Λιβερία
+      - LR
+      - Λιβύη
+      - LY
+      - Λιχτενστάιν
+      - LI
+      - Λιθουανία
+      - LT
+      - Λουξεμβούργο
+      - LU
+      - Μακάο ΕΔΠ Κίνας
+      - MO
+      - Μαδαγασκάρη
+      - MG
+      - Μαλάουι
+      - MW
+      - Μαλαισία
+      - MY
+      - Μαλδίβες
+      - MV
+      - Μάλι
+      - ML
+      - Μάλτα
+      - MT
+      - Νήσοι Μάρσαλ
+      - MH
+      - Μαρτινίκα
+      - MQ
+      - Μαυριτανία
+      - MR
+      - Μαυρίκιος
+      - MU
+      - Μαγιότ
+      - YT
+      - Μεξικό
+      - MX
+      - Μικρονησία
+      - FM
+      - Μολδαβία
+      - MD
+      - Μονακό
+      - MC
+      - Μογγολία
+      - MN
+      - Μαυροβούνιο
+      - ME
+      - Μονσεράτ
+      - MS
+      - Μαρόκο
+      - MA
+      - Μοζαμβίκη
+      - MZ
+      - Μιανμάρ (Βιρμανία)
+      - MM
+      - Ναμίμπια
+      - NA
+      - Ναουρού
+      - NR
+      - Νεπάλ
+      - NP
+      - Ολλανδία
+      - NL
+      - Νέα Καληδονία
+      - NC
+      - Νέα Ζηλανδία
+      - NZ
+      - Νικαράγουα
+      - NI
+      - Νίγηρας
+      - NE
+      - Νιγηρία
+      - NG
+      - Νιούε
+      - NU
+      - Νήσος Νόρφολκ
+      - NF
+      - Βόρεια Μακεδονία
+      - MK
+      - Νήσοι Βόρειες Μαριάνες
+      - MP
+      - Νορβηγία
+      - NO
+      - Ομάν
+      - OM
+      - Πακιστάν
+      - PK
+      - Παλάου
+      - PW
+      - Παλαιστινιακά Εδάφη
+      - PS
+      - Παναμάς
+      - PA
+      - Παπούα Νέα Γουινέα
+      - PG
+      - Παραγουάη
+      - PY
+      - Περού
+      - PE
+      - Φιλιππίνες
+      - PH
+      - Νήσοι Πίτκερν
+      - PN
+      - Πολωνία
+      - PL
+      - Πορτογαλία
+      - PT
+      - Πουέρτο Ρίκο
+      - PR
+      - Κατάρ
+      - QA
+      - Ρουμανία
+      - RO
+      - Ρωσία
+      - RU
+      - Ρουάντα
+      - RW
+      - Ρεϊνιόν
+      - RE
+      - Άγιος Βαρθολομαίος
+      - BL
+      - Αγία Ελένη
+      - SH
+      - Σεν Κιτς και Νέβις
+      - KN
+      - Αγία Λουκία
+      - LC
+      - Άγιος Μαρτίνος (Γαλλικό τμήμα)
+      - MF
+      - Σεν Πιερ και Μικελόν
+      - PM
+      - Άγιος Βικέντιος και Γρεναδίνες
+      - VC
+      - Σαμόα
+      - WS
+      - Άγιος Μαρίνος
+      - SM
+      - Σάο Τομέ και Πρίνσιπε
+      - ST
+      - Σαουδική Αραβία
+      - SA
+      - Σενεγάλη
+      - SN
+      - Σερβία
+      - RS
+      - Σεϋχέλλες
+      - SC
+      - Σιέρα Λεόνε
+      - SL
+      - Σιγκαπούρη
+      - SG
+      - Άγιος Μαρτίνος (Ολλανδικό τμήμα)
+      - SX
+      - Σλοβακία
+      - SK
+      - Σλοβενία
+      - SI
+      - Νήσοι Σολομώντος
+      - SB
+      - Σομαλία
+      - SO
+      - Νότια Αφρική
+      - ZA
+      - Νήσοι Νότια Γεωργία και Νότιες Σάντουιτς
+      - GS
+      - Νότιο Σουδάν
+      - SS
+      - Ισπανία
+      - ES
+      - Σρι Λάνκα
+      - LK
+      - Σουδάν
+      - SD
+      - Σουρινάμ
+      - SR
+      - Σβάλμπαρντ και Γιαν Μαγιέν
+      - SJ
+      - Σουηδία
+      - SE
+      - Ελβετία
+      - CH
+      - Συρία
+      - SY
+      - Ταϊβάν
+      - TW
+      - Τατζικιστάν
+      - TJ
+      - Τανζανία
+      - TZ
+      - Ταϊλάνδη
+      - TH
+      - Τιμόρ-Λέστε
+      - TL
+      - Τόγκο
+      - TG
+      - Τοκελάου
+      - TK
+      - Τόνγκα
+      - TO
+      - Τρινιντάντ και Τομπάγκο
+      - TT
+      - Τυνησία
+      - TN
+      - Τουρκμενιστάν
+      - TM
+      - Νήσοι Τερκς και Κάικος
+      - TC
+      - Τουβαλού
+      - TV
+      - Τουρκία
+      - TR
+      - Ουγκάντα
+      - UG
+      - Ουκρανία
+      - UA
+      - Ηνωμένα Αραβικά Εμιράτα
+      - AE
+      - Ηνωμένο Βασίλειο
+      - UK
+      - GB
+      - Απομακρυσμένες Νησίδες ΗΠΑ
+      - UM
+      - Ηνωμένες Πολιτείες
+      - ΗΠΑ
+      - USA
+      - US
+      - Ουρουγουάη
+      - UY
+      - Ουζμπεκιστάν
+      - UZ
+      - Βανουάτου
+      - VU
+      - Βενεζουέλα
+      - VE
+      - Βιετνάμ
+      - VN
+      - Βρετανικές Παρθένες Νήσοι
+      - VG
+      - Αμερικανικές Παρθένες Νήσοι
+      - VI
+      - Γουάλις και Φουτούνα
+      - WF
+      - Δυτική Σαχάρα
+      - EH
+      - Υεμένη
+      - YE
+      - Ζάμπια
+      - ZM
+      - Ζιμπάμπουε
+      - ZW
+      - Νήσοι Όλαντ
+      - AX
+
+  - synonym: AF
+    examples: |
+      - Αφγανιστάν
+      - AF
+
+  - synonym: AL
+    examples: |
+      - Αλβανία
+      - AL
+
+  - synonym: DZ
+    examples: |
+      - Αλγερία
+      - DZ
+
+  - synonym: AS
+    examples: |
+      - Αμερικανική Σαμόα
+      - AS
+
+  - synonym: AD
+    examples: |
+      - Ανδόρα
+      - AD
+
+  - synonym: AO
+    examples: |
+      - Αγκόλα
+      - AO
+
+  - synonym: AI
+    examples: |
+      - Ανγκουίλα
+      - AI
+
+  - synonym: AQ
+    examples: |
+      - Ανταρκτική
+      - AQ
+
+  - synonym: AG
+    examples: |
+      - Αντίγκουα και Μπαρμπούντα
+      - AG
+
+  - synonym: AR
+    examples: |
+      - Αργεντινή
+      - AR
+
+  - synonym: AM
+    examples: |
+      - Αρμενία
+      - AM
+
+  - synonym: AW
+    examples: |
+      - Αρούμπα
+      - AW
+
+  - synonym: AU
+    examples: |
+      - Αυστραλία
+      - AU
+
+  - synonym: AT
+    examples: |
+      - Αυστρία
+      - AT
+
+  - synonym: AZ
+    examples: |
+      - Αζερμπαϊτζάν
+      - AZ
+
+  - synonym: BS
+    examples: |
+      - Μπαχάμες
+      - BS
+
+  - synonym: BH
+    examples: |
+      - Μπαχρέιν
+      - BH
+
+  - synonym: BD
+    examples: |
+      - Μπανγκλαντές
+      - BD
+
+  - synonym: BB
+    examples: |
+      - Μπαρμπέιντος
+      - BB
+
+  - synonym: BY
+    examples: |
+      - Λευκορωσία
+      - BY
+
+  - synonym: BE
+    examples: |
+      - Βέλγιο
+      - BE
+
+  - synonym: BZ
+    examples: |
+      - Μπελίζ
+      - BZ
+
+  - synonym: BJ
+    examples: |
+      - Μπενίν
+      - BJ
+
+  - synonym: BM
+    examples: |
+      - Βερμούδες
+      - BM
+
+  - synonym: BT
+    examples: |
+      - Μπουτάν
+      - BT
+
+  - synonym: BO
+    examples: |
+      - Βολιβία
+      - BO
+
+  - synonym: BQ
+    examples: |
+      - Ολλανδία Καραϊβικής
+      - BQ
+
+  - synonym: BA
+    examples: |
+      - Βοσνία - Ερζεγοβίνη
+      - BA
+
+  - synonym: BW
+    examples: |
+      - Μποτσουάνα
+      - BW
+
+  - synonym: BV
+    examples: |
+      - Νήσος Μπουβέ
+      - BV
+
+  - synonym: BR
+    examples: |
+      - Βραζιλία
+      - BR
+
+  - synonym: IO
+    examples: |
+      - Βρετανικά Εδάφη Ινδικού Ωκεανού
+      - IO
+
+  - synonym: BN
+    examples: |
+      - Μπρουνέι
+      - BN
+
+  - synonym: BG
+    examples: |
+      - Βουλγαρία
+      - BG
+
+  - synonym: BF
+    examples: |
+      - Μπουρκίνα Φάσο
+      - BF
+
+  - synonym: BI
+    examples: |
+      - Μπουρούντι
+      - BI
+
+  - synonym: CV
+    examples: |
+      - Πράσινο Ακρωτήριο
+      - CV
+
+  - synonym: KH
+    examples: |
+      - Καμπότζη
+      - KH
+
+  - synonym: CM
+    examples: |
+      - Καμερούν
+      - CM
+
+  - synonym: CA
+    examples: |
+      - Καναδάς
+      - CA
+
+  - synonym: KY
+    examples: |
+      - Νήσοι Κέιμαν
+      - KY
+
+  - synonym: CF
+    examples: |
+      - Κεντροαφρικανική Δημοκρατία
+      - CF
+
+  - synonym: TD
+    examples: |
+      - Τσαντ
+      - TD
+
+  - synonym: CL
+    examples: |
+      - Χιλή
+      - CL
+
+  - synonym: CN
+    examples: |
+      - Κίνα
+      - CN
+
+  - synonym: CX
+    examples: |
+      - Νήσος των Χριστουγέννων
+      - CX
+
+  - synonym: CC
+    examples: |
+      - Νήσοι Κόκος (Κίλινγκ)
+      - CC
+
+  - synonym: CO
+    examples: |
+      - Κολομβία
+      - CO
+
+  - synonym: KM
+    examples: |
+      - Κομόρες
+      - KM
+
+  - synonym: CD
+    examples: |
+      - Κονγκό - Κινσάσα
+      - CD
+
+  - synonym: CG
+    examples: |
+      - Κονγκό - Μπραζαβίλ
+      - CG
+
+  - synonym: CK
+    examples: |
+      - Νήσοι Κουκ
+      - CK
+
+  - synonym: CR
+    examples: |
+      - Κόστα Ρίκα
+      - CR
+
+  - synonym: HR
+    examples: |
+      - Κροατία
+      - HR
+
+  - synonym: CU
+    examples: |
+      - Κούβα
+      - CU
+
+  - synonym: CW
+    examples: |
+      - Κουρασάο
+      - CW
+
+  - synonym: CY
+    examples: |
+      - Κύπρος
+      - CY
+
+  - synonym: CZ
+    examples: |
+      - Τσεχία
+      - CZ
+
+  - synonym: CI
+    examples: |
+      - Ακτή Ελεφαντοστού
+      - CI
+
+  - synonym: DK
+    examples: |
+      - Δανία
+      - DK
+
+  - synonym: DJ
+    examples: |
+      - Τζιμπουτί
+      - DJ
+
+  - synonym: DM
+    examples: |
+      - Ντομίνικα
+      - DM
+
+  - synonym: DO
+    examples: |
+      - Δομινικανή Δημοκρατία
+      - DO
+
+  - synonym: EC
+    examples: |
+      - Ισημερινός
+      - EC
+
+  - synonym: EG
+    examples: |
+      - Αίγυπτος
+      - EG
+
+  - synonym: SV
+    examples: |
+      - Ελ Σαλβαδόρ
+      - SV
+
+  - synonym: GQ
+    examples: |
+      - Ισημερινή Γουινέα
+      - GQ
+
+  - synonym: ER
+    examples: |
+      - Ερυθραία
+      - ER
+
+  - synonym: EE
+    examples: |
+      - Εσθονία
+      - EE
+
+  - synonym: SZ
+    examples: |
+      - Σουαζιλάνδη
+      - SZ
+
+  - synonym: ET
+    examples: |
+      - Αιθιοπία
+      - ET
+
+  - synonym: FK
+    examples: |
+      - Νήσοι Φόκλαντ
+      - FK
+
+  - synonym: FO
+    examples: |
+      - Νήσοι Φερόες
+      - FO
+
+  - synonym: FJ
+    examples: |
+      - Φίτζι
+      - FJ
+
+  - synonym: FI
+    examples: |
+      - Φινλανδία
+      - FI
+
+  - synonym: FR
+    examples: |
+      - Γαλλία
+      - FR
+
+  - synonym: GF
+    examples: |
+      - Γαλλική Γουιάνα
+      - GF
+
+  - synonym: PF
+    examples: |
+      - Γαλλική Πολυνησία
+      - PF
+
+  - synonym: TF
+    examples: |
+      - Γαλλικά Νότια Εδάφη
+      - TF
+
+  - synonym: GA
+    examples: |
+      - Γκαμπόν
+      - GA
+
+  - synonym: GM
+    examples: |
+      - Γκάμπια
+      - GM
+
+  - synonym: GE
+    examples: |
+      - Γεωργία
+      - GE
+
+  - synonym: DE
+    examples: |
+      - Γερμανία
+      - DE
+
+  - synonym: GH
+    examples: |
+      - Γκάνα
+      - GH
+
+  - synonym: GI
+    examples: |
+      - Γιβραλτάρ
+      - GI
+
+  - synonym: GR
+    examples: |
+      - Ελλάδα
+      - GR
+
+  - synonym: GL
+    examples: |
+      - Γροιλανδία
+      - GL
+
+  - synonym: GD
+    examples: |
+      - Γρενάδα
+      - GD
+
+  - synonym: GP
+    examples: |
+      - Γουαδελούπη
+      - GP
+
+  - synonym: GU
+    examples: |
+      - Γκουάμ
+      - GU
+
+  - synonym: GT
+    examples: |
+      - Γουατεμάλα
+      - GT
+
+  - synonym: GG
+    examples: |
+      - Γκέρνζι
+      - GG
+
+  - synonym: GN
+    examples: |
+      - Γουινέα
+      - GN
+
+  - synonym: GW
+    examples: |
+      - Γουινέα Μπισάου
+      - GW
+
+  - synonym: GY
+    examples: |
+      - Γουιάνα
+      - GY
+
+  - synonym: HT
+    examples: |
+      - Αϊτή
+      - HT
+
+  - synonym: HM
+    examples: |
+      - Νήσοι Χερντ και Μακντόναλντ
+      - HM
+
+  - synonym: VA
+    examples: |
+      - Βατικανό
+      - VA
+
+  - synonym: HN
+    examples: |
+      - Ονδούρα
+      - HN
+
+  - synonym: HK
+    examples: |
+      - Χονγκ Κονγκ ΕΔΠ Κίνας
+      - HK
+
+  - synonym: HU
+    examples: |
+      - Ουγγαρία
+      - HU
+
+  - synonym: IS
+    examples: |
+      - Ισλανδία
+      - IS
+
+  - synonym: IN
+    examples: |
+      - Ινδία
+      - IN
+
+  - synonym: ID
+    examples: |
+      - Ινδονησία
+      - ID
+
+  - synonym: IR
+    examples: |
+      - Ιράν
+      - IR
+
+  - synonym: IQ
+    examples: |
+      - Ιράκ
+      - IQ
+
+  - synonym: IE
+    examples: |
+      - Ιρλανδία
+      - IE
+
+  - synonym: IM
+    examples: |
+      - Νήσος του Μαν
+      - IM
+
+  - synonym: IL
+    examples: |
+      - Ισραήλ
+      - IL
+
+  - synonym: IT
+    examples: |
+      - Ιταλία
+      - IT
+
+  - synonym: JM
+    examples: |
+      - Τζαμάικα
+      - JM
+
+  - synonym: JP
+    examples: |
+      - Ιαπωνία
+      - JP
+
+  - synonym: JE
+    examples: |
+      - Τζέρζι
+      - JE
+
+  - synonym: JO
+    examples: |
+      - Ιορδανία
+      - JO
+
+  - synonym: KZ
+    examples: |
+      - Καζακστάν
+      - KZ
+
+  - synonym: KE
+    examples: |
+      - Κένυα
+      - KE
+
+  - synonym: KI
+    examples: |
+      - Κιριμπάτι
+      - KI
+
+  - synonym: KP
+    examples: |
+      - Βόρεια Κορέα
+      - KP
+
+  - synonym: KR
+    examples: |
+      - Νότια Κορέα
+      - KR
+
+  - synonym: KW
+    examples: |
+      - Κουβέιτ
+      - KW
+
+  - synonym: KG
+    examples: |
+      - Κιργιστάν
+      - KG
+
+  - synonym: LA
+    examples: |
+      - Λάος
+      - LA
+
+  - synonym: LV
+    examples: |
+      - Λετονία
+      - LV
+
+  - synonym: LB
+    examples: |
+      - Λίβανος
+      - LB
+
+  - synonym: LS
+    examples: |
+      - Λεσότο
+      - LS
+
+  - synonym: LR
+    examples: |
+      - Λιβερία
+      - LR
+
+  - synonym: LY
+    examples: |
+      - Λιβύη
+      - LY
+
+  - synonym: LI
+    examples: |
+      - Λιχτενστάιν
+      - LI
+
+  - synonym: LT
+    examples: |
+      - Λιθουανία
+      - LT
+
+  - synonym: LU
+    examples: |
+      - Λουξεμβούργο
+      - LU
+
+  - synonym: MO
+    examples: |
+      - Μακάο ΕΔΠ Κίνας
+      - MO
+
+  - synonym: MG
+    examples: |
+      - Μαδαγασκάρη
+      - MG
+
+  - synonym: MW
+    examples: |
+      - Μαλάουι
+      - MW
+
+  - synonym: MY
+    examples: |
+      - Μαλαισία
+      - MY
+
+  - synonym: MV
+    examples: |
+      - Μαλδίβες
+      - MV
+
+  - synonym: ML
+    examples: |
+      - Μάλι
+      - ML
+
+  - synonym: MT
+    examples: |
+      - Μάλτα
+      - MT
+
+  - synonym: MH
+    examples: |
+      - Νήσοι Μάρσαλ
+      - MH
+
+  - synonym: MQ
+    examples: |
+      - Μαρτινίκα
+      - MQ
+
+  - synonym: MR
+    examples: |
+      - Μαυριτανία
+      - MR
+
+  - synonym: MU
+    examples: |
+      - Μαυρίκιος
+      - MU
+
+  - synonym: YT
+    examples: |
+      - Μαγιότ
+      - YT
+
+  - synonym: MX
+    examples: |
+      - Μεξικό
+      - MX
+
+  - synonym: FM
+    examples: |
+      - Μικρονησία
+      - FM
+
+  - synonym: MD
+    examples: |
+      - Μολδαβία
+      - MD
+
+  - synonym: MC
+    examples: |
+      - Μονακό
+      - MC
+
+  - synonym: MN
+    examples: |
+      - Μογγολία
+      - MN
+
+  - synonym: ME
+    examples: |
+      - Μαυροβούνιο
+      - ME
+
+  - synonym: MS
+    examples: |
+      - Μονσεράτ
+      - MS
+
+  - synonym: MA
+    examples: |
+      - Μαρόκο
+      - MA
+
+  - synonym: MZ
+    examples: |
+      - Μοζαμβίκη
+      - MZ
+
+  - synonym: MM
+    examples: |
+      - Μιανμάρ (Βιρμανία)
+      - MM
+
+  - synonym: NA
+    examples: |
+      - Ναμίμπια
+      - NA
+
+  - synonym: NR
+    examples: |
+      - Ναουρού
+      - NR
+
+  - synonym: NP
+    examples: |
+      - Νεπάλ
+      - NP
+
+  - synonym: NL
+    examples: |
+      - Ολλανδία
+      - NL
+
+  - synonym: NC
+    examples: |
+      - Νέα Καληδονία
+      - NC
+
+  - synonym: NZ
+    examples: |
+      - Νέα Ζηλανδία
+      - NZ
+
+  - synonym: NI
+    examples: |
+      - Νικαράγουα
+      - NI
+
+  - synonym: NE
+    examples: |
+      - Νίγηρας
+      - NE
+
+  - synonym: NG
+    examples: |
+      - Νιγηρία
+      - NG
+
+  - synonym: NU
+    examples: |
+      - Νιούε
+      - NU
+
+  - synonym: NF
+    examples: |
+      - Νήσος Νόρφολκ
+      - NF
+
+  - synonym: MK
+    examples: |
+      - Βόρεια Μακεδονία
+      - MK
+
+  - synonym: MP
+    examples: |
+      - Νήσοι Βόρειες Μαριάνες
+      - MP
+
+  - synonym: NO
+    examples: |
+      - Νορβηγία
+      - NO
+
+  - synonym: OM
+    examples: |
+      - Ομάν
+      - OM
+
+  - synonym: PK
+    examples: |
+      - Πακιστάν
+      - PK
+
+  - synonym: PW
+    examples: |
+      - Παλάου
+      - PW
+
+  - synonym: PS
+    examples: |
+      - Παλαιστινιακά Εδάφη
+      - PS
+
+  - synonym: PA
+    examples: |
+      - Παναμάς
+      - PA
+
+  - synonym: PG
+    examples: |
+      - Παπούα Νέα Γουινέα
+      - PG
+
+  - synonym: PY
+    examples: |
+      - Παραγουάη
+      - PY
+
+  - synonym: PE
+    examples: |
+      - Περού
+      - PE
+
+  - synonym: PH
+    examples: |
+      - Φιλιππίνες
+      - PH
+
+  - synonym: PN
+    examples: |
+      - Νήσοι Πίτκερν
+      - PN
+
+  - synonym: PL
+    examples: |
+      - Πολωνία
+      - PL
+
+  - synonym: PT
+    examples: |
+      - Πορτογαλία
+      - PT
+
+  - synonym: PR
+    examples: |
+      - Πουέρτο Ρίκο
+      - PR
+
+  - synonym: QA
+    examples: |
+      - Κατάρ
+      - QA
+
+  - synonym: RO
+    examples: |
+      - Ρουμανία
+      - RO
+
+  - synonym: RU
+    examples: |
+      - Ρωσία
+      - RU
+
+  - synonym: RW
+    examples: |
+      - Ρουάντα
+      - RW
+
+  - synonym: RE
+    examples: |
+      - Ρεϊνιόν
+      - RE
+
+  - synonym: BL
+    examples: |
+      - Άγιος Βαρθολομαίος
+      - BL
+
+  - synonym: SH
+    examples: |
+      - Αγία Ελένη
+      - SH
+
+  - synonym: KN
+    examples: |
+      - Σεν Κιτς και Νέβις
+      - KN
+
+  - synonym: LC
+    examples: |
+      - Αγία Λουκία
+      - LC
+
+  - synonym: MF
+    examples: |
+      - Άγιος Μαρτίνος (Γαλλικό τμήμα)
+      - MF
+
+  - synonym: PM
+    examples: |
+      - Σεν Πιερ και Μικελόν
+      - PM
+
+  - synonym: VC
+    examples: |
+      - Άγιος Βικέντιος και Γρεναδίνες
+      - VC
+
+  - synonym: WS
+    examples: |
+      - Σαμόα
+      - WS
+
+  - synonym: SM
+    examples: |
+      - Άγιος Μαρίνος
+      - SM
+
+  - synonym: ST
+    examples: |
+      - Σάο Τομέ και Πρίνσιπε
+      - ST
+
+  - synonym: SA
+    examples: |
+      - Σαουδική Αραβία
+      - SA
+
+  - synonym: SN
+    examples: |
+      - Σενεγάλη
+      - SN
+
+  - synonym: RS
+    examples: |
+      - Σερβία
+      - RS
+
+  - synonym: SC
+    examples: |
+      - Σεϋχέλλες
+      - SC
+
+  - synonym: SL
+    examples: |
+      - Σιέρα Λεόνε
+      - SL
+
+  - synonym: SG
+    examples: |
+      - Σιγκαπούρη
+      - SG
+
+  - synonym: SX
+    examples: |
+      - Άγιος Μαρτίνος (Ολλανδικό τμήμα)
+      - SX
+
+  - synonym: SK
+    examples: |
+      - Σλοβακία
+      - SK
+
+  - synonym: SI
+    examples: |
+      - Σλοβενία
+      - SI
+
+  - synonym: SB
+    examples: |
+      - Νήσοι Σολομώντος
+      - SB
+
+  - synonym: SO
+    examples: |
+      - Σομαλία
+      - SO
+
+  - synonym: ZA
+    examples: |
+      - Νότια Αφρική
+      - ZA
+
+  - synonym: GS
+    examples: |
+      - Νήσοι Νότια Γεωργία και Νότιες Σάντουιτς
+      - GS
+
+  - synonym: SS
+    examples: |
+      - Νότιο Σουδάν
+      - SS
+
+  - synonym: ES
+    examples: |
+      - Ισπανία
+      - ES
+
+  - synonym: LK
+    examples: |
+      - Σρι Λάνκα
+      - LK
+
+  - synonym: SD
+    examples: |
+      - Σουδάν
+      - SD
+
+  - synonym: SR
+    examples: |
+      - Σουρινάμ
+      - SR
+
+  - synonym: SJ
+    examples: |
+      - Σβάλμπαρντ και Γιαν Μαγιέν
+      - SJ
+
+  - synonym: SE
+    examples: |
+      - Σουηδία
+      - SE
+
+  - synonym: CH
+    examples: |
+      - Ελβετία
+      - CH
+
+  - synonym: SY
+    examples: |
+      - Συρία
+      - SY
+
+  - synonym: TW
+    examples: |
+      - Ταϊβάν
+      - TW
+
+  - synonym: TJ
+    examples: |
+      - Τατζικιστάν
+      - TJ
+
+  - synonym: TZ
+    examples: |
+      - Τανζανία
+      - TZ
+
+  - synonym: TH
+    examples: |
+      - Ταϊλάνδη
+      - TH
+
+  - synonym: TL
+    examples: |
+      - Τιμόρ-Λέστε
+      - TL
+
+  - synonym: TG
+    examples: |
+      - Τόγκο
+      - TG
+
+  - synonym: TK
+    examples: |
+      - Τοκελάου
+      - TK
+
+  - synonym: TO
+    examples: |
+      - Τόνγκα
+      - TO
+
+  - synonym: TT
+    examples: |
+      - Τρινιντάντ και Τομπάγκο
+      - TT
+
+  - synonym: TN
+    examples: |
+      - Τυνησία
+      - TN
+
+  - synonym: TM
+    examples: |
+      - Τουρκμενιστάν
+      - TM
+
+  - synonym: TC
+    examples: |
+      - Νήσοι Τερκς και Κάικος
+      - TC
+
+  - synonym: TV
+    examples: |
+      - Τουβαλού
+      - TV
+
+  - synonym: TR
+    examples: |
+      - Τουρκία
+      - TR
+
+  - synonym: UG
+    examples: |
+      - Ουγκάντα
+      - UG
+
+  - synonym: UA
+    examples: |
+      - Ουκρανία
+      - UA
+
+  - synonym: AE
+    examples: |
+      - Ηνωμένα Αραβικά Εμιράτα
+      - AE
+
+  - synonym: GB
+    examples: |
+      - Ηνωμένο Βασίλειο
+      - UK
+      - GB
+
+  - synonym: UM
+    examples: |
+      - Απομακρυσμένες Νησίδες ΗΠΑ
+      - UM
+
+  - synonym: US
+    examples: |
+      - Ηνωμένες Πολιτείες
+      - ΗΠΑ
+      - USA
+      - US
+
+  - synonym: UY
+    examples: |
+      - Ουρουγουάη
+      - UY
+
+  - synonym: UZ
+    examples: |
+      - Ουζμπεκιστάν
+      - UZ
+
+  - synonym: VU
+    examples: |
+      - Βανουάτου
+      - VU
+
+  - synonym: VE
+    examples: |
+      - Βενεζουέλα
+      - VE
+
+  - synonym: VN
+    examples: |
+      - Βιετνάμ
+      - VN
+
+  - synonym: VG
+    examples: |
+      - Βρετανικές Παρθένες Νήσοι
+      - VG
+
+  - synonym: VI
+    examples: |
+      - Αμερικανικές Παρθένες Νήσοι
+      - VI
+
+  - synonym: WF
+    examples: |
+      - Γουάλις και Φουτούνα
+      - WF
+
+  - synonym: EH
+    examples: |
+      - Δυτική Σαχάρα
+      - EH
+
+  - synonym: YE
+    examples: |
+      - Υεμένη
+      - YE
+
+  - synonym: ZM
+    examples: |
+      - Ζάμπια
+      - ZM
+
+  - synonym: ZW
+    examples: |
+      - Ζιμπάμπουε
+      - ZW
+
+  - synonym: AX
+    examples: |
+      - Νήσοι Όλαντ
+      - AX

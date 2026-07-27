@@ -1,0 +1,1758 @@
+version: "3.1"
+
+nlu:
+  - lookup: country_code
+    examples: |
+      - Afghanistan
+      - AF
+      - Albania
+      - AL
+      - Algeria
+      - DZ
+      - American Samoa
+      - AS
+      - Andorra
+      - AD
+      - Angola
+      - AO
+      - Anguilla
+      - AI
+      - Antarctica
+      - AQ
+      - Antigua & Barbuda
+      - AG
+      - Argentina
+      - AR
+      - Armenia
+      - AM
+      - Aruba
+      - AW
+      - Australia
+      - AU
+      - Austria
+      - AT
+      - Azerbaijan
+      - AZ
+      - Bahamas
+      - BS
+      - Bahrain
+      - BH
+      - Bangladesh
+      - BD
+      - Barbados
+      - BB
+      - Belarus
+      - BY
+      - Belgium
+      - BE
+      - Belize
+      - BZ
+      - Benin
+      - BJ
+      - Bermuda
+      - BM
+      - Bhutan
+      - BT
+      - Bolivia
+      - BO
+      - Caribbean Netherlands
+      - BQ
+      - Bosnia & Herzegovina
+      - BA
+      - Botswana
+      - BW
+      - Bouvet Island
+      - BV
+      - Brazil
+      - BR
+      - British Indian Ocean Territory
+      - IO
+      - Brunei
+      - BN
+      - Bulgaria
+      - BG
+      - Burkina Faso
+      - BF
+      - Burundi
+      - BI
+      - Cape Verde
+      - CV
+      - Cambodia
+      - KH
+      - Cameroon
+      - CM
+      - Canada
+      - CA
+      - Cayman Islands
+      - KY
+      - Central African Republic
+      - CF
+      - Chad
+      - TD
+      - Chile
+      - CL
+      - China
+      - CN
+      - Christmas Island
+      - CX
+      - Cocos (Keeling) Islands
+      - CC
+      - Colombia
+      - CO
+      - Comoros
+      - KM
+      - Congo - Kinshasa
+      - CD
+      - Congo - Brazzaville
+      - CG
+      - Cook Islands
+      - CK
+      - Costa Rica
+      - CR
+      - Croatia
+      - HR
+      - Cuba
+      - CU
+      - Curaçao
+      - CW
+      - Cyprus
+      - CY
+      - Czechia
+      - CZ
+      - Côte d’Ivoire
+      - CI
+      - Denmark
+      - DK
+      - Djibouti
+      - DJ
+      - Dominica
+      - DM
+      - Dominican Republic
+      - DO
+      - Ecuador
+      - EC
+      - Egypt
+      - EG
+      - El Salvador
+      - SV
+      - Equatorial Guinea
+      - GQ
+      - Eritrea
+      - ER
+      - Estonia
+      - EE
+      - Eswatini
+      - SZ
+      - Ethiopia
+      - ET
+      - Falkland Islands
+      - FK
+      - Faroe Islands
+      - FO
+      - Fiji
+      - FJ
+      - Finland
+      - FI
+      - France
+      - FR
+      - French Guiana
+      - GF
+      - French Polynesia
+      - PF
+      - French Southern Territories
+      - TF
+      - Gabon
+      - GA
+      - Gambia
+      - GM
+      - Georgia
+      - GE
+      - Germany
+      - DE
+      - Ghana
+      - GH
+      - Gibraltar
+      - GI
+      - Greece
+      - GR
+      - Greenland
+      - GL
+      - Grenada
+      - GD
+      - Guadeloupe
+      - GP
+      - Guam
+      - GU
+      - Guatemala
+      - GT
+      - Guernsey
+      - GG
+      - Guinea
+      - GN
+      - Guinea-Bissau
+      - GW
+      - Guyana
+      - GY
+      - Haiti
+      - HT
+      - Heard & McDonald Islands
+      - HM
+      - Vatican City
+      - VA
+      - Honduras
+      - HN
+      - Hong Kong SAR China
+      - HK
+      - Hungary
+      - HU
+      - Iceland
+      - IS
+      - India
+      - IN
+      - Indonesia
+      - ID
+      - Iran
+      - IR
+      - Iraq
+      - IQ
+      - Ireland
+      - IE
+      - Isle of Man
+      - IM
+      - Israel
+      - IL
+      - Italy
+      - IT
+      - Jamaica
+      - JM
+      - Japan
+      - JP
+      - Jersey
+      - JE
+      - Jordan
+      - JO
+      - Kazakhstan
+      - KZ
+      - Kenya
+      - KE
+      - Kiribati
+      - KI
+      - North Korea
+      - KP
+      - South Korea
+      - KR
+      - Kuwait
+      - KW
+      - Kyrgyzstan
+      - KG
+      - Laos
+      - LA
+      - Latvia
+      - LV
+      - Lebanon
+      - LB
+      - Lesotho
+      - LS
+      - Liberia
+      - LR
+      - Libya
+      - LY
+      - Liechtenstein
+      - LI
+      - Lithuania
+      - LT
+      - Luxembourg
+      - LU
+      - Macao SAR China
+      - MO
+      - Madagascar
+      - MG
+      - Malawi
+      - MW
+      - Malaysia
+      - MY
+      - Maldives
+      - MV
+      - Mali
+      - ML
+      - Malta
+      - MT
+      - Marshall Islands
+      - MH
+      - Martinique
+      - MQ
+      - Mauritania
+      - MR
+      - Mauritius
+      - MU
+      - Mayotte
+      - YT
+      - Mexico
+      - México
+      - MX
+      - Micronesia
+      - FM
+      - Moldova
+      - MD
+      - Monaco
+      - MC
+      - Mongolia
+      - MN
+      - Montenegro
+      - ME
+      - Montserrat
+      - MS
+      - Morocco
+      - MA
+      - Mozambique
+      - MZ
+      - Myanmar (Burma)
+      - MM
+      - Namibia
+      - NA
+      - Nauru
+      - NR
+      - Nepal
+      - NP
+      - Netherlands
+      - NL
+      - New Caledonia
+      - NC
+      - New Zealand
+      - NZ
+      - Nicaragua
+      - NI
+      - Niger
+      - NE
+      - Nigeria
+      - NG
+      - Niue
+      - NU
+      - Norfolk Island
+      - NF
+      - North Macedonia
+      - MK
+      - Northern Mariana Islands
+      - MP
+      - Norway
+      - NO
+      - Oman
+      - OM
+      - Pakistan
+      - PK
+      - Palau
+      - PW
+      - Palestinian Territories
+      - PS
+      - Panama
+      - PA
+      - Papua New Guinea
+      - PG
+      - Paraguay
+      - PY
+      - Peru
+      - PE
+      - Philippines
+      - PH
+      - Pitcairn Islands
+      - PN
+      - Poland
+      - PL
+      - Portugal
+      - PT
+      - Puerto Rico
+      - PR
+      - Qatar
+      - QA
+      - Romania
+      - RO
+      - Russia
+      - RU
+      - Rwanda
+      - RW
+      - Réunion
+      - RE
+      - St. Barthélemy
+      - BL
+      - St. Helena
+      - SH
+      - St. Kitts & Nevis
+      - KN
+      - St. Lucia
+      - LC
+      - St. Martin
+      - MF
+      - St. Pierre & Miquelon
+      - PM
+      - St. Vincent & Grenadines
+      - VC
+      - Samoa
+      - WS
+      - San Marino
+      - SM
+      - São Tomé & Príncipe
+      - ST
+      - Saudi Arabia
+      - SA
+      - Senegal
+      - SN
+      - Serbia
+      - RS
+      - Seychelles
+      - SC
+      - Sierra Leone
+      - SL
+      - Singapore
+      - SG
+      - Sint Maarten
+      - SX
+      - Slovakia
+      - SK
+      - Slovenia
+      - SI
+      - Solomon Islands
+      - SB
+      - Somalia
+      - SO
+      - South Africa
+      - ZA
+      - South Georgia & South Sandwich Islands
+      - GS
+      - South Sudan
+      - SS
+      - Spain
+      - Espana
+      - España
+      - ES
+      - Sri Lanka
+      - LK
+      - Sudan
+      - SD
+      - Suriname
+      - SR
+      - Svalbard & Jan Mayen
+      - SJ
+      - Sweden
+      - SE
+      - Switzerland
+      - CH
+      - Syria
+      - SY
+      - Taiwan
+      - TW
+      - Tajikistan
+      - TJ
+      - Tanzania
+      - TZ
+      - Thailand
+      - TH
+      - Timor-Leste
+      - TL
+      - Togo
+      - TG
+      - Tokelau
+      - TK
+      - Tonga
+      - TO
+      - Trinidad & Tobago
+      - TT
+      - Tunisia
+      - TN
+      - Turkmenistan
+      - TM
+      - Turks & Caicos Islands
+      - TC
+      - Tuvalu
+      - TV
+      - Turkey
+      - TR
+      - Uganda
+      - UG
+      - Ukraine
+      - UA
+      - United Arab Emirates
+      - AE
+      - United Kingdom
+      - UK
+      - GB
+      - U.S. Outlying Islands
+      - UM
+      - United States
+      - USA
+      - US
+      - Uruguay
+      - UY
+      - Uzbekistan
+      - UZ
+      - Vanuatu
+      - VU
+      - Venezuela
+      - VE
+      - Vietnam
+      - VN
+      - British Virgin Islands
+      - VG
+      - U.S. Virgin Islands
+      - VI
+      - Wallis & Futuna
+      - WF
+      - Western Sahara
+      - EH
+      - Yemen
+      - YE
+      - Zambia
+      - ZM
+      - Zimbabwe
+      - ZW
+      - Åland Islands
+      - AX
+
+  - synonym: AF
+    examples: |
+      - Afghanistan
+      - AF
+
+  - synonym: AL
+    examples: |
+      - Albania
+      - AL
+
+  - synonym: DZ
+    examples: |
+      - Algeria
+      - DZ
+
+  - synonym: AS
+    examples: |
+      - American Samoa
+      - AS
+
+  - synonym: AD
+    examples: |
+      - Andorra
+      - AD
+
+  - synonym: AO
+    examples: |
+      - Angola
+      - AO
+
+  - synonym: AI
+    examples: |
+      - Anguilla
+      - AI
+
+  - synonym: AQ
+    examples: |
+      - Antarctica
+      - AQ
+
+  - synonym: AG
+    examples: |
+      - Antigua & Barbuda
+      - AG
+
+  - synonym: AR
+    examples: |
+      - Argentina
+      - AR
+
+  - synonym: AM
+    examples: |
+      - Armenia
+      - AM
+
+  - synonym: AW
+    examples: |
+      - Aruba
+      - AW
+
+  - synonym: AU
+    examples: |
+      - Australia
+      - AU
+
+  - synonym: AT
+    examples: |
+      - Austria
+      - AT
+
+  - synonym: AZ
+    examples: |
+      - Azerbaijan
+      - AZ
+
+  - synonym: BS
+    examples: |
+      - Bahamas
+      - BS
+
+  - synonym: BH
+    examples: |
+      - Bahrain
+      - BH
+
+  - synonym: BD
+    examples: |
+      - Bangladesh
+      - BD
+
+  - synonym: BB
+    examples: |
+      - Barbados
+      - BB
+
+  - synonym: BY
+    examples: |
+      - Belarus
+      - BY
+
+  - synonym: BE
+    examples: |
+      - Belgium
+      - BE
+
+  - synonym: BZ
+    examples: |
+      - Belize
+      - BZ
+
+  - synonym: BJ
+    examples: |
+      - Benin
+      - BJ
+
+  - synonym: BM
+    examples: |
+      - Bermuda
+      - BM
+
+  - synonym: BT
+    examples: |
+      - Bhutan
+      - BT
+
+  - synonym: BO
+    examples: |
+      - Bolivia
+      - BO
+
+  - synonym: BQ
+    examples: |
+      - Caribbean Netherlands
+      - BQ
+
+  - synonym: BA
+    examples: |
+      - Bosnia & Herzegovina
+      - BA
+
+  - synonym: BW
+    examples: |
+      - Botswana
+      - BW
+
+  - synonym: BV
+    examples: |
+      - Bouvet Island
+      - BV
+
+  - synonym: BR
+    examples: |
+      - Brazil
+      - BR
+
+  - synonym: IO
+    examples: |
+      - British Indian Ocean Territory
+      - IO
+
+  - synonym: BN
+    examples: |
+      - Brunei
+      - BN
+
+  - synonym: BG
+    examples: |
+      - Bulgaria
+      - BG
+
+  - synonym: BF
+    examples: |
+      - Burkina Faso
+      - BF
+
+  - synonym: BI
+    examples: |
+      - Burundi
+      - BI
+
+  - synonym: CV
+    examples: |
+      - Cape Verde
+      - CV
+
+  - synonym: KH
+    examples: |
+      - Cambodia
+      - KH
+
+  - synonym: CM
+    examples: |
+      - Cameroon
+      - CM
+
+  - synonym: CA
+    examples: |
+      - Canada
+      - CA
+
+  - synonym: KY
+    examples: |
+      - Cayman Islands
+      - KY
+
+  - synonym: CF
+    examples: |
+      - Central African Republic
+      - CF
+
+  - synonym: TD
+    examples: |
+      - Chad
+      - TD
+
+  - synonym: CL
+    examples: |
+      - Chile
+      - CL
+
+  - synonym: CN
+    examples: |
+      - China
+      - CN
+
+  - synonym: CX
+    examples: |
+      - Christmas Island
+      - CX
+
+  - synonym: CC
+    examples: |
+      - Cocos (Keeling) Islands
+      - CC
+
+  - synonym: CO
+    examples: |
+      - Colombia
+      - CO
+
+  - synonym: KM
+    examples: |
+      - Comoros
+      - KM
+
+  - synonym: CD
+    examples: |
+      - Congo - Kinshasa
+      - CD
+
+  - synonym: CG
+    examples: |
+      - Congo - Brazzaville
+      - CG
+
+  - synonym: CK
+    examples: |
+      - Cook Islands
+      - CK
+
+  - synonym: CR
+    examples: |
+      - Costa Rica
+      - CR
+
+  - synonym: HR
+    examples: |
+      - Croatia
+      - HR
+
+  - synonym: CU
+    examples: |
+      - Cuba
+      - CU
+
+  - synonym: CW
+    examples: |
+      - Curaçao
+      - CW
+
+  - synonym: CY
+    examples: |
+      - Cyprus
+      - CY
+
+  - synonym: CZ
+    examples: |
+      - Czechia
+      - CZ
+
+  - synonym: CI
+    examples: |
+      - Côte d’Ivoire
+      - CI
+
+  - synonym: DK
+    examples: |
+      - Denmark
+      - DK
+
+  - synonym: DJ
+    examples: |
+      - Djibouti
+      - DJ
+
+  - synonym: DM
+    examples: |
+      - Dominica
+      - DM
+
+  - synonym: DO
+    examples: |
+      - Dominican Republic
+      - DO
+
+  - synonym: EC
+    examples: |
+      - Ecuador
+      - EC
+
+  - synonym: EG
+    examples: |
+      - Egypt
+      - EG
+
+  - synonym: SV
+    examples: |
+      - El Salvador
+      - SV
+
+  - synonym: GQ
+    examples: |
+      - Equatorial Guinea
+      - GQ
+
+  - synonym: ER
+    examples: |
+      - Eritrea
+      - ER
+
+  - synonym: EE
+    examples: |
+      - Estonia
+      - EE
+
+  - synonym: SZ
+    examples: |
+      - Eswatini
+      - SZ
+
+  - synonym: ET
+    examples: |
+      - Ethiopia
+      - ET
+
+  - synonym: FK
+    examples: |
+      - Falkland Islands
+      - FK
+
+  - synonym: FO
+    examples: |
+      - Faroe Islands
+      - FO
+
+  - synonym: FJ
+    examples: |
+      - Fiji
+      - FJ
+
+  - synonym: FI
+    examples: |
+      - Finland
+      - FI
+
+  - synonym: FR
+    examples: |
+      - France
+      - FR
+
+  - synonym: GF
+    examples: |
+      - French Guiana
+      - GF
+
+  - synonym: PF
+    examples: |
+      - French Polynesia
+      - PF
+
+  - synonym: TF
+    examples: |
+      - French Southern Territories
+      - TF
+
+  - synonym: GA
+    examples: |
+      - Gabon
+      - GA
+
+  - synonym: GM
+    examples: |
+      - Gambia
+      - GM
+
+  - synonym: GE
+    examples: |
+      - Georgia
+      - GE
+
+  - synonym: DE
+    examples: |
+      - Germany
+      - DE
+
+  - synonym: GH
+    examples: |
+      - Ghana
+      - GH
+
+  - synonym: GI
+    examples: |
+      - Gibraltar
+      - GI
+
+  - synonym: GR
+    examples: |
+      - Greece
+      - GR
+
+  - synonym: GL
+    examples: |
+      - Greenland
+      - GL
+
+  - synonym: GD
+    examples: |
+      - Grenada
+      - GD
+
+  - synonym: GP
+    examples: |
+      - Guadeloupe
+      - GP
+
+  - synonym: GU
+    examples: |
+      - Guam
+      - GU
+
+  - synonym: GT
+    examples: |
+      - Guatemala
+      - GT
+
+  - synonym: GG
+    examples: |
+      - Guernsey
+      - GG
+
+  - synonym: GN
+    examples: |
+      - Guinea
+      - GN
+
+  - synonym: GW
+    examples: |
+      - Guinea-Bissau
+      - GW
+
+  - synonym: GY
+    examples: |
+      - Guyana
+      - GY
+
+  - synonym: HT
+    examples: |
+      - Haiti
+      - HT
+
+  - synonym: HM
+    examples: |
+      - Heard & McDonald Islands
+      - HM
+
+  - synonym: VA
+    examples: |
+      - Vatican City
+      - VA
+
+  - synonym: HN
+    examples: |
+      - Honduras
+      - HN
+
+  - synonym: HK
+    examples: |
+      - Hong Kong SAR China
+      - HK
+
+  - synonym: HU
+    examples: |
+      - Hungary
+      - HU
+
+  - synonym: IS
+    examples: |
+      - Iceland
+      - IS
+
+  - synonym: IN
+    examples: |
+      - India
+      - IN
+
+  - synonym: ID
+    examples: |
+      - Indonesia
+      - ID
+
+  - synonym: IR
+    examples: |
+      - Iran
+      - IR
+
+  - synonym: IQ
+    examples: |
+      - Iraq
+      - IQ
+
+  - synonym: IE
+    examples: |
+      - Ireland
+      - IE
+
+  - synonym: IM
+    examples: |
+      - Isle of Man
+      - IM
+
+  - synonym: IL
+    examples: |
+      - Israel
+      - IL
+
+  - synonym: IT
+    examples: |
+      - Italy
+      - IT
+
+  - synonym: JM
+    examples: |
+      - Jamaica
+      - JM
+
+  - synonym: JP
+    examples: |
+      - Japan
+      - JP
+
+  - synonym: JE
+    examples: |
+      - Jersey
+      - JE
+
+  - synonym: JO
+    examples: |
+      - Jordan
+      - JO
+
+  - synonym: KZ
+    examples: |
+      - Kazakhstan
+      - KZ
+
+  - synonym: KE
+    examples: |
+      - Kenya
+      - KE
+
+  - synonym: KI
+    examples: |
+      - Kiribati
+      - KI
+
+  - synonym: KP
+    examples: |
+      - North Korea
+      - KP
+
+  - synonym: KR
+    examples: |
+      - South Korea
+      - KR
+
+  - synonym: KW
+    examples: |
+      - Kuwait
+      - KW
+
+  - synonym: KG
+    examples: |
+      - Kyrgyzstan
+      - KG
+
+  - synonym: LA
+    examples: |
+      - Laos
+      - LA
+
+  - synonym: LV
+    examples: |
+      - Latvia
+      - LV
+
+  - synonym: LB
+    examples: |
+      - Lebanon
+      - LB
+
+  - synonym: LS
+    examples: |
+      - Lesotho
+      - LS
+
+  - synonym: LR
+    examples: |
+      - Liberia
+      - LR
+
+  - synonym: LY
+    examples: |
+      - Libya
+      - LY
+
+  - synonym: LI
+    examples: |
+      - Liechtenstein
+      - LI
+
+  - synonym: LT
+    examples: |
+      - Lithuania
+      - LT
+
+  - synonym: LU
+    examples: |
+      - Luxembourg
+      - LU
+
+  - synonym: MO
+    examples: |
+      - Macao SAR China
+      - MO
+
+  - synonym: MG
+    examples: |
+      - Madagascar
+      - MG
+
+  - synonym: MW
+    examples: |
+      - Malawi
+      - MW
+
+  - synonym: MY
+    examples: |
+      - Malaysia
+      - MY
+
+  - synonym: MV
+    examples: |
+      - Maldives
+      - MV
+
+  - synonym: ML
+    examples: |
+      - Mali
+      - ML
+
+  - synonym: MT
+    examples: |
+      - Malta
+      - MT
+
+  - synonym: MH
+    examples: |
+      - Marshall Islands
+      - MH
+
+  - synonym: MQ
+    examples: |
+      - Martinique
+      - MQ
+
+  - synonym: MR
+    examples: |
+      - Mauritania
+      - MR
+
+  - synonym: MU
+    examples: |
+      - Mauritius
+      - MU
+
+  - synonym: YT
+    examples: |
+      - Mayotte
+      - YT
+
+  - synonym: MX
+    examples: |
+      - Mexico
+      - México
+      - MX
+
+  - synonym: FM
+    examples: |
+      - Micronesia
+      - FM
+
+  - synonym: MD
+    examples: |
+      - Moldova
+      - MD
+
+  - synonym: MC
+    examples: |
+      - Monaco
+      - MC
+
+  - synonym: MN
+    examples: |
+      - Mongolia
+      - MN
+
+  - synonym: ME
+    examples: |
+      - Montenegro
+      - ME
+
+  - synonym: MS
+    examples: |
+      - Montserrat
+      - MS
+
+  - synonym: MA
+    examples: |
+      - Morocco
+      - MA
+
+  - synonym: MZ
+    examples: |
+      - Mozambique
+      - MZ
+
+  - synonym: MM
+    examples: |
+      - Myanmar (Burma)
+      - MM
+
+  - synonym: NA
+    examples: |
+      - Namibia
+      - NA
+
+  - synonym: NR
+    examples: |
+      - Nauru
+      - NR
+
+  - synonym: NP
+    examples: |
+      - Nepal
+      - NP
+
+  - synonym: NL
+    examples: |
+      - Netherlands
+      - NL
+
+  - synonym: NC
+    examples: |
+      - New Caledonia
+      - NC
+
+  - synonym: NZ
+    examples: |
+      - New Zealand
+      - NZ
+
+  - synonym: NI
+    examples: |
+      - Nicaragua
+      - NI
+
+  - synonym: NE
+    examples: |
+      - Niger
+      - NE
+
+  - synonym: NG
+    examples: |
+      - Nigeria
+      - NG
+
+  - synonym: NU
+    examples: |
+      - Niue
+      - NU
+
+  - synonym: NF
+    examples: |
+      - Norfolk Island
+      - NF
+
+  - synonym: MK
+    examples: |
+      - North Macedonia
+      - MK
+
+  - synonym: MP
+    examples: |
+      - Northern Mariana Islands
+      - MP
+
+  - synonym: NO
+    examples: |
+      - Norway
+      - NO
+
+  - synonym: OM
+    examples: |
+      - Oman
+      - OM
+
+  - synonym: PK
+    examples: |
+      - Pakistan
+      - PK
+
+  - synonym: PW
+    examples: |
+      - Palau
+      - PW
+
+  - synonym: PS
+    examples: |
+      - Palestinian Territories
+      - PS
+
+  - synonym: PA
+    examples: |
+      - Panama
+      - PA
+
+  - synonym: PG
+    examples: |
+      - Papua New Guinea
+      - PG
+
+  - synonym: PY
+    examples: |
+      - Paraguay
+      - PY
+
+  - synonym: PE
+    examples: |
+      - Peru
+      - PE
+
+  - synonym: PH
+    examples: |
+      - Philippines
+      - PH
+
+  - synonym: PN
+    examples: |
+      - Pitcairn Islands
+      - PN
+
+  - synonym: PL
+    examples: |
+      - Poland
+      - PL
+
+  - synonym: PT
+    examples: |
+      - Portugal
+      - PT
+
+  - synonym: PR
+    examples: |
+      - Puerto Rico
+      - PR
+
+  - synonym: QA
+    examples: |
+      - Qatar
+      - QA
+
+  - synonym: RO
+    examples: |
+      - Romania
+      - RO
+
+  - synonym: RU
+    examples: |
+      - Russia
+      - RU
+
+  - synonym: RW
+    examples: |
+      - Rwanda
+      - RW
+
+  - synonym: RE
+    examples: |
+      - Réunion
+      - RE
+
+  - synonym: BL
+    examples: |
+      - St. Barthélemy
+      - BL
+
+  - synonym: SH
+    examples: |
+      - St. Helena
+      - SH
+
+  - synonym: KN
+    examples: |
+      - St. Kitts & Nevis
+      - KN
+
+  - synonym: LC
+    examples: |
+      - St. Lucia
+      - LC
+
+  - synonym: MF
+    examples: |
+      - St. Martin
+      - MF
+
+  - synonym: PM
+    examples: |
+      - St. Pierre & Miquelon
+      - PM
+
+  - synonym: VC
+    examples: |
+      - St. Vincent & Grenadines
+      - VC
+
+  - synonym: WS
+    examples: |
+      - Samoa
+      - WS
+
+  - synonym: SM
+    examples: |
+      - San Marino
+      - SM
+
+  - synonym: ST
+    examples: |
+      - São Tomé & Príncipe
+      - ST
+
+  - synonym: SA
+    examples: |
+      - Saudi Arabia
+      - SA
+
+  - synonym: SN
+    examples: |
+      - Senegal
+      - SN
+
+  - synonym: RS
+    examples: |
+      - Serbia
+      - RS
+
+  - synonym: SC
+    examples: |
+      - Seychelles
+      - SC
+
+  - synonym: SL
+    examples: |
+      - Sierra Leone
+      - SL
+
+  - synonym: SG
+    examples: |
+      - Singapore
+      - SG
+
+  - synonym: SX
+    examples: |
+      - Sint Maarten
+      - SX
+
+  - synonym: SK
+    examples: |
+      - Slovakia
+      - SK
+
+  - synonym: SI
+    examples: |
+      - Slovenia
+      - SI
+
+  - synonym: SB
+    examples: |
+      - Solomon Islands
+      - SB
+
+  - synonym: SO
+    examples: |
+      - Somalia
+      - SO
+
+  - synonym: ZA
+    examples: |
+      - South Africa
+      - ZA
+
+  - synonym: GS
+    examples: |
+      - South Georgia & South Sandwich Islands
+      - GS
+
+  - synonym: SS
+    examples: |
+      - South Sudan
+      - SS
+
+  - synonym: ES
+    examples: |
+      - Spain
+      - Espana
+      - España
+      - ES
+
+  - synonym: LK
+    examples: |
+      - Sri Lanka
+      - LK
+
+  - synonym: SD
+    examples: |
+      - Sudan
+      - SD
+
+  - synonym: SR
+    examples: |
+      - Suriname
+      - SR
+
+  - synonym: SJ
+    examples: |
+      - Svalbard & Jan Mayen
+      - SJ
+
+  - synonym: SE
+    examples: |
+      - Sweden
+      - SE
+
+  - synonym: CH
+    examples: |
+      - Switzerland
+      - CH
+
+  - synonym: SY
+    examples: |
+      - Syria
+      - SY
+
+  - synonym: TW
+    examples: |
+      - Taiwan
+      - TW
+
+  - synonym: TJ
+    examples: |
+      - Tajikistan
+      - TJ
+
+  - synonym: TZ
+    examples: |
+      - Tanzania
+      - TZ
+
+  - synonym: TH
+    examples: |
+      - Thailand
+      - TH
+
+  - synonym: TL
+    examples: |
+      - Timor-Leste
+      - TL
+
+  - synonym: TG
+    examples: |
+      - Togo
+      - TG
+
+  - synonym: TK
+    examples: |
+      - Tokelau
+      - TK
+
+  - synonym: TO
+    examples: |
+      - Tonga
+      - TO
+
+  - synonym: TT
+    examples: |
+      - Trinidad & Tobago
+      - TT
+
+  - synonym: TN
+    examples: |
+      - Tunisia
+      - TN
+
+  - synonym: TM
+    examples: |
+      - Turkmenistan
+      - TM
+
+  - synonym: TC
+    examples: |
+      - Turks & Caicos Islands
+      - TC
+
+  - synonym: TV
+    examples: |
+      - Tuvalu
+      - TV
+
+  - synonym: TR
+    examples: |
+      - Turkey
+      - TR
+
+  - synonym: UG
+    examples: |
+      - Uganda
+      - UG
+
+  - synonym: UA
+    examples: |
+      - Ukraine
+      - UA
+
+  - synonym: AE
+    examples: |
+      - United Arab Emirates
+      - AE
+
+  - synonym: GB
+    examples: |
+      - United Kingdom
+      - UK
+      - GB
+
+  - synonym: UM
+    examples: |
+      - U.S. Outlying Islands
+      - UM
+
+  - synonym: US
+    examples: |
+      - United States
+      - USA
+      - US
+
+  - synonym: UY
+    examples: |
+      - Uruguay
+      - UY
+
+  - synonym: UZ
+    examples: |
+      - Uzbekistan
+      - UZ
+
+  - synonym: VU
+    examples: |
+      - Vanuatu
+      - VU
+
+  - synonym: VE
+    examples: |
+      - Venezuela
+      - VE
+
+  - synonym: VN
+    examples: |
+      - Vietnam
+      - VN
+
+  - synonym: VG
+    examples: |
+      - British Virgin Islands
+      - VG
+
+  - synonym: VI
+    examples: |
+      - U.S. Virgin Islands
+      - VI
+
+  - synonym: WF
+    examples: |
+      - Wallis & Futuna
+      - WF
+
+  - synonym: EH
+    examples: |
+      - Western Sahara
+      - EH
+
+  - synonym: YE
+    examples: |
+      - Yemen
+      - YE
+
+  - synonym: ZM
+    examples: |
+      - Zambia
+      - ZM
+
+  - synonym: ZW
+    examples: |
+      - Zimbabwe
+      - ZW
+
+  - synonym: AX
+    examples: |
+      - Åland Islands
+      - AX

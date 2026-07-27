@@ -1,0 +1,1754 @@
+version: "3.1"
+
+nlu:
+  - lookup: country_code
+    examples: |
+      - Afghánistán
+      - AF
+      - Albánie
+      - AL
+      - Alžírsko
+      - DZ
+      - Americká Samoa
+      - AS
+      - Andorra
+      - AD
+      - Angola
+      - AO
+      - Anguilla
+      - AI
+      - Antarktida
+      - AQ
+      - Antigua a Barbuda
+      - AG
+      - Argentina
+      - AR
+      - Arménie
+      - AM
+      - Aruba
+      - AW
+      - Austrálie
+      - AU
+      - Rakousko
+      - AT
+      - Ázerbájdžán
+      - AZ
+      - Bahamy
+      - BS
+      - Bahrajn
+      - BH
+      - Bangladéš
+      - BD
+      - Barbados
+      - BB
+      - Bělorusko
+      - BY
+      - Belgie
+      - BE
+      - Belize
+      - BZ
+      - Benin
+      - BJ
+      - Bermudy
+      - BM
+      - Bhútán
+      - BT
+      - Bolívie
+      - BO
+      - Karibské Nizozemsko
+      - BQ
+      - Bosna a Hercegovina
+      - BA
+      - Botswana
+      - BW
+      - Bouvetův ostrov
+      - BV
+      - Brazílie
+      - BR
+      - Britské indickooceánské území
+      - IO
+      - Brunej
+      - BN
+      - Bulharsko
+      - BG
+      - Burkina Faso
+      - BF
+      - Burundi
+      - BI
+      - Kapverdy
+      - CV
+      - Kambodža
+      - KH
+      - Kamerun
+      - CM
+      - Kanada
+      - CA
+      - Kajmanské ostrovy
+      - KY
+      - Středoafrická republika
+      - CF
+      - Čad
+      - TD
+      - Chile
+      - CL
+      - Čína
+      - CN
+      - Vánoční ostrov
+      - CX
+      - Kokosové ostrovy
+      - CC
+      - Kolumbie
+      - CO
+      - Komory
+      - KM
+      - Kongo – Kinshasa
+      - CD
+      - Kongo – Brazzaville
+      - CG
+      - Cookovy ostrovy
+      - CK
+      - Kostarika
+      - CR
+      - Chorvatsko
+      - HR
+      - Kuba
+      - CU
+      - Curaçao
+      - CW
+      - Kypr
+      - CY
+      - Česko
+      - CZ
+      - Pobřeží slonoviny
+      - CI
+      - Dánsko
+      - DK
+      - Džibutsko
+      - DJ
+      - Dominika
+      - DM
+      - Dominikánská republika
+      - DO
+      - Ekvádor
+      - EC
+      - Egypt
+      - EG
+      - Salvador
+      - SV
+      - Rovníková Guinea
+      - GQ
+      - Eritrea
+      - ER
+      - Estonsko
+      - EE
+      - Svazijsko
+      - SZ
+      - Etiopie
+      - ET
+      - Falklandské ostrovy
+      - FK
+      - Faerské ostrovy
+      - FO
+      - Fidži
+      - FJ
+      - Finsko
+      - FI
+      - Francie
+      - FR
+      - Francouzská Guyana
+      - GF
+      - Francouzská Polynésie
+      - PF
+      - Francouzská jižní území
+      - TF
+      - Gabon
+      - GA
+      - Gambie
+      - GM
+      - Gruzie
+      - GE
+      - Německo
+      - DE
+      - Ghana
+      - GH
+      - Gibraltar
+      - GI
+      - Řecko
+      - GR
+      - Grónsko
+      - GL
+      - Grenada
+      - GD
+      - Guadeloupe
+      - GP
+      - Guam
+      - GU
+      - Guatemala
+      - GT
+      - Guernsey
+      - GG
+      - Guinea
+      - GN
+      - Guinea-Bissau
+      - GW
+      - Guyana
+      - GY
+      - Haiti
+      - HT
+      - Heardův ostrov a McDonaldovy ostrovy
+      - HM
+      - Vatikán
+      - VA
+      - Honduras
+      - HN
+      - Hongkong – ZAO Číny
+      - HK
+      - Maďarsko
+      - HU
+      - Island
+      - IS
+      - Indie
+      - IN
+      - Indonésie
+      - ID
+      - Írán
+      - IR
+      - Irák
+      - IQ
+      - Irsko
+      - IE
+      - Ostrov Man
+      - IM
+      - Izrael
+      - IL
+      - Itálie
+      - IT
+      - Jamajka
+      - JM
+      - Japonsko
+      - JP
+      - Jersey
+      - JE
+      - Jordánsko
+      - JO
+      - Kazachstán
+      - KZ
+      - Keňa
+      - KE
+      - Kiribati
+      - KI
+      - Severní Korea
+      - KP
+      - Jižní Korea
+      - KR
+      - Kuvajt
+      - KW
+      - Kyrgyzstán
+      - KG
+      - Laos
+      - LA
+      - Lotyšsko
+      - LV
+      - Libanon
+      - LB
+      - Lesotho
+      - LS
+      - Libérie
+      - LR
+      - Libye
+      - LY
+      - Lichtenštejnsko
+      - LI
+      - Litva
+      - LT
+      - Lucembursko
+      - LU
+      - Macao – ZAO Číny
+      - MO
+      - Madagaskar
+      - MG
+      - Malawi
+      - MW
+      - Malajsie
+      - MY
+      - Maledivy
+      - MV
+      - Mali
+      - ML
+      - Malta
+      - MT
+      - Marshallovy ostrovy
+      - MH
+      - Martinik
+      - MQ
+      - Mauritánie
+      - MR
+      - Mauricius
+      - MU
+      - Mayotte
+      - YT
+      - Mexiko
+      - MX
+      - Mikronésie
+      - FM
+      - Moldavsko
+      - MD
+      - Monako
+      - MC
+      - Mongolsko
+      - MN
+      - Černá Hora
+      - ME
+      - Montserrat
+      - MS
+      - Maroko
+      - MA
+      - Mosambik
+      - MZ
+      - Myanmar (Barma)
+      - MM
+      - Namibie
+      - NA
+      - Nauru
+      - NR
+      - Nepál
+      - NP
+      - Nizozemsko
+      - NL
+      - Nová Kaledonie
+      - NC
+      - Nový Zéland
+      - NZ
+      - Nikaragua
+      - NI
+      - Niger
+      - NE
+      - Nigérie
+      - NG
+      - Niue
+      - NU
+      - Norfolk
+      - NF
+      - Severní Makedonie
+      - MK
+      - Severní Mariany
+      - MP
+      - Norsko
+      - NO
+      - Omán
+      - OM
+      - Pákistán
+      - PK
+      - Palau
+      - PW
+      - Palestinská území
+      - PS
+      - Panama
+      - PA
+      - Papua-Nová Guinea
+      - PG
+      - Paraguay
+      - PY
+      - Peru
+      - PE
+      - Filipíny
+      - PH
+      - Pitcairnovy ostrovy
+      - PN
+      - Polsko
+      - PL
+      - Portugalsko
+      - PT
+      - Portoriko
+      - PR
+      - Katar
+      - QA
+      - Rumunsko
+      - RO
+      - Rusko
+      - RU
+      - Rwanda
+      - RW
+      - Réunion
+      - RE
+      - Svatý Bartoloměj
+      - BL
+      - Svatá Helena
+      - SH
+      - Svatý Kryštof a Nevis
+      - KN
+      - Svatá Lucie
+      - LC
+      - Svatý Martin (Francie)
+      - MF
+      - Saint-Pierre a Miquelon
+      - PM
+      - Svatý Vincenc a Grenadiny
+      - VC
+      - Samoa
+      - WS
+      - San Marino
+      - SM
+      - Svatý Tomáš a Princův ostrov
+      - ST
+      - Saúdská Arábie
+      - SA
+      - Senegal
+      - SN
+      - Srbsko
+      - RS
+      - Seychely
+      - SC
+      - Sierra Leone
+      - SL
+      - Singapur
+      - SG
+      - Svatý Martin (Nizozemsko)
+      - SX
+      - Slovensko
+      - SK
+      - Slovinsko
+      - SI
+      - Šalamounovy ostrovy
+      - SB
+      - Somálsko
+      - SO
+      - Jihoafrická republika
+      - ZA
+      - Jižní Georgie a Jižní Sandwichovy ostrovy
+      - GS
+      - Jižní Súdán
+      - SS
+      - Španělsko
+      - ES
+      - Srí Lanka
+      - LK
+      - Súdán
+      - SD
+      - Surinam
+      - SR
+      - Špicberky a Jan Mayen
+      - SJ
+      - Švédsko
+      - SE
+      - Švýcarsko
+      - CH
+      - Sýrie
+      - SY
+      - Tchaj-wan
+      - TW
+      - Tádžikistán
+      - TJ
+      - Tanzanie
+      - TZ
+      - Thajsko
+      - TH
+      - Východní Timor
+      - TL
+      - Togo
+      - TG
+      - Tokelau
+      - TK
+      - Tonga
+      - TO
+      - Trinidad a Tobago
+      - TT
+      - Tunisko
+      - TN
+      - Turkmenistán
+      - TM
+      - Turks a Caicos
+      - TC
+      - Tuvalu
+      - TV
+      - Turecko
+      - TR
+      - Uganda
+      - UG
+      - Ukrajina
+      - UA
+      - Spojené arabské emiráty
+      - AE
+      - Spojené království
+      - Velká Británie
+      - UK
+      - GB
+      - Menší odlehlé ostrovy USA
+      - UM
+      - Spojené státy
+      - USA
+      - US
+      - Uruguay
+      - UY
+      - Uzbekistán
+      - UZ
+      - Vanuatu
+      - VU
+      - Venezuela
+      - VE
+      - Vietnam
+      - VN
+      - Britské Panenské ostrovy
+      - VG
+      - Americké Panenské ostrovy
+      - VI
+      - Wallis a Futuna
+      - WF
+      - Západní Sahara
+      - EH
+      - Jemen
+      - YE
+      - Zambie
+      - ZM
+      - Zimbabwe
+      - ZW
+      - Ålandy
+      - AX
+
+  - synonym: AF
+    examples: |
+      - Afghánistán
+      - AF
+
+  - synonym: AL
+    examples: |
+      - Albánie
+      - AL
+
+  - synonym: DZ
+    examples: |
+      - Alžírsko
+      - DZ
+
+  - synonym: AS
+    examples: |
+      - Americká Samoa
+      - AS
+
+  - synonym: AD
+    examples: |
+      - Andorra
+      - AD
+
+  - synonym: AO
+    examples: |
+      - Angola
+      - AO
+
+  - synonym: AI
+    examples: |
+      - Anguilla
+      - AI
+
+  - synonym: AQ
+    examples: |
+      - Antarktida
+      - AQ
+
+  - synonym: AG
+    examples: |
+      - Antigua a Barbuda
+      - AG
+
+  - synonym: AR
+    examples: |
+      - Argentina
+      - AR
+
+  - synonym: AM
+    examples: |
+      - Arménie
+      - AM
+
+  - synonym: AW
+    examples: |
+      - Aruba
+      - AW
+
+  - synonym: AU
+    examples: |
+      - Austrálie
+      - AU
+
+  - synonym: AT
+    examples: |
+      - Rakousko
+      - AT
+
+  - synonym: AZ
+    examples: |
+      - Ázerbájdžán
+      - AZ
+
+  - synonym: BS
+    examples: |
+      - Bahamy
+      - BS
+
+  - synonym: BH
+    examples: |
+      - Bahrajn
+      - BH
+
+  - synonym: BD
+    examples: |
+      - Bangladéš
+      - BD
+
+  - synonym: BB
+    examples: |
+      - Barbados
+      - BB
+
+  - synonym: BY
+    examples: |
+      - Bělorusko
+      - BY
+
+  - synonym: BE
+    examples: |
+      - Belgie
+      - BE
+
+  - synonym: BZ
+    examples: |
+      - Belize
+      - BZ
+
+  - synonym: BJ
+    examples: |
+      - Benin
+      - BJ
+
+  - synonym: BM
+    examples: |
+      - Bermudy
+      - BM
+
+  - synonym: BT
+    examples: |
+      - Bhútán
+      - BT
+
+  - synonym: BO
+    examples: |
+      - Bolívie
+      - BO
+
+  - synonym: BQ
+    examples: |
+      - Karibské Nizozemsko
+      - BQ
+
+  - synonym: BA
+    examples: |
+      - Bosna a Hercegovina
+      - BA
+
+  - synonym: BW
+    examples: |
+      - Botswana
+      - BW
+
+  - synonym: BV
+    examples: |
+      - Bouvetův ostrov
+      - BV
+
+  - synonym: BR
+    examples: |
+      - Brazílie
+      - BR
+
+  - synonym: IO
+    examples: |
+      - Britské indickooceánské území
+      - IO
+
+  - synonym: BN
+    examples: |
+      - Brunej
+      - BN
+
+  - synonym: BG
+    examples: |
+      - Bulharsko
+      - BG
+
+  - synonym: BF
+    examples: |
+      - Burkina Faso
+      - BF
+
+  - synonym: BI
+    examples: |
+      - Burundi
+      - BI
+
+  - synonym: CV
+    examples: |
+      - Kapverdy
+      - CV
+
+  - synonym: KH
+    examples: |
+      - Kambodža
+      - KH
+
+  - synonym: CM
+    examples: |
+      - Kamerun
+      - CM
+
+  - synonym: CA
+    examples: |
+      - Kanada
+      - CA
+
+  - synonym: KY
+    examples: |
+      - Kajmanské ostrovy
+      - KY
+
+  - synonym: CF
+    examples: |
+      - Středoafrická republika
+      - CF
+
+  - synonym: TD
+    examples: |
+      - Čad
+      - TD
+
+  - synonym: CL
+    examples: |
+      - Chile
+      - CL
+
+  - synonym: CN
+    examples: |
+      - Čína
+      - CN
+
+  - synonym: CX
+    examples: |
+      - Vánoční ostrov
+      - CX
+
+  - synonym: CC
+    examples: |
+      - Kokosové ostrovy
+      - CC
+
+  - synonym: CO
+    examples: |
+      - Kolumbie
+      - CO
+
+  - synonym: KM
+    examples: |
+      - Komory
+      - KM
+
+  - synonym: CD
+    examples: |
+      - Kongo – Kinshasa
+      - CD
+
+  - synonym: CG
+    examples: |
+      - Kongo – Brazzaville
+      - CG
+
+  - synonym: CK
+    examples: |
+      - Cookovy ostrovy
+      - CK
+
+  - synonym: CR
+    examples: |
+      - Kostarika
+      - CR
+
+  - synonym: HR
+    examples: |
+      - Chorvatsko
+      - HR
+
+  - synonym: CU
+    examples: |
+      - Kuba
+      - CU
+
+  - synonym: CW
+    examples: |
+      - Curaçao
+      - CW
+
+  - synonym: CY
+    examples: |
+      - Kypr
+      - CY
+
+  - synonym: CZ
+    examples: |
+      - Česko
+      - CZ
+
+  - synonym: CI
+    examples: |
+      - Pobřeží slonoviny
+      - CI
+
+  - synonym: DK
+    examples: |
+      - Dánsko
+      - DK
+
+  - synonym: DJ
+    examples: |
+      - Džibutsko
+      - DJ
+
+  - synonym: DM
+    examples: |
+      - Dominika
+      - DM
+
+  - synonym: DO
+    examples: |
+      - Dominikánská republika
+      - DO
+
+  - synonym: EC
+    examples: |
+      - Ekvádor
+      - EC
+
+  - synonym: EG
+    examples: |
+      - Egypt
+      - EG
+
+  - synonym: SV
+    examples: |
+      - Salvador
+      - SV
+
+  - synonym: GQ
+    examples: |
+      - Rovníková Guinea
+      - GQ
+
+  - synonym: ER
+    examples: |
+      - Eritrea
+      - ER
+
+  - synonym: EE
+    examples: |
+      - Estonsko
+      - EE
+
+  - synonym: SZ
+    examples: |
+      - Svazijsko
+      - SZ
+
+  - synonym: ET
+    examples: |
+      - Etiopie
+      - ET
+
+  - synonym: FK
+    examples: |
+      - Falklandské ostrovy
+      - FK
+
+  - synonym: FO
+    examples: |
+      - Faerské ostrovy
+      - FO
+
+  - synonym: FJ
+    examples: |
+      - Fidži
+      - FJ
+
+  - synonym: FI
+    examples: |
+      - Finsko
+      - FI
+
+  - synonym: FR
+    examples: |
+      - Francie
+      - FR
+
+  - synonym: GF
+    examples: |
+      - Francouzská Guyana
+      - GF
+
+  - synonym: PF
+    examples: |
+      - Francouzská Polynésie
+      - PF
+
+  - synonym: TF
+    examples: |
+      - Francouzská jižní území
+      - TF
+
+  - synonym: GA
+    examples: |
+      - Gabon
+      - GA
+
+  - synonym: GM
+    examples: |
+      - Gambie
+      - GM
+
+  - synonym: GE
+    examples: |
+      - Gruzie
+      - GE
+
+  - synonym: DE
+    examples: |
+      - Německo
+      - DE
+
+  - synonym: GH
+    examples: |
+      - Ghana
+      - GH
+
+  - synonym: GI
+    examples: |
+      - Gibraltar
+      - GI
+
+  - synonym: GR
+    examples: |
+      - Řecko
+      - GR
+
+  - synonym: GL
+    examples: |
+      - Grónsko
+      - GL
+
+  - synonym: GD
+    examples: |
+      - Grenada
+      - GD
+
+  - synonym: GP
+    examples: |
+      - Guadeloupe
+      - GP
+
+  - synonym: GU
+    examples: |
+      - Guam
+      - GU
+
+  - synonym: GT
+    examples: |
+      - Guatemala
+      - GT
+
+  - synonym: GG
+    examples: |
+      - Guernsey
+      - GG
+
+  - synonym: GN
+    examples: |
+      - Guinea
+      - GN
+
+  - synonym: GW
+    examples: |
+      - Guinea-Bissau
+      - GW
+
+  - synonym: GY
+    examples: |
+      - Guyana
+      - GY
+
+  - synonym: HT
+    examples: |
+      - Haiti
+      - HT
+
+  - synonym: HM
+    examples: |
+      - Heardův ostrov a McDonaldovy ostrovy
+      - HM
+
+  - synonym: VA
+    examples: |
+      - Vatikán
+      - VA
+
+  - synonym: HN
+    examples: |
+      - Honduras
+      - HN
+
+  - synonym: HK
+    examples: |
+      - Hongkong – ZAO Číny
+      - HK
+
+  - synonym: HU
+    examples: |
+      - Maďarsko
+      - HU
+
+  - synonym: IS
+    examples: |
+      - Island
+      - IS
+
+  - synonym: IN
+    examples: |
+      - Indie
+      - IN
+
+  - synonym: ID
+    examples: |
+      - Indonésie
+      - ID
+
+  - synonym: IR
+    examples: |
+      - Írán
+      - IR
+
+  - synonym: IQ
+    examples: |
+      - Irák
+      - IQ
+
+  - synonym: IE
+    examples: |
+      - Irsko
+      - IE
+
+  - synonym: IM
+    examples: |
+      - Ostrov Man
+      - IM
+
+  - synonym: IL
+    examples: |
+      - Izrael
+      - IL
+
+  - synonym: IT
+    examples: |
+      - Itálie
+      - IT
+
+  - synonym: JM
+    examples: |
+      - Jamajka
+      - JM
+
+  - synonym: JP
+    examples: |
+      - Japonsko
+      - JP
+
+  - synonym: JE
+    examples: |
+      - Jersey
+      - JE
+
+  - synonym: JO
+    examples: |
+      - Jordánsko
+      - JO
+
+  - synonym: KZ
+    examples: |
+      - Kazachstán
+      - KZ
+
+  - synonym: KE
+    examples: |
+      - Keňa
+      - KE
+
+  - synonym: KI
+    examples: |
+      - Kiribati
+      - KI
+
+  - synonym: KP
+    examples: |
+      - Severní Korea
+      - KP
+
+  - synonym: KR
+    examples: |
+      - Jižní Korea
+      - KR
+
+  - synonym: KW
+    examples: |
+      - Kuvajt
+      - KW
+
+  - synonym: KG
+    examples: |
+      - Kyrgyzstán
+      - KG
+
+  - synonym: LA
+    examples: |
+      - Laos
+      - LA
+
+  - synonym: LV
+    examples: |
+      - Lotyšsko
+      - LV
+
+  - synonym: LB
+    examples: |
+      - Libanon
+      - LB
+
+  - synonym: LS
+    examples: |
+      - Lesotho
+      - LS
+
+  - synonym: LR
+    examples: |
+      - Libérie
+      - LR
+
+  - synonym: LY
+    examples: |
+      - Libye
+      - LY
+
+  - synonym: LI
+    examples: |
+      - Lichtenštejnsko
+      - LI
+
+  - synonym: LT
+    examples: |
+      - Litva
+      - LT
+
+  - synonym: LU
+    examples: |
+      - Lucembursko
+      - LU
+
+  - synonym: MO
+    examples: |
+      - Macao – ZAO Číny
+      - MO
+
+  - synonym: MG
+    examples: |
+      - Madagaskar
+      - MG
+
+  - synonym: MW
+    examples: |
+      - Malawi
+      - MW
+
+  - synonym: MY
+    examples: |
+      - Malajsie
+      - MY
+
+  - synonym: MV
+    examples: |
+      - Maledivy
+      - MV
+
+  - synonym: ML
+    examples: |
+      - Mali
+      - ML
+
+  - synonym: MT
+    examples: |
+      - Malta
+      - MT
+
+  - synonym: MH
+    examples: |
+      - Marshallovy ostrovy
+      - MH
+
+  - synonym: MQ
+    examples: |
+      - Martinik
+      - MQ
+
+  - synonym: MR
+    examples: |
+      - Mauritánie
+      - MR
+
+  - synonym: MU
+    examples: |
+      - Mauricius
+      - MU
+
+  - synonym: YT
+    examples: |
+      - Mayotte
+      - YT
+
+  - synonym: MX
+    examples: |
+      - Mexiko
+      - MX
+
+  - synonym: FM
+    examples: |
+      - Mikronésie
+      - FM
+
+  - synonym: MD
+    examples: |
+      - Moldavsko
+      - MD
+
+  - synonym: MC
+    examples: |
+      - Monako
+      - MC
+
+  - synonym: MN
+    examples: |
+      - Mongolsko
+      - MN
+
+  - synonym: ME
+    examples: |
+      - Černá Hora
+      - ME
+
+  - synonym: MS
+    examples: |
+      - Montserrat
+      - MS
+
+  - synonym: MA
+    examples: |
+      - Maroko
+      - MA
+
+  - synonym: MZ
+    examples: |
+      - Mosambik
+      - MZ
+
+  - synonym: MM
+    examples: |
+      - Myanmar (Barma)
+      - MM
+
+  - synonym: NA
+    examples: |
+      - Namibie
+      - NA
+
+  - synonym: NR
+    examples: |
+      - Nauru
+      - NR
+
+  - synonym: NP
+    examples: |
+      - Nepál
+      - NP
+
+  - synonym: NL
+    examples: |
+      - Nizozemsko
+      - NL
+
+  - synonym: NC
+    examples: |
+      - Nová Kaledonie
+      - NC
+
+  - synonym: NZ
+    examples: |
+      - Nový Zéland
+      - NZ
+
+  - synonym: NI
+    examples: |
+      - Nikaragua
+      - NI
+
+  - synonym: NE
+    examples: |
+      - Niger
+      - NE
+
+  - synonym: NG
+    examples: |
+      - Nigérie
+      - NG
+
+  - synonym: NU
+    examples: |
+      - Niue
+      - NU
+
+  - synonym: NF
+    examples: |
+      - Norfolk
+      - NF
+
+  - synonym: MK
+    examples: |
+      - Severní Makedonie
+      - MK
+
+  - synonym: MP
+    examples: |
+      - Severní Mariany
+      - MP
+
+  - synonym: NO
+    examples: |
+      - Norsko
+      - NO
+
+  - synonym: OM
+    examples: |
+      - Omán
+      - OM
+
+  - synonym: PK
+    examples: |
+      - Pákistán
+      - PK
+
+  - synonym: PW
+    examples: |
+      - Palau
+      - PW
+
+  - synonym: PS
+    examples: |
+      - Palestinská území
+      - PS
+
+  - synonym: PA
+    examples: |
+      - Panama
+      - PA
+
+  - synonym: PG
+    examples: |
+      - Papua-Nová Guinea
+      - PG
+
+  - synonym: PY
+    examples: |
+      - Paraguay
+      - PY
+
+  - synonym: PE
+    examples: |
+      - Peru
+      - PE
+
+  - synonym: PH
+    examples: |
+      - Filipíny
+      - PH
+
+  - synonym: PN
+    examples: |
+      - Pitcairnovy ostrovy
+      - PN
+
+  - synonym: PL
+    examples: |
+      - Polsko
+      - PL
+
+  - synonym: PT
+    examples: |
+      - Portugalsko
+      - PT
+
+  - synonym: PR
+    examples: |
+      - Portoriko
+      - PR
+
+  - synonym: QA
+    examples: |
+      - Katar
+      - QA
+
+  - synonym: RO
+    examples: |
+      - Rumunsko
+      - RO
+
+  - synonym: RU
+    examples: |
+      - Rusko
+      - RU
+
+  - synonym: RW
+    examples: |
+      - Rwanda
+      - RW
+
+  - synonym: RE
+    examples: |
+      - Réunion
+      - RE
+
+  - synonym: BL
+    examples: |
+      - Svatý Bartoloměj
+      - BL
+
+  - synonym: SH
+    examples: |
+      - Svatá Helena
+      - SH
+
+  - synonym: KN
+    examples: |
+      - Svatý Kryštof a Nevis
+      - KN
+
+  - synonym: LC
+    examples: |
+      - Svatá Lucie
+      - LC
+
+  - synonym: MF
+    examples: |
+      - Svatý Martin (Francie)
+      - MF
+
+  - synonym: PM
+    examples: |
+      - Saint-Pierre a Miquelon
+      - PM
+
+  - synonym: VC
+    examples: |
+      - Svatý Vincenc a Grenadiny
+      - VC
+
+  - synonym: WS
+    examples: |
+      - Samoa
+      - WS
+
+  - synonym: SM
+    examples: |
+      - San Marino
+      - SM
+
+  - synonym: ST
+    examples: |
+      - Svatý Tomáš a Princův ostrov
+      - ST
+
+  - synonym: SA
+    examples: |
+      - Saúdská Arábie
+      - SA
+
+  - synonym: SN
+    examples: |
+      - Senegal
+      - SN
+
+  - synonym: RS
+    examples: |
+      - Srbsko
+      - RS
+
+  - synonym: SC
+    examples: |
+      - Seychely
+      - SC
+
+  - synonym: SL
+    examples: |
+      - Sierra Leone
+      - SL
+
+  - synonym: SG
+    examples: |
+      - Singapur
+      - SG
+
+  - synonym: SX
+    examples: |
+      - Svatý Martin (Nizozemsko)
+      - SX
+
+  - synonym: SK
+    examples: |
+      - Slovensko
+      - SK
+
+  - synonym: SI
+    examples: |
+      - Slovinsko
+      - SI
+
+  - synonym: SB
+    examples: |
+      - Šalamounovy ostrovy
+      - SB
+
+  - synonym: SO
+    examples: |
+      - Somálsko
+      - SO
+
+  - synonym: ZA
+    examples: |
+      - Jihoafrická republika
+      - ZA
+
+  - synonym: GS
+    examples: |
+      - Jižní Georgie a Jižní Sandwichovy ostrovy
+      - GS
+
+  - synonym: SS
+    examples: |
+      - Jižní Súdán
+      - SS
+
+  - synonym: ES
+    examples: |
+      - Španělsko
+      - ES
+
+  - synonym: LK
+    examples: |
+      - Srí Lanka
+      - LK
+
+  - synonym: SD
+    examples: |
+      - Súdán
+      - SD
+
+  - synonym: SR
+    examples: |
+      - Surinam
+      - SR
+
+  - synonym: SJ
+    examples: |
+      - Špicberky a Jan Mayen
+      - SJ
+
+  - synonym: SE
+    examples: |
+      - Švédsko
+      - SE
+
+  - synonym: CH
+    examples: |
+      - Švýcarsko
+      - CH
+
+  - synonym: SY
+    examples: |
+      - Sýrie
+      - SY
+
+  - synonym: TW
+    examples: |
+      - Tchaj-wan
+      - TW
+
+  - synonym: TJ
+    examples: |
+      - Tádžikistán
+      - TJ
+
+  - synonym: TZ
+    examples: |
+      - Tanzanie
+      - TZ
+
+  - synonym: TH
+    examples: |
+      - Thajsko
+      - TH
+
+  - synonym: TL
+    examples: |
+      - Východní Timor
+      - TL
+
+  - synonym: TG
+    examples: |
+      - Togo
+      - TG
+
+  - synonym: TK
+    examples: |
+      - Tokelau
+      - TK
+
+  - synonym: TO
+    examples: |
+      - Tonga
+      - TO
+
+  - synonym: TT
+    examples: |
+      - Trinidad a Tobago
+      - TT
+
+  - synonym: TN
+    examples: |
+      - Tunisko
+      - TN
+
+  - synonym: TM
+    examples: |
+      - Turkmenistán
+      - TM
+
+  - synonym: TC
+    examples: |
+      - Turks a Caicos
+      - TC
+
+  - synonym: TV
+    examples: |
+      - Tuvalu
+      - TV
+
+  - synonym: TR
+    examples: |
+      - Turecko
+      - TR
+
+  - synonym: UG
+    examples: |
+      - Uganda
+      - UG
+
+  - synonym: UA
+    examples: |
+      - Ukrajina
+      - UA
+
+  - synonym: AE
+    examples: |
+      - Spojené arabské emiráty
+      - AE
+
+  - synonym: GB
+    examples: |
+      - Spojené království
+      - Velká Británie
+      - UK
+      - GB
+
+  - synonym: UM
+    examples: |
+      - Menší odlehlé ostrovy USA
+      - UM
+
+  - synonym: US
+    examples: |
+      - Spojené státy
+      - USA
+      - US
+
+  - synonym: UY
+    examples: |
+      - Uruguay
+      - UY
+
+  - synonym: UZ
+    examples: |
+      - Uzbekistán
+      - UZ
+
+  - synonym: VU
+    examples: |
+      - Vanuatu
+      - VU
+
+  - synonym: VE
+    examples: |
+      - Venezuela
+      - VE
+
+  - synonym: VN
+    examples: |
+      - Vietnam
+      - VN
+
+  - synonym: VG
+    examples: |
+      - Britské Panenské ostrovy
+      - VG
+
+  - synonym: VI
+    examples: |
+      - Americké Panenské ostrovy
+      - VI
+
+  - synonym: WF
+    examples: |
+      - Wallis a Futuna
+      - WF
+
+  - synonym: EH
+    examples: |
+      - Západní Sahara
+      - EH
+
+  - synonym: YE
+    examples: |
+      - Jemen
+      - YE
+
+  - synonym: ZM
+    examples: |
+      - Zambie
+      - ZM
+
+  - synonym: ZW
+    examples: |
+      - Zimbabwe
+      - ZW
+
+  - synonym: AX
+    examples: |
+      - Ålandy
+      - AX
