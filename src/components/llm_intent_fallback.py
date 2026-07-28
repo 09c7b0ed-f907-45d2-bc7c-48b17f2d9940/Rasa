@@ -40,13 +40,24 @@ exactly one label from this list, and nothing else -- no punctuation, no explana
 If none of the labels genuinely fit, reply with: {fallback_label}"""
 
 
-def _load_domain_intents() -> List[str]:
-    """Reuse OverlayImporter (the same code that builds the real, locale-merged
-    domain at train/serve time) rather than re-deriving the intent list from
-    scratch -- this way it always reflects the live domain, no separate list
-    to keep in sync."""
+_DEFAULT_BASE_DOMAIN = ["src/core/domain"]
+
+
+def _load_domain_intents(base_domain: List[str], overlay_domain: List[str]) -> List[str]:
+    """Reuse OverlayImporter (the same code that builds the real domain at
+    train time) rather than re-deriving the intent list from scratch.
+
+    Deliberately does NOT rely on the OVERLAY_BASE_DOMAIN/OVERLAY_DOMAIN env
+    vars that the training scripts export: those only exist for the lifetime
+    of the separate `bash scripts/layer_rasa_lang.sh ...` subprocess that
+    builds the model, not in the actual serving process afterwards (verified
+    against the real container: `docker exec rasa env | grep OVERLAY` finds
+    nothing). Defaults to the same base domain path already hardcoded in
+    config.yml's own `importers:` section, so this works out of the box in
+    real deployment; OverlayImporter will still honor those env vars on top
+    of these defaults if a caller does set them (e.g. manual testing)."""
     try:
-        domain = OverlayImporter().get_domain()
+        domain = OverlayImporter(base_domain=base_domain, overlay_domain=overlay_domain).get_domain()
         intents = getattr(domain, "intents", None) or []
         return sorted({str(i) for i in intents if str(i) not in _EXCLUDED_INTENTS})
     except Exception:
@@ -70,7 +81,9 @@ class LLMIntentFallback(GraphComponent):
         timeout_seconds = float(self._config.get("timeout_seconds", 8.0))
         self._client = llm_client if llm_client is not None else build_default_client(timeout_seconds)
 
-        self._intents: List[str] = _load_domain_intents()
+        base_domain = self._config.get("base_domain", _DEFAULT_BASE_DOMAIN)
+        overlay_domain = self._config.get("overlay_domain", [])
+        self._intents: List[str] = _load_domain_intents(base_domain, overlay_domain)
         if self._enabled and not self._client.enabled:
             logger.info("LLMIntentFallback: LLM client not configured, component will be a no-op")
         if self._enabled and not self._intents:
