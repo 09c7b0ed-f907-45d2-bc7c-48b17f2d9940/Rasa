@@ -190,23 +190,23 @@ nlu:
       - [admission nihss](metric) [po čtvrtletích](group_by) podle [typu mrtvice](stroke_type)
       - Rozděl [DTN](metric) podle [typu mrtvice](stroke_type)
       - Seskup [LOS](metric) podle [typu mrtvice](stroke_type)
-      - Ukaž mi skóre [door to needle](metric) a [DIDO](metric)
-      - Ukaž [DTN](metric) bez pacientů s [ischemickou](stroke_type) mrtvicí
-      - Graf [DIDO](metric) pro [hemoragické](stroke_type) mrtvice
-      - Ukaž [DTN](metric) mezi [4. březnem 2023]{"entity": "date", "role": "lower"} a [5. červencem 2024]{"entity": "date", "role": "upper"}
-      - Graf [DIDO](metric) od [1. ledna 2022]{"entity": "date", "role": "lower"} do [31. prosince 2022]{"entity": "date", "role": "upper"}
+      - Chci vidět skóre [door to needle](metric) společně s [DIDO](metric)
+      - Zobraz [DTN](metric) u pacientů, kteří neměli [ischemickou](stroke_type) mrtvici
+      - Vykresli [DIDO](metric) u pacientů s [hemoragickou](stroke_type) mrtvicí
+      - Zobraz vývoj [DTN](metric) v období od [4. března 2023]{"entity": "date", "role": "lower"} do [5. července 2024]{"entity": "date", "role": "upper"}
+      - Zobraz vývoj [DIDO](metric) mezi [1. lednem 2022]{"entity": "date", "role": "lower"} a [31. prosincem 2022]{"entity": "date", "role": "upper"}
       - Ukaž [pohlaví](metric) v procentech v [sloupcovém](chart_type) grafu
       - Dej mi [typ mrtvice](metric) v procentech pomocí [čárového](chart_type) grafu
       - Zobraz [Hospitalized in](metric) v procentech
       - Ukaž mi [pohlaví](metric) pacientů v [sloupcovém](chart_type) grafu seskupené podle [čtvrtletí](group_by)
       - Ukaž mi [typ mrtvice](metric) pacientů v [sloupcovém](chart_type) grafu seskupené podle [čtvrtletí](group_by)
-      - Dej mi graf [věku](metric) pacientů seskupený podle [místa prvního kontaktu](group_by), bez [ischemických](stroke_type) mrtvic, ve věku od [18]{"entity": "age", "role": "lower"} do [90]{"entity": "age", "role": "upper"}
-      - Můžeš mi ukázat [LOS](metric) pro pacienty s [ischemickou](stroke_type) mrtvicí?
-      - Dej mi skóre [mRS](metric) pro [hemoragické](stroke_type) mrtvice od [2023-01-01]{"entity": "date", "role": "lower"} do [2023-12-31]{"entity": "date", "role": "upper"}
+      - Potřebuji graf [věku](metric) pacientů podle [místa prvního kontaktu](group_by), bez [ischemických](stroke_type) mrtvic, u pacientů ve věku [18]{"entity": "age", "role": "lower"} až [90]{"entity": "age", "role": "upper"} let
+      - Šlo by ukázat [LOS](metric) u pacientů s [ischemickou](stroke_type) mrtvicí?
+      - Zobraz skóre [mRS](metric) u [hemoragických](stroke_type) mrtvic za období od [2023-01-01]{"entity": "date", "role": "lower"} do [2023-12-31]{"entity": "date", "role": "upper"}
       - Graf [funkčního výsledku](metric) pro pacienty s [ischemickou](stroke_type) mrtvicí podle [pohlaví](group_by)
-      - Ukaž [dobu reakce záchranné služby](metric) pro [hemoragické](stroke_type) případy
-      - Porovnej data [ischemické](stroke_type) a [hemoragické](stroke_type) mrtvice
-      - Ukaž [čárový](chart_type) graf [DTN](metric) pro mou nemocnici vs celostátní průměr Velké Británie
+      - Zobraz [dobu reakce záchranné služby](metric) u [hemoragických](stroke_type) případů
+      - Srovnej výskyt [ischemické](stroke_type) a [hemoragické](stroke_type) mrtvice
+      - Zobraz [DTN](metric) mé nemocnice v porovnání s celostátním průměrem Velké Británie v [čárovém](chart_type) grafu
       - Ukaž mi čárový graf [dtn](metric) seskupený podle [způsobu měření INR](group_by)
       - Udělej mi sloupcový graf [absolvované fyzioterapie](metric) seskupený podle [typu mrtvice](group_by)
   - intent: update_visualization
@@ -221,8 +221,8 @@ nlu:
       - Seskup data podle [léčebného zařízení](group_by)
       - Nyní seskup podle [místa prvního kontaktu](group_by)
       - Seskup podle [místa prvního kontaktu](group_by)
-      - Nyní seskup podle [místa prvního kontaktu](group_by)
-      - Seskup podle [místa prvního kontaktu](group_by)
+      - Teď to seskup podle [místa prvního kontaktu](group_by)
+      - Rozděl to podle [místa prvního kontaktu](group_by)
       - Přidej [DIDO](metric) do aktuální vizualizace
       - Odeber [mužské](sex) pacienty z grafu
       - Změň věkové rozmezí na [55]{"entity": "age", "role": "lower"} až [75]{"entity": "age", "role": "upper"}
@@ -259,9 +259,9 @@ nlu:
       - ukaž data od [2023](date) do [2025](date)
       - ukaž data za [2024](date) a [2025](date)
       - zobraz data za [2023](date) a [2024](date)
-      - ukaž data z [2024](date) a [2025](date)
+      - zobraz záznamy z [2024](date) a [2025](date)
       - zahrň [2024](date) a [2025](date)
-      - ukaž data za [2024](date) a [2025](date)
+      - zahrň data za [2024](date) a [2025](date)
       - Změň to na [čárový](chart_type) graf
       - Udělej z toho místo toho [sloupcový](chart_type) graf
       - Použij [bodový](chart_type) graf
@@ -302,7 +302,7 @@ nlu:
       - Přidej [nemocnici](group_by)
       - Zahrň [podtyp mrtvice](group_by)
       - Přidej filtr pro [ženy](sex)
-      - Zahrň pouze [ischemické](stroke_type) mrtvice
+      - Ponech pouze [ischemické](stroke_type) mrtvice
       - Odeber filtr věku
       - Odeber filtr pohlaví
       - Vymaž filtr data
@@ -323,15 +323,15 @@ nlu:
       - To je dobré, ale seskup to podle [nemocnice](group_by)
       - Nech všechno ostatní stejné, jen ukaž [ženy](sex)
       - Nech graf tak, jak je, ale použij [2025]{"entity":"date","role":"lower"}
-      - Přepni na [hemoragický](stroke_type) typ mrtvice
-      - Přidej [DIDO](metric) do aktuální vizualizace
-      - Filtruj pouze [ischemické](stroke_type) mrtvice
+      - Změň typ mrtvice na [hemoragický](stroke_type)
+      - Doplň [DIDO](metric) do stávající vizualizace
+      - Nech pouze [ischemické](stroke_type) mrtvice
       - Seskup data podle [typu mrtvice](group_by)
       - Také seskup data podle [pohlaví](group_by)
       - Seskup podle [čtvrtletí](group_by)
       - Změň seskupení na [čtvrtletí](group_by)
       - Nastav KPI na procenta
-      - Přepni na vizualizaci typu [bodový](chart_type) graf
+      - Změň vizualizaci na [bodový](chart_type) graf
       - Ukaž [vstupní glykémii](metric)
       - ukaž mi [discharge nihss](metric) v [sloupcovém grafu](chart_type) seskupeném podle [typu mrtvice](group_by)
       - udělej mi [ich score](metric), [čárový graf](chart_type) seskupený podle [typu mrtvice](group_by)
