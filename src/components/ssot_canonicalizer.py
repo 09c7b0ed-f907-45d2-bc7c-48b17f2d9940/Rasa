@@ -7,10 +7,11 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Text, cast
 
-import yaml  # type: ignore[import-untyped]  # pyright: ignore[reportMissingModuleSource, reportMissingTypeStubs]
 from rasa.engine.graph import GraphComponent  # type: ignore
 from rasa.engine.recipes.default_recipe import DefaultV1Recipe  # type: ignore
 from rasa.shared.nlu.training_data.message import Message  # type: ignore
+
+from src.components import ssot_yaml
 
 logger = logging.getLogger(__name__)
 
@@ -21,28 +22,6 @@ def _norm_text(text: str) -> str:
     s = s.replace("_", " ").replace("-", " ")
     s = re.sub(r"\s+", " ", s)
     return s
-
-
-def _as_list(value: Any) -> List[str]:
-    if value is None:
-        return []
-    if isinstance(value, list):
-        out: List[str] = []
-        for v in cast(List[Any], value):
-            if v is None:
-                continue
-            out.append(str(v))
-        return out
-    return [str(value)]
-
-
-def _collect_synonyms(value: Any) -> List[str]:
-    if isinstance(value, dict):
-        out: List[str] = []
-        for localized in cast(Dict[Any, Any], value).values():
-            out.extend(_as_list(localized))
-        return out
-    return _as_list(value)
 
 
 @dataclass(frozen=True)
@@ -60,24 +39,11 @@ class _SSOTIndex:
 def _load_ssot_index(path: Path) -> _SSOTIndex:
     """Loads a SSOT YAML file into a synonym->canonical index.
 
-    Expected SSOT shape: a YAML list of items with keys like:
-      - canonical: <CODE>
-        synonyms: ["...", "..."]
-
     For MetricType.yml, some items also include data_type: Enum with an Enum list; we include
     enum keys + their synonyms as valid synonyms for that canonical as well.
     """
 
-    raw = yaml.safe_load(path.read_text(encoding="utf-8"))
-    items: List[Dict[str, Any]] = []
-    if isinstance(raw, list):
-        raw_list = cast(List[Any], raw)
-        items = [
-            cast(Dict[str, Any], item) for item in raw_list if isinstance(item, dict)
-        ]
-    elif isinstance(raw, dict):
-        # Be permissive; allow a dict form if present.
-        items = [cast(Dict[str, Any], raw)]
+    items = ssot_yaml.load_ssot_items(path)
 
     canonicals: Set[str] = set()
     by_synonym: Dict[str, str] = {}
@@ -89,7 +55,7 @@ def _load_ssot_index(path: Path) -> _SSOTIndex:
         canonical = str(canonical_any)
         canonicals.add(canonical)
 
-        synonyms = _collect_synonyms(item.get("synonyms"))
+        synonyms = ssot_yaml.all_synonyms(item)
         # Always accept the canonical itself.
         synonyms.append(canonical)
 
@@ -104,7 +70,7 @@ def _load_ssot_index(path: Path) -> _SSOTIndex:
                     if key_any is not None:
                         synonyms.append(str(key_any))
                     synonyms.extend(
-                        _collect_synonyms(cast(Dict[str, Any], e).get("synonyms"))
+                        ssot_yaml.all_synonyms(cast(Dict[str, Any], e))
                     )
 
         for syn in synonyms:
@@ -126,7 +92,6 @@ class SSOTCanonicalizer(GraphComponent):
     Behavior:
       - For configured entity types, if extracted value matches a SSOT synonym, rewrite `value` to SSOT canonical.
       - If strict for an entity type and no mapping exists, drop that entity.
-      - Also supports migrating old entity name `kpi` -> `metric`.
 
     This is intended to ensure downstream consumers only see canonical SSOT codes.
     """
@@ -157,7 +122,7 @@ class SSOTCanonicalizer(GraphComponent):
 
         # Which entities are strict (unmapped values are dropped). Default: only `metric`.
         strict_any = self._config.get("strict_entities", ["metric"])
-        self._strict_entities: Set[str] = set(_as_list(strict_any))
+        self._strict_entities: Set[str] = set(ssot_yaml.as_str_list(strict_any))
 
         debug_any = self._config.get("debug", False)
         self._debug = bool(debug_any)
@@ -207,11 +172,6 @@ class SSOTCanonicalizer(GraphComponent):
                 if not entity_name:
                     new_entities.append(ent)
                     continue
-
-                # Migration shim: kpi -> metric
-                if entity_name == "kpi":
-                    ent["entity"] = "metric"
-                    entity_name = "metric"
 
                 idx = self._indexes.get(entity_name)
                 if idx is None:

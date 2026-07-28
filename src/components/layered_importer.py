@@ -14,6 +14,8 @@ from rasa.shared.core.training_data.structures import StoryGraph  # type: ignore
 from rasa.shared.importers.importer import TrainingDataImporter  # type: ignore
 from rasa.shared.nlu.training_data import loading as nlu_loading  # type: ignore
 
+from src.components import ssot_yaml
+
 try:  # story reader imports (robust across minor Rasa versions)
     from rasa.shared.core.training_data.story_reader.yaml_story_reader import YAMLStoryReader  # type: ignore
 except Exception:  # pragma: no cover
@@ -234,6 +236,84 @@ def _merge_nlu_docs(base_docs: List[Dict[str, Any]], overlay_docs: List[Dict[str
     return {"version": version, "nlu": merged_items}
 
 
+# Entity -> SSOT file mapping for auto-generated NLU lookup/synonym data.
+# Mirrors ssot_canonicalizer.py's entity_ssot_files (which canonicalizes
+# *after* extraction); this generates the lookup/synonym tables that help
+# extraction find the spans in the first place, so RegexEntityExtractor and
+# EntitySynonymMapper never need hand-typed, per-locale duplicates of SSOT
+# data. Add a new SSOT type here and every locale picks it up on the next
+# train -- no Rasa-side lookup file to write or keep in sync.
+DEFAULT_SSOT_NLU_ENTITIES: Dict[str, str] = {
+    "stroke_type": "StrokeType.yml",
+    "group_by": "GroupByType.yml",
+    "metric": "MetricType.yml",
+    "country_code": "CountryType.yml",
+}
+
+
+def _detect_locale(domain_paths: List[Path]) -> str:
+    """Best-effort locale code from an overlay domain path like src/locales/cs/CZ/domain."""
+    for p in domain_paths:
+        parts = p.parts
+        if "locales" in parts:
+            idx = parts.index("locales")
+            if idx + 1 < len(parts):
+                return parts[idx + 1]
+    return "en"
+
+
+def _default_ssot_dir(domain_paths: List[Path]) -> Path:
+    for p in domain_paths:
+        parts = p.parts
+        if "src" in parts:
+            idx = parts.index("src")
+            root = Path(*parts[:idx]) if idx > 0 else Path(".")
+            candidate = root / "src" / "shared" / "SSOT"
+            if candidate.exists():
+                return candidate
+    return Path("src/shared/SSOT")
+
+
+def _build_ssot_nlu_doc(ssot_dir: Path, locale: str, entities: Dict[str, str]) -> Optional[Dict[str, Any]]:
+    """Synthesize `lookup`/`synonym` NLU items straight from SSOT for one locale."""
+    nlu_items: List[Dict[str, Any]] = []
+    for entity_name, filename in entities.items():
+        fpath = ssot_dir / filename
+        if not fpath.exists():
+            continue
+        try:
+            ssot_items = ssot_yaml.load_ssot_items(fpath)
+        except Exception as e:
+            logger.warning(f"Failed loading SSOT file {fpath} for NLU generation: {e}")
+            continue
+
+        lookup_examples: List[str] = []
+        synonym_items: List[Dict[str, Any]] = []
+        for entry in ssot_items:
+            canonical_any = entry.get("canonical")
+            if not isinstance(canonical_any, str) or not canonical_any.strip():
+                continue
+            canonical = canonical_any.strip().upper()
+            names = ssot_yaml.locale_synonyms(entry, locale)
+            if not names:
+                continue
+            lookup_examples.append(canonical)
+            lookup_examples.extend(names)
+            synonym_items.append(
+                {"synonym": canonical, "examples": "".join(f"- {n}\n" for n in names)}
+            )
+
+        if lookup_examples:
+            nlu_items.append(
+                {"lookup": entity_name, "examples": "".join(f"- {e}\n" for e in lookup_examples)}
+            )
+        nlu_items.extend(synonym_items)
+
+    if not nlu_items:
+        return None
+    return {"version": "3.1", "nlu": nlu_items}
+
+
 def _merge_config_docs(base_docs: List[Dict[str, Any]], overlay_docs: List[Dict[str, Any]]) -> Dict[str, Any]:
     """Merge Rasa config dictionaries with add/replace semantics.
 
@@ -291,7 +371,10 @@ def _merge_config_docs(base_docs: List[Dict[str, Any]], overlay_docs: List[Dict[
             else:
                 # Scalar or list (non-recognized list handled by deep add semantics)
                 if op == REPLACE:
-                    merged[k] = v if k in merged else v  # allow introducing new key even on replace for simplicity
+                    # Scalars always take the overlay value outright, even for keys
+                    # not yet present in the base -- REPLACE's strict-keys check
+                    # only applies to dict/list sections above.
+                    merged[k] = v
                 else:
                     existing_any = merged.get(k)
                     if isinstance(existing_any, list) and isinstance(v, list):
@@ -479,6 +562,18 @@ class OverlayImporter(TrainingDataImporter):  # pyright: ignore[reportUntypedBas
         if self._overlay_config_paths:
             logger.info(f"Overlay config files: {[str(p) for p in self._overlay_config_paths]}")
 
+        # SSOT-driven NLU lookup/synonym generation -- see DEFAULT_SSOT_NLU_ENTITIES.
+        ssot_nlu_entities_any: Any = cfg.get("ssot_nlu_entities", DEFAULT_SSOT_NLU_ENTITIES)
+        self._ssot_nlu_entities: Dict[str, str] = {
+            str(k): str(v) for k, v in cast(Dict[str, Any], ssot_nlu_entities_any).items()
+        }
+        ssot_dir_cfg = cfg.get("ssot_dir")
+        self._ssot_dir: Path = (
+            Path(str(ssot_dir_cfg)) if ssot_dir_cfg else _default_ssot_dir(self._base_domain_paths)
+        )
+        self._ssot_locale: str = _detect_locale(self._overlay_domain_paths or self._base_domain_paths)
+        logger.info(f"SSOT NLU generation: dir={self._ssot_dir} locale={self._ssot_locale} entities={list(self._ssot_nlu_entities)}")
+
     def get_domain(self) -> Any:
         base_docs: List[Dict[str, Any]] = []
         for p in self._base_domain_paths:
@@ -531,6 +626,12 @@ class OverlayImporter(TrainingDataImporter):  # pyright: ignore[reportUntypedBas
         logger.info(f"Merging NLU from base={base_paths} overlays={overlay_paths}")
         base_docs = _load_yaml_docs([Path(p) for p in base_paths])
         overlay_docs = _load_yaml_docs([Path(p) for p in overlay_paths])
+
+        ssot_doc = _build_ssot_nlu_doc(self._ssot_dir, self._ssot_locale, self._ssot_nlu_entities)
+        if ssot_doc:
+            base_docs = base_docs + [ssot_doc]
+            logger.info(f"Injected SSOT-derived NLU data for locale={self._ssot_locale}")
+
         merged: Dict[str, Any] = _merge_nlu_docs(base_docs, overlay_docs)
         merged_nlu_list = cast(List[Dict[str, Any]], merged.get("nlu", []))
         intents = [str(it.get("intent")) for it in merged_nlu_list if it.get("intent")]
