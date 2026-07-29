@@ -5,32 +5,64 @@ nlu:
     examples: |
       - vypiš nemocnice
       - ukaž nemocnice
-      - které nemocnice mohu porovnat?
       - jaké nemocnice jsou k dispozici?
       - vypiš dostupné poskytovatele
       - ukaž mi seznam poskytovatelů
-      - které poskytovatele mohu porovnat?
       - zobraz nemocnice pro porovnání
       - dej mi seznam nemocnic
       - ukaž dostupné nemocnice
-      - ukaž nemocnice ve [Španělsku](country_code)
+      - vypiš nemocnice nacházející se ve [Španělsku](country_code)
       - dostupné nemocnice pro [Mexiko](country_code)
       - vypiš nemocnice pro zemi [DE](country_code)
-      - ukaž dalších [20](limit) nemocnic v [ES](country_code)
-      - vypiš nemocnice v [USA](country_code)
+      - ukaž dalších [15](limit) nemocnic v [IT](country_code)
+      - vypiš nemocnice v [US](country_code)
       - ukaž nemocnice ve [Spojených státech](country_code)
       - vypiš nemocnice v [Kanadě](country_code)
       - ukaž nemocnice ve [Spojeném království](country_code)
       - vypiš nemocnice v [Austrálii](country_code)
-      - ukaž nemocnice ve [Francii](country_code)
-      - vypiš nemocnice v [Japonsku](country_code)
+      - ukaž nemocnice v [Německu](country_code)
+      - vypiš nemocnice ve [Francii](country_code)
+      - ukaž nemocnice ve [Španělsku](country_code)
+      - vypiš nemocnice v [Mexiku](country_code)
+      - ukaž nemocnice v [Japonsku](country_code)
       - ukaž nemocnice ve [Španělsku](country_code) seřazené podle [name](sort)
+      - vypiš nemocnice v [Mexiku](country_code) seřazené podle [created_at](sort)
       - vypiš nemocnice s názvem [General](hospital_name)
       - ukaž nemocnice se jménem [Memorial](hospital_name)
+      - najdi nemocnice obsahující [Saint](hospital_name)
+      - vypiš nemocnice odpovídající [Children](hospital_name)
+      - ukaž nemocnice se jménem [Central](hospital_name)
       - vypiš nemocnice, limit [10](limit)
+      - ukaž nemocnice, limit [25](limit)
+      - vypiš nemocnice, offset [0](offset)
       - ukaž nemocnice, offset [50](offset)
-      - vypiš nemocnice seřazené podle [created_at](sort)
+      - vypiš nemocnice v [US](country_code) s limitem [20](limit)
+      - ukaž nemocnice v [US](country_code) s offsetem [40](offset)
+      - vypiš nemocnice v [US](country_code) s limitem [20](limit) a offsetem [0](offset)
+      - ukaž nemocnice v [Kanadě](country_code) s limitem [50](limit) a offsetem [50](offset)
+      - ukaž dalších [20](limit) nemocnic v [ES](country_code)
+      - ukaž dalších [10](limit) nemocnic s offsetem [20](offset)
+      - vypiš nemocnice s offsetem [100](offset) a limitem [20](limit)
+      - vypiš nemocnice seřazené podle [name](sort)
+      - ukaž nemocnice seřazené podle [created_at](sort)
+      - vypiš nemocnice pro skupinu [10](group_id)
       - ukaž nemocnice pro skupinu [25](group_id)
+      - vypiš nemocnice v [Brazílii](country_code)
+      - ukaž nemocnice v [Indii](country_code)
+      - vypiš nemocnice v [Nizozemsku](country_code)
+      - ukaž nemocnice v [Polsku](country_code)
+      - vypiš nemocnice v [Portugalsku](country_code)
+      - můžu dostat seznam nemocnic?
+      - jaké poskytovatele máte?
+      - ukaž mi úplně všechny nemocnice
+      - vypiš nemocnice se jménem [Central](hospital_name) seřazené podle [name](sort)
+      - ukaž nemocnice pro skupinu [10](group_id) s limitem [20](limit)
+      - vypiš nemocnice v [Brazílii](country_code) s limitem [15](limit)
+      - ukaž nemocnice v [Indii](country_code) s offsetem [10](offset)
+      - dej mi nemocnice odpovídající [Saint](hospital_name)
+      - najdi nemocnice se jménem [Memorial](hospital_name) ve [Francii](country_code)
+      - vypiš nemocnice seřazené podle [name](sort) s limitem [10](limit)
+      - ukaž nemocnice pro skupinu [10](group_id) seřazené podle [created_at](sort)
 
   # country_code lookup/synonym data is generated from SSOT/CountryType.yml by
   # OverlayImporter -- see src/components/layered_importer.py.

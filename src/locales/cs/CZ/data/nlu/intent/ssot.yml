@@ -73,3 +73,12 @@ nlu:
       - Co představuje [AGE](metric) ve vašich datech?
       - Vysvětli metriku [DIDO](metric).
       - Jaká je definice [ADMISSION_NIHSS](metric)?
+      - Řekni mi, co znamená [NIHSS](metric)
+      - Dej mi definici [LOS](metric)
+      - Nerozumím metrice [mRS](metric)
+      - Co je [DischargeNihss](metric)?
+      - Rozeber mi [THROMBOLYSIS](metric)
+      - Vysvětli, co znamená [GLUCOSE](metric)
+      - Můžeš definovat [SYSTOLIC_PRESSURE](metric)?
+      - Jaký druh metriky je [ARRIVAL_MODE](metric)?
+      - Pomoz mi pochopit [PRESTROKE_MRS](metric)

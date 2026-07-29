@@ -3,18 +3,68 @@ version: "3.1"
 nlu:
   - intent: fallback
     examples: |
-      - Jaké je dnes počasí?
+      - qwrty
+      - zxcvbnm
+      - asdkjfh
+      - ghjklqwe
+      - poiuytr
+      - mnbvcxz
+      - lkjhgfd
+      - qazwsx
+      - edcrfv
+      - tgbyhn
+      - ujmikl
+      - plokij
+
+  - intent: out_of_scope
+    examples: |
       - Můžeš mi pomoct s domácím úkolem?
       - Řekni mi vtip o doktorech
-      - Jak uvařit těstoviny?
+      - Jak uvařím těstoviny?
       - Kolik je hodin?
       - Potřebuji pomoc s počítačem
       - Můžeš pustit hudbu?
       - Jaké je hlavní město Francie?
-      - Jak je vysoký Mount Everest?
+      - Jak vysoký je Mount Everest?
       - Jaká je tvoje oblíbená barva?
       - Můžeš mi objednat pizzu?
       - Řekni mi něco o strojovém učení
       - Jaké filmy dnes dávají?
       - Jak opravím auto?
       - Jaký je smysl života?
+      - Můžeš mi doporučit knihu?
+      - Chci se naučit něco o kvantové fyzice
+      - Řekni mi o historii Římské říše
+      - Kdy narval opéká slaninu?
+      - Jaké je počasí v New Yorku?
+      - Můžeš mi pomoct s daněmi?
+      - kdo je současný prezident Spojených států?
+      - kdo tě vytvořil?
+      - Kdo je generální ředitel Microsoftu?
+      - jaký je objem barelu ropy?
+      - Můžeš mi pomoct napsat e-mail mému šéfovi?
+      - Jaké bylo skóre včerejšího zápasu?
+      - Můžeš mi přeložit tuto větu do španělštiny?
+      - Jaký je dobrý recept na kuřecí kari?
+      - Můžeš mi říct můj dnešní horoskop?
+      - Jak rychle zhubnout?
+      - Kolik je odmocnina ze 144?
+      - Můžeš mi nastavit připomínku?
+      - Řekni mi hádanku
+      - Co je teď populární na sociálních sítích?
+      - Můžeš mi pomoct naplánovat výlet do Itálie?
+      - Kdo letos vyhrál Nobelovu cenu za fyziku?
+      - Můžeš napsat báseň o oceánu?
+      - Jaký je nejlepší programovací jazyk k naučení?
+      - Jak se zbavit bolesti hlavy?
+      - Můžeš mi doporučit dobrou restauraci poblíž?
+      - Jaký je směnný kurz mezi dolarem a eurem?
+      - Řekni mi o zápletce dobrého detektivního románu
+      - Můžeš mi pomoct s problémy ve vztahu?
+      - Jaká je nejvyšší budova na světě?
+      - Můžeš si se mnou zahrát hru?
+      - Kolik kalorií má jablko?
+      - Jaké jsou poslední zprávy?
+      - Můžeš mi pomoct napsat výpověď?
+      - Jaký je tvůj názor na nejlepší sportovní tým?
+      - Můžeš vygenerovat obrázek západu slunce?

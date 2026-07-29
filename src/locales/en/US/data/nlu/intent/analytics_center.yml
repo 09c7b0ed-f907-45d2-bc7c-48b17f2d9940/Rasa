@@ -11,10 +11,10 @@ nlu:
       - display hospitals for comparison
       - give me the hospital list
       - show available hospitals
-      - show hospitals in Spain
-      - available hospitals for mexico
-      - list hospitals country DE
-      - show next 20 hospitals in ES
+      - list hospitals located in [Spain](country_code)
+      - available hospitals for [Mexico](country_code)
+      - list hospitals country [DE](country_code)
+      - show next [15](limit) hospitals in [IT](country_code)
       - list hospitals in [US](country_code)
       - show hospitals in [United States](country_code)
       - list hospitals in [Canada](country_code)
@@ -47,6 +47,22 @@ nlu:
       - show hospitals sorted by [created_at](sort)
       - list hospitals for group [10](group_id)
       - show hospitals for group [25](group_id)
+      - list hospitals in [Brazil](country_code)
+      - show hospitals in [India](country_code)
+      - list hospitals in [Netherlands](country_code)
+      - show hospitals in [Poland](country_code)
+      - list hospitals in [Portugal](country_code)
+      - can I get a list of hospitals?
+      - what providers do you have?
+      - show me all the hospitals
+      - list hospitals with name [Central](hospital_name) sorted by [name](sort)
+      - show hospitals for group [10](group_id) limit [20](limit)
+      - list hospitals in [Brazil](country_code) limit [15](limit)
+      - show hospitals in [India](country_code) offset [10](offset)
+      - give me hospitals matching [Saint](hospital_name)
+      - find hospitals named [Memorial](hospital_name) in [France](country_code)
+      - list hospitals sorted by [name](sort) limit [10](limit)
+      - show hospitals for group [10](group_id) sorted by [created_at](sort)
 
   # country_code lookup/synonym data is generated from SSOT/CountryType.yml by
   # OverlayImporter -- see src/components/layered_importer.py.

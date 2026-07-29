@@ -73,3 +73,12 @@ nlu:
       - Τι αντιπροσωπεύει το [AGE](metric) στα δεδομένα σας;
       - Εξήγησε τη μετρική [DIDO](metric).
       - Ποιος είναι ο ορισμός του [ADMISSION_NIHSS](metric);
+      - Πες μου τι σημαίνει το [NIHSS](metric)
+      - Δώσε μου έναν ορισμό του [LOS](metric)
+      - Δεν καταλαβαίνω τη μετρική [mRS](metric)
+      - Τι είναι το [DischargeNihss](metric);
+      - Ανάλυσέ μου το [THROMBOLYSIS](metric)
+      - Διευκρίνισε τι σημαίνει το [GLUCOSE](metric)
+      - Μπορείς να ορίσεις το [SYSTOLIC_PRESSURE](metric);
+      - Τι είδους μετρική είναι το [ARRIVAL_MODE](metric);
+      - Βοήθησέ με να καταλάβω το [PRESTROKE_MRS](metric)
