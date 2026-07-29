@@ -10,6 +10,11 @@ nlu:
       - poiuytr
       - mnbvcxz
       - lkjhgfd
+      - qazwsx
+      - edcrfv
+      - tgbyhn
+      - ujmikl
+      - plokij
 
   - intent: out_of_scope
     examples: |
@@ -37,3 +42,29 @@ nlu:
       - kdo tě vytvořil?
       - Kdo je generální ředitel Microsoftu?
       - jaký je objem barelu ropy?
+      - Můžeš mi pomoct napsat e-mail mému šéfovi?
+      - Jaké bylo skóre včerejšího zápasu?
+      - Můžeš mi přeložit tuto větu do španělštiny?
+      - Jaký je dobrý recept na kuřecí kari?
+      - Můžeš mi říct můj dnešní horoskop?
+      - Jak rychle zhubnout?
+      - Kolik je odmocnina ze 144?
+      - Můžeš mi nastavit připomínku?
+      - Řekni mi hádanku
+      - Co je teď populární na sociálních sítích?
+      - Můžeš mi pomoct naplánovat výlet do Itálie?
+      - Kdo letos vyhrál Nobelovu cenu za fyziku?
+      - Můžeš napsat báseň o oceánu?
+      - Jaký je nejlepší programovací jazyk k naučení?
+      - Jak se zbavit bolesti hlavy?
+      - Můžeš mi doporučit dobrou restauraci poblíž?
+      - Jaký je směnný kurz mezi dolarem a eurem?
+      - Řekni mi o zápletce dobrého detektivního románu
+      - Můžeš mi pomoct s problémy ve vztahu?
+      - Jaká je nejvyšší budova na světě?
+      - Můžeš si se mnou zahrát hru?
+      - Kolik kalorií má jablko?
+      - Jaké jsou poslední zprávy?
+      - Můžeš mi pomoct napsat výpověď?
+      - Jaký je tvůj názor na nejlepší sportovní tým?
+      - Můžeš vygenerovat obrázek západu slunce?

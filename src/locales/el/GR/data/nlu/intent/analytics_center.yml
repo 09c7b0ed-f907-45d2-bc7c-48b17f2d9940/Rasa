@@ -47,6 +47,22 @@ nlu:
       - δείξε νοσοκομεία ταξινομημένα κατά [created_at](sort)
       - εμφάνισε νοσοκομεία για ομάδα [10](group_id)
       - δείξε νοσοκομεία για ομάδα [25](group_id)
+      - εμφάνισε νοσοκομεία στη [Βραζιλία](country_code)
+      - δείξε νοσοκομεία στην [Ινδία](country_code)
+      - εμφάνισε νοσοκομεία στην [Ολλανδία](country_code)
+      - δείξε νοσοκομεία στην [Πολωνία](country_code)
+      - εμφάνισε νοσοκομεία στην [Πορτογαλία](country_code)
+      - μπορώ να πάρω μια λίστα νοσοκομείων;
+      - τι παρόχους έχετε;
+      - δείξε μου εντελώς όλα τα νοσοκομεία
+      - εμφάνισε νοσοκομεία με όνομα [Central](hospital_name) ταξινομημένα κατά [name](sort)
+      - δείξε νοσοκομεία για ομάδα [10](group_id) με όριο [20](limit)
+      - εμφάνισε νοσοκομεία στη [Βραζιλία](country_code) με όριο [15](limit)
+      - δείξε νοσοκομεία στην [Ινδία](country_code) με μετατόπιση [10](offset)
+      - δώσε μου νοσοκομεία που ταιριάζουν με [Saint](hospital_name)
+      - βρες νοσοκομεία με όνομα [Memorial](hospital_name) στη [Γαλλία](country_code)
+      - εμφάνισε νοσοκομεία ταξινομημένα κατά [name](sort) με όριο [10](limit)
+      - δείξε νοσοκομεία για ομάδα [10](group_id) ταξινομημένα κατά [created_at](sort)
 
   # country_code lookup/synonym data is generated from SSOT/CountryType.yml by
   # OverlayImporter -- see src/components/layered_importer.py.

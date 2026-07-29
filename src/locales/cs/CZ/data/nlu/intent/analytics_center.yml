@@ -47,6 +47,22 @@ nlu:
       - ukaž nemocnice seřazené podle [created_at](sort)
       - vypiš nemocnice pro skupinu [10](group_id)
       - ukaž nemocnice pro skupinu [25](group_id)
+      - vypiš nemocnice v [Brazílii](country_code)
+      - ukaž nemocnice v [Indii](country_code)
+      - vypiš nemocnice v [Nizozemsku](country_code)
+      - ukaž nemocnice v [Polsku](country_code)
+      - vypiš nemocnice v [Portugalsku](country_code)
+      - můžu dostat seznam nemocnic?
+      - jaké poskytovatele máte?
+      - ukaž mi úplně všechny nemocnice
+      - vypiš nemocnice se jménem [Central](hospital_name) seřazené podle [name](sort)
+      - ukaž nemocnice pro skupinu [10](group_id) s limitem [20](limit)
+      - vypiš nemocnice v [Brazílii](country_code) s limitem [15](limit)
+      - ukaž nemocnice v [Indii](country_code) s offsetem [10](offset)
+      - dej mi nemocnice odpovídající [Saint](hospital_name)
+      - najdi nemocnice se jménem [Memorial](hospital_name) ve [Francii](country_code)
+      - vypiš nemocnice seřazené podle [name](sort) s limitem [10](limit)
+      - ukaž nemocnice pro skupinu [10](group_id) seřazené podle [created_at](sort)
 
   # country_code lookup/synonym data is generated from SSOT/CountryType.yml by
   # OverlayImporter -- see src/components/layered_importer.py.

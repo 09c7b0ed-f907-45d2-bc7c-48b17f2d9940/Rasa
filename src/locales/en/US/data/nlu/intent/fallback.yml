@@ -10,6 +10,11 @@ nlu:
       - qwrty
       - zxcvbnm
       - poiuytr
+      - xkjhqwerty
+      - bflkjdso
+      - ttyyuiop
+      - zzxxccvv
+      - qazwsxedc
 
   - intent: out_of_scope
     examples: |
@@ -37,3 +42,29 @@ nlu:
       - who made you?
       - Who is the CEO of microsoft?
       - what is the volume of a barrel of crude oil?
+      - Can you help me write an email to my boss?
+      - What's the score of last night's game?
+      - Can you translate this sentence into Spanish?
+      - What's a good recipe for chicken curry?
+      - Can you tell me my horoscope for today?
+      - How do I lose weight fast?
+      - What's the square root of 144?
+      - Can you set a reminder for me?
+      - Tell me a riddle
+      - What's trending on social media right now?
+      - Can you help me plan a trip to Italy?
+      - Who won the Nobel Prize in Physics this year?
+      - Can you write a poem about the ocean?
+      - What's the best programming language to learn?
+      - How do I get rid of a headache?
+      - Can you recommend a good restaurant nearby?
+      - What's the exchange rate between dollars and euros?
+      - Tell me about the plot of a good mystery novel
+      - Can you help me with my relationship problems?
+      - What's the tallest building in the world?
+      - Can you play a game with me?
+      - How many calories are in an apple?
+      - What's the latest news headline?
+      - Can you help me draft a resignation letter?
+      - What's your opinion on the best sports team?
+      - Can you generate an image of a sunset?
