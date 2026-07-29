@@ -297,7 +297,21 @@ def _build_ssot_nlu_doc(ssot_dir: Path, locale: str, entities: Dict[str, str]) -
             names = ssot_yaml.locale_synonyms(entry, locale)
             if not names:
                 continue
-            lookup_examples.append(canonical)
+            # country_code canonicals are bare ISO 3166-1 alpha-2 codes (TO, US,
+            # IN, IT, BY, ...). RegexEntityExtractor's lookup-table matching is
+            # case-insensitive (case_sensitive: false in config.yml, needed so
+            # the *name* synonyms below still match lowercase user text), which
+            # made 14 of these codes collide with ordinary English function
+            # words ("to", "us", "in", "it", "is", "at", "as", "by", "be", "so",
+            # "am", "me", "do", "my") and 8 more with Czech ones ("to", "za",
+            # "do", "ve", "se", "si", "my", "mu") -- e.g. "...from 2023-01-01 to
+            # 2023-12-31" got a spurious country_code=TO (Tonga) entity from the
+            # word "to", which then broke hospital-scope resolution downstream.
+            # Country *names* have no such collision risk, so only the bare
+            # code is excluded here; DIET still recognizes codes contextually
+            # from the real "[US](country_code)"-style training examples.
+            if entity_name != "country_code":
+                lookup_examples.append(canonical)
             lookup_examples.extend(names)
             synonym_items.append(
                 {"synonym": canonical, "examples": "".join(f"- {n}\n" for n in names)}
