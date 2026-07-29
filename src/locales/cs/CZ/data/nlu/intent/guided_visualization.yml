@@ -30,14 +30,38 @@ nlu:
       - zastav vedený režim
       - zruš vedený postup
       - zruš vedený režim
+      - ukonči vedený postup
+
+  - intent: provide_guided_hospital_scope
+    examples: |
+      - použij [US](country_code)
+      - [Spojené státy](country_code)
+      - [ES](country_code)
+      - [Španělsko](country_code)
+      - [Mexiko](country_code)
+      - použij nemocnici [Memorial](hospital_name)
+      - [General](hospital_name)
+      - skupina nemocnic [10](group_id)
+      - skupina [25](group_id)
+      - [všechny nemocnice](hospital_scope_reference)
+      - [všechny](hospital_scope_reference)
+      - [moje nemocnice](hospital_scope_reference)
+      - [moje](hospital_scope_reference)
+      - [naše](hospital_scope_reference)
+      - [naše nemocnice](hospital_scope_reference)
 
   - intent: skip_guided_step
     examples: |
       - přeskočit
       - přeskoč to
+      - další
+      - pokračovat
+      - jdeme dál
       - ne
       - ne díky
       - teď ne
+      - nene
+      - kdepak
       - možná později
       - bez filtru
       - žádné

@@ -30,14 +30,38 @@ nlu:
       - σταμάτα την καθοδηγούμενη λειτουργία
       - ακύρωσε την καθοδηγούμενη ροή
       - ακύρωσε τον καθοδηγούμενο τρόπο
+      - τερμάτισε την καθοδηγούμενη λειτουργία
+
+  - intent: provide_guided_hospital_scope
+    examples: |
+      - χρησιμοποίησε [US](country_code)
+      - [Ηνωμένες Πολιτείες](country_code)
+      - [ES](country_code)
+      - [Ισπανία](country_code)
+      - [Μεξικό](country_code)
+      - χρησιμοποίησε το νοσοκομείο [Memorial](hospital_name)
+      - [General](hospital_name)
+      - ομάδα νοσοκομείων [10](group_id)
+      - ομάδα [25](group_id)
+      - [όλα τα νοσοκομεία](hospital_scope_reference)
+      - [όλα](hospital_scope_reference)
+      - [το νοσοκομείο μου](hospital_scope_reference)
+      - [δικό μου](hospital_scope_reference)
+      - [δικό μας](hospital_scope_reference)
+      - [το νοσοκομείο μας](hospital_scope_reference)
 
   - intent: skip_guided_step
     examples: |
       - παράλειψη
       - παράλειψέ το
+      - επόμενο
+      - συνέχισε
+      - προχώρα
       - όχι
       - όχι ευχαριστώ
       - όχι τώρα
+      - μπα
+      - ε όχι
       - ίσως αργότερα
       - χωρίς φίλτρο
       - κανένα

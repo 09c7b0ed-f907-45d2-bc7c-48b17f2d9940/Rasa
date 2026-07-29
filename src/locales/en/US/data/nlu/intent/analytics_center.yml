@@ -11,10 +11,10 @@ nlu:
       - display hospitals for comparison
       - give me the hospital list
       - show available hospitals
-      - show hospitals in Spain
-      - available hospitals for mexico
-      - list hospitals country DE
-      - show next 20 hospitals in ES
+      - list hospitals located in [Spain](country_code)
+      - available hospitals for [Mexico](country_code)
+      - list hospitals country [DE](country_code)
+      - show next [15](limit) hospitals in [IT](country_code)
       - list hospitals in [US](country_code)
       - show hospitals in [United States](country_code)
       - list hospitals in [Canada](country_code)

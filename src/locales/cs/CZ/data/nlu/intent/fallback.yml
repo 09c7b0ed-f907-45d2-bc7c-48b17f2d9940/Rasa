@@ -3,18 +3,37 @@ version: "3.1"
 nlu:
   - intent: fallback
     examples: |
-      - Jaké je dnes počasí?
+      - qwrty
+      - zxcvbnm
+      - asdkjfh
+      - ghjklqwe
+      - poiuytr
+      - mnbvcxz
+      - lkjhgfd
+
+  - intent: out_of_scope
+    examples: |
       - Můžeš mi pomoct s domácím úkolem?
       - Řekni mi vtip o doktorech
-      - Jak uvařit těstoviny?
+      - Jak uvařím těstoviny?
       - Kolik je hodin?
       - Potřebuji pomoc s počítačem
       - Můžeš pustit hudbu?
       - Jaké je hlavní město Francie?
-      - Jak je vysoký Mount Everest?
+      - Jak vysoký je Mount Everest?
       - Jaká je tvoje oblíbená barva?
       - Můžeš mi objednat pizzu?
       - Řekni mi něco o strojovém učení
       - Jaké filmy dnes dávají?
       - Jak opravím auto?
       - Jaký je smysl života?
+      - Můžeš mi doporučit knihu?
+      - Chci se naučit něco o kvantové fyzice
+      - Řekni mi o historii Římské říše
+      - Kdy narval opéká slaninu?
+      - Jaké je počasí v New Yorku?
+      - Můžeš mi pomoct s daněmi?
+      - kdo je současný prezident Spojených států?
+      - kdo tě vytvořil?
+      - Kdo je generální ředitel Microsoftu?
+      - jaký je objem barelu ropy?
