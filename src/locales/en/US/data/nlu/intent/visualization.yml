@@ -3,21 +3,13 @@ version: "3.1"
 nlu:
   - intent: generate_visualization
     examples: |
-      - Show me [doot to needle](metric) and [DIDO](metric) scores
-      - I want [NIHSS](metric) for all patients
+      - Show me [door to needle](metric) and [DIDO](metric) scores
+      - I want [treatment delay](metric) for all patients
       - Give me [AdmissionNihss](metric) and [DischargeNihss](metric)
-      - Show me a [bar](chart_type) chart for [SEX](metric)
-      - Chart of [sex](metric)
-      - Give me a chart of [biological sex](metric)
-      - Visualize the [sex](metric) distribution
-      - Plot the [sex](metric) breakdown
-      - Show [sex](metric) counts
-      - Make a [pie](chart_type) chart of [sex](metric)
-      - I want to see [sex](metric) as a chart
-      - Display a [bar](chart_type) chart of [biological sex](metric)
       - Show me [DTN](metric) for [male](sex) patients
       - Chart of [DIDO](metric) in [female](sex) stroke patients
-      - Give me [NIHSS](metric) data for [men](sex) and [women](sex) patients
+      - [Line chart](chart_type) of [DTN](metric) in [female](sex) stroke patients
+      - Give me [DTG_PRIMARY](metric) data for [men](sex) and [women](sex) patients
       - Show me [door to needle time](metric) for patients aged [50]{"entity": "age", "role": "lower"} to [90]{"entity": "age", "role": "upper"}
       - Give me [door in door out](metric) between ages [30]{"entity": "age", "role": "lower"} and [50]{"entity": "age", "role": "upper"}
       - Display [AdmissionNihss](metric) for patients aged from [60]{"entity": "age", "role": "lower"} to [80]{"entity": "age", "role": "upper"}
@@ -26,43 +18,47 @@ nlu:
       - Display data for patients under [30]{"entity": "age", "role": "upper"} years
       - Show patients aged [18]{"entity": "age", "role": "lower"} and above
       - Chart for patients below [90]{"entity": "age", "role": "upper"}
-      - Chart of [DTN](metric) grouped by [initial point of contact](group_by)
-      - Show [DIDO](metric) by [hospital department](group_by)
-      - Give me average [NIHSS](metric) grouped by [EMS prenotification](group_by)
-      - Show [DTN](metric) excluding [ischemic](stroke_type) stroke patients
-      - Chart [DIDO](metric) for [hemorrhagic](stroke_type) strokes
-      - Give me [NIHSS](metric) scores excluding [TIA](stroke_type) patients
-      - Show [DTN](metric) between [March 4th, 2023]{"entity": "date", "role": "lower"} and [July 5th, 2024]{"entity": "date", "role": "upper"}
-      - Chart [DIDO](metric) from [January 1, 2022]{"entity": "date", "role": "lower"} to [December 31, 2022]{"entity": "date", "role": "upper"}
+      - Chart of [swallowing screening (awards metric)](metric) grouped by [initial point of contact](group_by)
+      - Chart of [swallowing screening awards metric](metric) grouped by [initial point of contact](group_by)
+      - Show [occlusion found on cta or mra](metric) by [hospital department](group_by)
+      - Give me average [time to thrombolysis](metric) grouped by [EMS prenotification](group_by)
+      - Show [AA_ANTICOAGULANTS](metric) excluding [ischemic](stroke_type) stroke patients
+      - Chart [OCCLUSION_SITE](metric) for [hemorrhagic](stroke_type) strokes
+      - Give me [time until thrombolytic treatment](metric) scores excluding [TIA](stroke_type) patients
+      - Show [anticoagulants at discharge (awards metric)](metric) between [March 4th, 2023]{"entity": "date", "role": "lower"} and [July 5th, 2024]{"entity": "date", "role": "upper"}
+      - Show [anticoagulants at discharge awards metric](metric) between [March 4th, 2023]{"entity": "date", "role": "lower"} and [July 5th, 2024]{"entity": "date", "role": "upper"}
+      - Chart [occlusion site](metric) from [January 1, 2022]{"entity": "date", "role": "lower"} to [December 31, 2022]{"entity": "date", "role": "upper"}
       - Show data after [2023-01-01]{"entity": "date", "role": "lower"}
       - Display records before [2024-12-31]{"entity": "date", "role": "upper"}
       - Give me data from [Q1 2023]{"entity": "date", "role": "lower"} onwards
       - Show recent data since [last month]{"entity": "date", "role": "lower"}
-      - Show a [line](chart_type) graph of [DTN](metric)
-      - Give me a [bar](chart_type) chart of [DIDO](metric) for [female](sex) patients
-      - Display a [pie](chart_type) chart of [NIHSS](metric) grouped by [stroke type](group_by)
-      - Show a [line](chart_type) graph for [DTN](metric) and [DIDO](metric) for [male](sex) and [female](sex) patients between [40]{"entity": "age", "role": "lower"} and [60]{"entity": "age", "role": "upper"}
+      - Show a [line](chart_type) graph of [AA_ANTITHROMBOTICS](metric)
+      - Give me a [bar](chart_type) chart of [OLD_INFARCTS_SEEN](metric) for [female](sex) patients
+      - Display a [pie](chart_type) chart of [time to iv tpa](metric) grouped by [stroke type](group_by)
+      - Show a [line](chart_type) graph for [antithrombotics at discharge (awards metric)](metric) and [old infarcts seen](metric) for [male](sex) and [female](sex) patients between [40]{"entity": "age", "role": "lower"} and [60]{"entity": "age", "role": "upper"}
+      - Show a [line](chart_type) graph for [antithrombotics at discharge awards metric](metric) and [old infarcts seen](metric) for [male](sex) and [female](sex) patients between [40]{"entity": "age", "role": "lower"} and [60]{"entity": "age", "role": "upper"}
       - Give me a chart of [age](metric) of patients grouped by [initial point of contact](group_by), excluding [ischemic](stroke_type) strokes, between ages [18]{"entity": "age", "role": "lower"} to [90]{"entity": "age", "role": "upper"}
-      - Can you show [LOS](metric) for [ischemic](stroke_type) stroke patients?
+      - Can you show [AA_DTN_LE60](metric) for [ischemic](stroke_type) stroke patients?
       - Display [DischargeNihss](metric) scores grouped by [treatment type](group_by)
-      - I need a [scatter](chart_type) plot of [DTN](metric) vs [DIDO](metric)
-      - Show me [mortality rate](metric) for patients aged [65]{"entity": "age", "role": "lower"} and above
-      - Chart [readmission rate](metric) by [stroke subtype](group_by) for [female](sex) patients
+      - I need a [scatter](chart_type) plot of [AA_STROKE_UNIT](metric) vs [OLD_INFARCTS_TYPE](metric)
+      - Show me [STROKE_MIMICS_DIAGNOSIS](metric) for patients aged [65]{"entity": "age", "role": "lower"} and above
+      - Chart [stroke mimics diagnosis](metric) by [stroke subtype](group_by) for [female](sex) patients
       - Give me [mRS](metric) scores for [hemorrhagic](stroke_type) strokes from [2023-01-01]{"entity": "date", "role": "lower"} to [2023-12-31]{"entity": "date", "role": "upper"}
       - Display a [histogram](chart_type) of [age](metric) distribution
       - Show [thrombolysis rate](metric) grouped by [arrival method](group_by)
-      - I want to see [NIHSS](metric) improvement between [admission]{"entity": "nihss", "role": "lower"} and [discharge]{"entity": "nihss", "role": "upper"}
-      - Chart [DTN](metric) performance by [month](group_by) in a [line](chart_type) graph
+      - I want to see [time to treatment](metric) improvement between [admission]{"entity": "nihss", "role": "lower"} and [discharge]{"entity": "nihss", "role": "upper"}
+      - Chart [stroke unit or intensive care (awards metric)](metric) performance by [month](group_by) in a [line](chart_type) graph
+      - Chart [stroke unit or intensive care awards metric](metric) performance by [month](group_by) in a [line](chart_type) graph
       - Show [complications rate](metric) for [male](sex) patients with [TIA](stroke_type)
       - Display [door to imaging](metric) times for urgent cases
-      - Give me [LOS](metric) statistics for patients aged [18]{"entity": "age", "role": "lower"} to [45]{"entity": "age", "role": "upper"}
-      - Show a [box plot](chart_type) of [DIDO](metric) by [severity level](group_by)
-      - Chart [functional outcome](metric) for [ischemic](stroke_type) patients by sex
-      - I need [DTN](metric) trends over the past year
+      - Give me [thrombolysis ≤60 minutes](metric) statistics for patients aged [18]{"entity": "age", "role": "lower"} to [45]{"entity": "age", "role": "upper"}
+      - Show a [box plot](chart_type) of [old infarcts type](metric) by [severity level](group_by)
+      - Chart [functional outcome](metric) for [ischemic](stroke_type) patients by [patient sex](group_by)
+      - I need [AGE](metric) trends over the past year
       - Display [medication compliance](metric) rates by [age group](group_by)
       - Show [emergency response time](metric) for [hemorrhagic](stroke_type) cases
       - Give me a [radar](chart_type) chart of multiple [KPIs](metric) by [hospital unit](group_by)
-      - Chart [NIHSS](metric) distribution from [Q1 2023]{"entity": "date", "role": "lower"} to [Q4 2023]{"entity": "date", "role": "upper"}
+      - Chart [primary door to groin](metric) distribution from [Q1 2023]{"entity": "date", "role": "lower"} to [Q4 2023]{"entity": "date", "role": "upper"}
       - Show NIHSS scores ranging from [0]{"entity": "nihss", "role": "lower"} to [15]{"entity": "nihss", "role": "upper"}
       - Display NIHSS changes between [5]{"entity": "nihss", "role": "lower"} and [25]{"entity": "nihss", "role": "upper"}
       - Chart NIHSS progression from [8]{"entity": "nihss", "role": "lower"} to [20]{"entity": "nihss", "role": "upper"} severity
@@ -71,119 +67,144 @@ nlu:
       - Display mild strokes with NIHSS below [5]{"entity": "nihss", "role": "upper"}
       - Chart severe cases with NIHSS over [20]{"entity": "nihss", "role": "lower"}
       - Show NIHSS improvements above [10]{"entity": "nihss", "role": "lower"} points
-      - Compare [DTN](metric) and [DIDO](metric) scores
-      - Show [mortality rate](metric) and [readmission rate](metric) together
+      - Compare [age at stroke onset](metric) and [PERFUSION_DEFICIT_TYPE](metric) scores
+      - Show [THROMBOLYSIS](metric) and [thrombolysis only](metric) together
       - Display [AdmissionNihss](metric) vs [DischargeNihss](metric) scores
       - Chart [male](sex) and [female](sex) patient outcomes
       - Compare [ischemic](stroke_type) and [hemorrhagic](stroke_type) stroke data
-      - Show [DTN](metric) and [DIDO](metric) and [door to imaging](metric) times
-      - Compare my hospital's [DTN](metric) to the national mean in the UK
-      - Compare [DTN](metric) for my hospital against the UK national mean
-      - Show a [line](chart_type) chart of [DTN](metric) for my hospital vs UK national mean
-      - Run a Mann Whitney test comparing my hospital [DTN](metric) to the national mean
-      - Compare my hospital [DTN](metric) with the UK national average using Mann Whitney
+      - Show [WAKEUP_STROKE](metric) and [perfusion deficit territory](metric) and [door to imaging](metric) times
+      - Compare my hospital's [wakeup stroke](metric) to the national mean in the UK
+      - Compare [stroke during sleep](metric) for my hospital against the UK national mean
+      - Show a [line](chart_type) chart of [INHOSPITAL_STROKE](metric) for my hospital vs UK national mean
+      - Run a Mann Whitney test comparing my hospital [in-hospital stroke](metric) to the national mean
+      - Generate a test to compare my hospital [stroke during hospitalization](metric) to the national mean with Mann Whitney
+      - Perform a Mann-Whitney U test for [ARRIVAL_MODE](metric) between my hospital and the national mean
+      - Compare my hospital [arrival mode](metric) with the UK national average using Mann Whitney
       - Statistically compare [q1 2023](date) to [q2 2023](date) for [DTN](metric)
       - using a man-whitney u test, compare [q1 2023](date) to [q2 2023](date) for [DTN](metric)
-      - Compare [DTN](metric) for [Q1 2023]{"entity": "date", "role": "lower"} to [Q2 2023]{"entity": "date", "role": "upper"} using Mann Whitney
-      - Show me [DTN](metric) per [quarter](group_by) for the [last 2 years](date)
-      - Is my hospital's [DTN](metric) significantly different from the national average?
-      - Test whether my hospital differs from the national average for [DTN](metric)
-      - Can you compare [mine](hospital_scope_reference) [DTN](metric) against [Army Alhama de Murcia Hospital](hospital_name) using Mann Whitney
-      - Run a Mann Whitney U test comparing [my hospital](hospital_scope_reference) with [Army Alhama de Murcia Hospital](hospital_name) for [DTN](metric)
-      - Perform a Mann Whitney test on [DTN](metric) between [Q1 2023]{"entity": "date", "role": "lower"} and [Q2 2023]{"entity": "date", "role": "upper"}
-      - Is there a significant difference in [DTN](metric) between [Q1 2023]{"entity": "date", "role": "lower"} and [Q2 2023]{"entity": "date", "role": "upper"}?
+      - Compare [arrival pathway](metric) for [Q1 2023]{"entity": "date", "role": "lower"} to [Q2 2023]{"entity": "date", "role": "upper"} using Mann Whitney
+      - Show me [EMS_PRENOTIFICATION](metric) per [quarter](group_by) for the [last 2 years](date)
+      - Compare my hospital [ems prenotification](metric) to the national average using Mann Whitney
+      - Run a Mann Whitney U test comparing my hospital [ems pre-alert](metric) with the national mean
+      - Perform a Mann-Whitney test for [ADMISSION_DEPARTMENT](metric) against the national benchmark
+      - Is my hospital's [admission department](metric) significantly different from the national average?
+      - Test whether my hospital differs from the national average for [FIRST_CONTACT_PLACE](metric)
+      - Compare [first contact place](metric) for [Q1 2023]{"entity": "date", "role": "lower"} to [Q2 2023]{"entity": "date", "role": "upper"} using Mann Whitney
+      - Run a Mann Whitney U test comparing [Q1 2023]{"entity": "date", "role": "lower"} to [Q2 2023]{"entity": "date", "role": "upper"} for [DTN](metric)
+      - Perform a Mann Whitney test on [HOSPITALIZED_IN](metric) between [Q1 2023]{"entity": "date", "role": "lower"} and [Q2 2023]{"entity": "date", "role": "upper"}
+      - Is there a significant difference in [monitoring intensity first day](metric) between [Q1 2023]{"entity": "date", "role": "lower"} and [Q2 2023]{"entity": "date", "role": "upper"}?
+      - Test [first-day bed type](metric) between [Q1 2023]{"entity": "date", "role": "lower"} and [Q2 2023]{"entity": "date", "role": "upper"} using Mann Whitney
       - Compare [Q1 2023]{"entity": "date", "role": "lower"} to [Q2 2023]{"entity": "date", "role": "upper"} against [Q3 2023]{"entity": "date", "role": "lower"} to [Q4 2023]{"entity": "date", "role": "upper"} using Mann Whitney for [DTN](metric)
+      - Run a Mann Whitney test comparing [Q1 2023]{"entity": "date", "role": "lower"} to [Q2 2023]{"entity": "date", "role": "upper"} with [Q3 2023]{"entity": "date", "role": "lower"} to [Q4 2023]{"entity": "date", "role": "upper"} for [DTN](metric)
       - Compare patients aged [30]{"entity": "age", "role": "lower"} to [45]{"entity": "age", "role": "upper"} with patients aged [60]{"entity": "age", "role": "lower"} to [80]{"entity": "age", "role": "upper"} using Mann Whitney
-      - Run a Mann Whitney test for [DIDO](metric)
+      - Perform a Mann Whitney U test comparing patients aged [30]{"entity": "age", "role": "lower"} to [45]{"entity": "age", "role": "upper"} and [60]{"entity": "age", "role": "lower"} to [80]{"entity": "age", "role": "upper"} for [DTN](metric)
+      - Run a Mann Whitney test for [PERFUSION_CORE](metric)
+      - Compare [door-to-needle ≤60 minutes](metric) using a Mann Whitney U test
+      - Perform a Mann Whitney test on [primary dtg](metric)
       - Test [Door to Needle Time](metric) using Mann Whitney
-      - Show [DTN](metric) [quarterly](group_by) over the [last 2 years](date)
-      - Chart [DTN](metric) by [quarter](group_by) for the [past year](date)
-      - Show [DIDO](metric) [monthly](group_by) for the [last 6 months](date)
-      - Give me [DTN](metric) [weekly](group_by) for the [last 3 months](date)
-      - Show [DTN](metric) trends [by month](group_by) over the [last year](date)
-      - Display [LOS](metric) [per quarter](group_by) for the [past 2 years](date)
-      - Chart [DTN](metric) [by quarter](group_by) from [2023](date) to [2024](date)
-      - Show me [NIHSS](metric) [monthly](group_by) since [January 2023](date)
-      - Give me [DTN](metric) performance [by quarter](group_by) over [the last 12 months](date)
+      - Show [SEX](metric) [quarterly](group_by) over the [last 2 years](date)
+      - Chart [biological sex](metric) by [quarter](group_by) for the [past year](date)
+      - Show [RISK_FACTORS_TYPE](metric) [monthly](group_by) for the [last 6 months](date)
+      - Give me [risk factors type](metric) [weekly](group_by) for the [last 3 months](date)
+      - Show [previous medical risk factors](metric) trends [by month](group_by) over the [last year](date)
+      - Display [AA_DTN_LE45](metric) [per quarter](group_by) for the [past 2 years](date)
+      - Chart [BEFORE_ONSET_MEDICATION](metric) [by quarter](group_by) from [2023](date) to [2024](date)
+      - Show me [DTG_SECONDARY](metric) [monthly](group_by) since [January 2023](date)
+      - Give me [medication before onset](metric) performance [by quarter](group_by) over [the last 12 months](date)
       - Display data from [Q1 2023]{"entity": "date", "role": "lower"} to [Q2 2023]{"entity": "date", "role": "upper"} vs [Q3 2023]{"entity": "date", "role": "lower"} to [Q4 2023]{"entity": "date", "role": "upper"}
       - Compare patients aged [30]{"entity": "age", "role": "lower"} to [45]{"entity": "age", "role": "upper"} with those aged [60]{"entity": "age", "role": "lower"} to [80]{"entity": "age", "role": "upper"}
-      - Show me [DTN](metric) in [2025](date)
-      - Chart [DTN](metric) for [2024](date)
-      - Display [DTN](metric) from [2025](date)
-      - Give me [DIDO](metric) data for [2023](date)
-      - Show [DTN](metric) during [2025](date)
-      - Could you plot [DTN](metric)?
-      - Can I see [DIDO](metric)?
-      - I'd like to look at [AdmissionNihss](metric)
-      - Let me see [LOS](metric)
-      - Visualize [mortality rate](metric)
-      - Plot [readmission rate](metric)
-      - Make a graph of [NIHSS](metric)
-      - Create a visualization for [DTN](metric)
+      - Show me [BEFORE_ONSET_MEDICATION_AIS_TIA](metric) in [2025](date)
+      - Chart [medication before onset in ais or tia](metric) for [2024](date)
+      - Display [BEFORE_ONSET_MEDICATION_ICH](metric) from [2025](date)
+      - Give me [medication before onset in ich](metric) data for [2023](date)
+      - Show [BEFORE_ONSET_ANTIPLATELET_TYPE](metric) during [2025](date)
+      - Could you plot [antiplatelet type before onset](metric)?
+      - Can I see [BEFORE_ONSET_ANTICOAGULANT_TYPE](metric)?
+      - I'd like to look at [anticoagulant type before onset](metric)
+      - Let me see [thrombolysis ≤45 minutes](metric)
+      - Visualize [mintravenous thrombolysis](metric)
+      - Plot [THROMBOLYSIS_AND_THROMBECTOMY](metric)
+      - Make a graph of [ADMISSION_NIHSS](metric)
+      - Create a visualization for [admission nihss](metric)
       - I need to inspect [door to needle time](metric)
       - What's the distribution of [age](metric)?
-      - How does [DTN](metric) look?
+      - How does [PRESTROKE_MRS](metric) look?
       - Can we look at [DischargeNihss](metric)?
       - Show the trend for [thrombolysis rate](metric)
       - I want an overview of [mRS](metric)
       - Display the values for [door in door out](metric)
-      - Show [DTN](metric) for [women](sex)
-      - I'd like to see [LOS](metric) among [men](sex)
-      - Plot [mortality rate](metric) for [female](sex) patients
-      - Compare [DIDO](metric) for [male](sex) patients
-      - Visualize [NIHSS](metric) in [women](sex)
-      - Show [DTN](metric) for patients younger than [45]{"entity":"age","role":"upper"}
-      - Plot [LOS](metric) for patients older than [75]{"entity":"age","role":"lower"}
-      - I'd like to see [mortality rate](metric) between ages [55]{"entity":"age","role":"lower"} and [80]{"entity":"age","role":"upper"}
+      - Show [pre-stroke mrs](metric) for [women](sex)
+      - I'd like to see [door-to-needle ≤45 minutes](metric) among [men](sex)
+      - Plot [ivt](metric) for [female](sex) patients
+      - Compare [perfusion core volume](metric) for [male](sex) patients
+      - Visualize [secondary door to groin](metric) in [women](sex)
+      - Show [mrs before stroke](metric) for patients younger than [45]{"entity":"age","role":"upper"}
+      - Plot [AA_DTG_LE120](metric) for patients older than [75]{"entity":"age","role":"lower"}
+      - I'd like to see [THROMBECTOMY](metric) between ages [55]{"entity":"age","role":"lower"} and [80]{"entity":"age","role":"upper"}
       - Visualize patients aged [40]{"entity":"age","role":"lower"} or older
       - Show records for patients below [30]{"entity":"age","role":"upper"}
-      - Plot [DTN](metric) by [hospital department](group_by)
-      - Break down [NIHSS](metric) by [arrival method](group_by)
-      - Group [LOS](metric) by [stroke subtype](group_by)
-      - Show [DTN](metric) grouped by sex
-      - Chart [DTN](metric) split by sex
-      - Give me [DTN](metric) by sex
-      - Show me a [line](chart_type) chart of [DTN](metric) grouped by sex
-      - Display [DIDO](metric) broken down by sex
-      - [NIHSS](metric) grouped by gender
-      - Show [DTN](metric) per sex
-      - Compare [DTN](metric) across sexes
-      - Chart [DTN](metric) for each sex
-      - Show [DIDO](metric) split by gender
-      - I'd like [mortality rate](metric) grouped by [EMS prenotification](group_by)
-      - Compare [DIDO](metric) across [treatment type](group_by)
-      - Show [DTN](metric) for [ischemic](stroke_type) stroke patients
-      - Plot [LOS](metric) excluding [TIA](stroke_type)
+      - Plot [GLUCOSE](metric) by [hospital department](group_by)
+      - Break down [secondary dtg](metric) by [arrival method](group_by)
+      - Group [thrombectomy ≤120 minutes](metric) by [stroke subtype](group_by)
+      - Show [initial blood glucose](metric) grouped by sex
+      - Chart [initial glucose](metric) split by sex
+      - Give me [CHOLESTEROL](metric) by sex
+      - Show me a [line](chart_type) chart of [initial ldl cholesterol](metric) grouped by [sex](group_by)
+      - Display [DIASTOLIC_PRESSURE](metric) broken down by [sex](group_by)
+      - [reason for no thrombolysis](metric) grouped by [gender](group_by)
+      - Show [SYSTOLIC_PRESSURE](metric) per [sex](group_by)
+      - Compare [initial systolic blood pressure](metric) across [sexes](group_by)
+      - Chart [systolic pressure](metric) for each [sex](group_by)
+      - Show [initial diastolic blood pressure](metric) split by [gender](group_by)
+      - I'd like [mechanical thrombectomy](metric) grouped by [EMS prenotification](group_by)
+      - Compare [HYPOPERFUSION](metric) across [treatment type](group_by)
+      - Show [diastolic pressure](metric) for [ischemic](stroke_type) stroke patients
+      - Plot [door-to-groin ≤120 minutes](metric) excluding [TIA](stroke_type)
       - Display [mRS](metric) for [hemorrhagic](stroke_type) strokes
-      - Visualize [NIHSS](metric) excluding [hemorrhagic](stroke_type) cases
+      - Visualize [door in door out](metric) excluding [hemorrhagic](stroke_type) cases
       - Show only [ischemic](stroke_type) stroke patients
-      - Show [DTN](metric) since [January 2024]{"entity":"date","role":"lower"}
-      - Display [LOS](metric) before [June 2025]{"entity":"date","role":"upper"}
-      - Plot [mortality rate](metric) from [2022-01-01]{"entity":"date","role":"lower"} to [2022-12-31]{"entity":"date","role":"upper"}
+      - Show [INR_MODE](metric) since [January 2024]{"entity":"date","role":"lower"}
+      - Display [AA_DTG_LE90](metric) before [June 2025]{"entity":"date","role":"upper"}
+      - Plot [mt](metric) from [2022-01-01]{"entity":"date","role":"lower"} to [2022-12-31]{"entity":"date","role":"upper"}
       - Show data collected after [last year]{"entity":"date","role":"lower"}
-      - Visualize [NIHSS](metric) during [Q2 2024]{"entity":"date","role":"lower"}
-      - I'd like a [box](chart_type) plot of [LOS](metric)
-      - Create a [scatter](chart_type) chart for [DTN](metric) and [LOS](metric)
-      - Make a [line](chart_type) graph showing [mortality rate](metric)
+      - Visualize [DOOR_TO_REPERFUSION](metric) during [Q2 2024]{"entity":"date","role":"lower"}
+      - I'd like a [box](chart_type) plot of [thrombectomy ≤90 minutes](metric)
+      - Create a [scatter](chart_type) chart for [inr measurement mode](metric) and [door-to-groin ≤90 minutes](metric)
+      - Make a [line](chart_type) graph showing [THROMBECTOMY_ONLY](metric)
       - Use a [bar](chart_type) chart for [thrombolysis rate](metric)
       - Display [age](metric) as a [histogram](chart_type)
-      - Show a [line](chart_type) graph of [DTN](metric) grouped by [hospital department](group_by) for [female](sex) patients
-      - Plot [LOS](metric) for [ischemic](stroke_type) patients over age [70]{"entity":"age","role":"lower"}
-      - I'd like [NIHSS](metric) grouped by [arrival method](group_by) between [2023-01-01]{"entity":"date","role":"lower"} and [2023-12-31]{"entity":"date","role":"upper"}
-      - Can you visualize [DIDO](metric) for [male](sex) patients between ages [40]{"entity":"age","role":"lower"} and [65]{"entity":"age","role":"upper"}?
-      - Show a [bar](chart_type) chart of [mortality rate](metric) by [stroke subtype](group_by) for [hemorrhagic](stroke_type) strokes
-      - Show me [DTN](metric) grouped by [stroke type](stroke_type)
-      - Chart [NIHSS](metric) split by [stroke type](stroke_type)
+      - Show a [line](chart_type) graph of [inr device type](metric) grouped by [hospital department](group_by) for [female](sex) patients
+      - Plot [AA_RECANALIZATION](metric) for [ischemic](stroke_type) patients over age [70]{"entity":"age","role":"lower"}
+      - I'd like [door to reperfusion time](metric) grouped by [arrival method](group_by) between [2023-01-01]{"entity":"date","role":"lower"} and [2023-12-31]{"entity":"date","role":"upper"}
+      - Can you visualize [hypoperfusion volume](metric) for [male](sex) patients between ages [40]{"entity":"age","role":"lower"} and [65]{"entity":"age","role":"upper"}?
+      - Show a [bar](chart_type) chart of [thrombectomy only](metric) by [stroke subtype](group_by) for [hemorrhagic](stroke_type) strokes
+      - Show me [inr device type](metric) grouped by [stroke type](stroke_type)
+      - Chart [MTICI_SCORE](metric) split by [stroke type](stroke_type)
       - [admission nihss](metric) [per quarter](group_by) by [stroke type](stroke_type)
-      - Break down [DTN](metric) by [stroke type](stroke_type)
-      - Group [LOS](metric) by [stroke type](stroke_type)
-      - Show [SEX](metric) as percent in a [bar](chart_type) chart
-      - Give me [STROKE TYPE](metric) in percentage using a [line](chart_type) chart
-      - Display [Hospitalized in](metric) as per cent
+      - Break down [IMAGING_DONE](metric) by [stroke type](stroke_type)
+      - Group [recanalization (awards metric)](metric) by [stroke type](stroke_type)
+      - Group [recanalization awards metric](metric) by [stroke type](stroke_type)
+      - Show me [door to needle](metric) and [STROKE_TYPE](metric) scores
+      - Show [brain imaging done](metric) excluding [ischaemic](stroke_type) stroke patients
+      - Chart [stroke type](metric) for [haemorrhagic](stroke_type) strokes
+      - Show [ct or mr imaging](metric) between [4 March 2023]{"entity": "date", "role": "lower"} and [5 July 2024]{"entity": "date", "role": "upper"}
+      - Chart [stroke diagnosis](metric) from [1 January 2022]{"entity": "date", "role": "lower"} to [31 December 2022]{"entity": "date", "role": "upper"}
+      - Show [SEX](metric) as [percent]{"entity": "kpi", "value": "percent"} in a [bar](chart_type) chart
+      - Give me [STROKE TYPE](metric) in [percentage]{"entity": "kpi", "value": "percent"} using a [line](chart_type) chart
+      - Display [Hospitalized in](metric) as [per cent]{"entity": "kpi", "value": "percent"}
       - Show me patient [sex](metric) in a [bar](chart_type) chart grouped by [quarter](group_by)
       - Show me patient [stroke type](metric) in a [bar](chart_type) chart grouped by [quarter](group_by)
-      - Show me a line chart of [dtn](metric) grouped by [inr measurement mode](group_by)
+      - Give me a chart of [age](metric) of patients grouped by [initial point of contact](group_by), excluding [ischaemic](stroke_type) strokes, between ages [18]{"entity": "age", "role": "lower"} to [90]{"entity": "age", "role": "upper"}
+      - Can you show [AA_IMAGING](metric) for [ischaemic](stroke_type) stroke patients?
+      - Give me [mRS](metric) scores for [haemorrhagic](stroke_type) strokes from [2023-01-01]{"entity": "date", "role": "lower"} to [2023-12-31]{"entity": "date", "role": "upper"}
+      - Chart [functional outcome](metric) for [ischaemic](stroke_type) patients by [sex](group_by)
+      - Show [emergency response time](metric) for [haemorrhagic](stroke_type) cases
+      - Compare [ischaemic](stroke_type) and [haemorrhagic](stroke_type) stroke data
+      - Show a [line](chart_type) graph of [IMAGING_TYPE](metric) for my hospital vs UK national mean
+      - Show me a [line chart](chart_type) of [brain imaging type](metric) grouped by [inr measurement mode](group_by)
+      - make a [bar](chart_type) graph of [OCCLUSION_FOUND](metric) grouped by [inr measurement mode](group_by)
       - Make me a bar chart of [physiotherapy received](metric) grouped by [stroke type](group_by)
+
   - intent: update_visualization
     examples: |
       - Change the chart to a [bar](chart_type) graph
@@ -198,7 +219,7 @@ nlu:
       - Group by [initial point of contact](group_by)
       - Now group by [first contact place](group_by)
       - Group by [first contact place](group_by)
-      - Add [DIDO](metric) to the current visualization
+      - Add [NO_THROMBECTOMY_REASON](metric) to the current visualization
       - Remove [male](sex) patients from the chart
       - Change age range to [55]{"entity": "age", "role": "lower"} to [75]{"entity": "age", "role": "upper"}
       - Update chart type to [pie](chart_type)
@@ -216,20 +237,27 @@ nlu:
       - switch to a [line](chart_type) plot
       - only for patients [in 2026]{"entity": "date"}
       - show only patients [from 2023]{"entity": "date"}
+      - filter to [2024]{"entity": "date"} only
       - only data from [2025]{"entity": "date"}
       - filter for patients below [50]{"entity": "age", "role": "upper"}
       - filter for age under [65]{"entity": "age", "role": "upper"}
       - only show patients younger than [40]{"entity": "age", "role": "upper"}
       - show patients below the age of [30]{"entity": "age", "role": "upper"}
       - restrict to patients under [55]{"entity": "age", "role": "upper"}
+      - filter for [ischemic](stroke_type) strokes
       - filter for [transient ischemic](stroke_type) strokes
       - show only [intracerebral hemorrhage](stroke_type) patients
       - Include only patients from [2025](date)
+      - Show data from [2025](date) only
+      - Filter for [2024](date) patients
       - Only show [2025](date) records
       - show data from [2024](date) and [2025](date)
       - show data from [2023](date) to [2025](date)
+      - show [2024](date) and [2025](date) data
       - display data for [2023](date) and [2024](date)
+      - show data from [2024](date) and [2025](date)
       - include [2024](date) and [2025](date)
+      - show data for [2024](date) and [2025](date)
       - Change it to a [line](chart_type) chart
       - Make it a [bar](chart_type) chart instead
       - Use a [scatter](chart_type) plot
@@ -250,6 +278,7 @@ nlu:
       - Remove [hemorrhagic](stroke_type) strokes
       - Limit it to [hemorrhagic](stroke_type) stroke patients
       - Show only [ischemic](stroke_type) cases
+      - Only show patients older than [70]{"entity":"age","role":"lower"}
       - Include patients younger than [50]{"entity":"age","role":"upper"}
       - Limit it to ages [40]{"entity":"age","role":"lower"} to [75]{"entity":"age","role":"upper"}
       - Remove patients under [18]{"entity":"age","role":"lower"}
@@ -259,15 +288,16 @@ nlu:
       - Only include data before [June 2025]{"entity":"date","role":"upper"}
       - Use data from [2022]{"entity":"date","role":"lower"} to [2023]{"entity":"date","role":"upper"}
       - Just show this year's data
-      - Replace [DTN](metric) with [DIDO](metric)
-      - Show [LOS](metric) instead
-      - I'd like to look at [mortality rate](metric) instead
+      - Replace [DTN](metric) with [reason for no thrombectomy](metric)
+      - Show [imaging at first hospital (awards metric)](metric) instead
+      - Show [imaging at first hospital awards metric](metric) instead
+      - I'd like to look at [THROMBOLYSIS_ONLY](metric) instead
       - Use [AdmissionNihss](metric) instead
       - Change the metric to [thrombolysis rate](metric)
-      - Change the metric to [sex](metric)
       - Add [sex](group_by)
       - Add [hospital](group_by)
       - Include [stroke subtype](group_by)
+      - Add a filter for [women](sex)
       - Include only [ischemic](stroke_type) strokes
       - Remove the age filter
       - Remove the sex filter
@@ -284,31 +314,29 @@ nlu:
       - Separate the results by [hospital](group_by)
       - Show each [stroke subtype](group_by) separately
       - Compare across [regions](group_by)
-      - Actually, use [LOS](metric)
+      - Actually, use [AA_SWALLOWING_SCREENING](metric)
       - On second thought, make it a [line](chart_type) chart
       - That's good, but group it by [hospital](group_by)
       - Keep everything else the same, just show [women](sex)
       - Leave the chart as is, but use [2025]{"entity":"date","role":"lower"}
       - Switch to [haemorrhagic](stroke_type) stroke type
-      - Add [DIDO](metric) to the current visualisation
+      - Add [MT_COMPLICATIONS_TYPE](metric) to the current visualisation
+      - Filter for [ischaemic](stroke_type) strokes only
       - Group the data by [stroke type](group_by)
       - Also group the data by [sex](group_by)
       - Group by [quarter](group_by)
       - Change grouping to [quarters](group_by)
-      - Set KPI to percent
+      - Set KPI to [percent]{"entity": "kpi", "value": "percent"}
       - Switch to [scatter](chart_type) plot visualisation
       - Show [initial blood glucose](metric)
       - show me [discharge nihss](metric) in a [bar chart](chart_type) grouped by [stroke type](group_by)
       - make me a [ich score](metric), [line chart](chart_type) grouped by [stroke type](group_by)
+
   - intent: clarify_visualization
     examples: |
       - [DTN](metric)
-      - Use [DIDO](metric)
-      - [NIHSS](metric) please
-      - [SEX](metric)
-      - [sex](metric)
-      - [biological sex](metric)
-      - categorical [sex](metric)
+      - Use [thrombectomy complications type](metric)
+      - [mtici score](metric) please
       - For [last month](date)
       - From [January 1, 2024]{"entity": "date", "role": "lower"} to [March 31, 2024]{"entity": "date", "role": "upper"}
       - [line](chart_type)
@@ -320,14 +348,21 @@ nlu:
       - Use [admission nihss](metric)
       - [this year](date)
       - previous calendar year
+      - the previous calendar year
+      - for the previous calendar year
       - previous year
       - calendar year
       - Jan to Dec last year
       - January through December last year
       - use the previous full year
       - rolling last 12 months
+      - rolling 12 months
+      - last 12 months rolling
+      - use a rolling last twelve months window
       - trailing 12 months
+      - for the trailing twelve months
       - the rolling window please
+      - make it rolling instead
       - use the calendar-year option
       - use the rolling option
       - all quarters
@@ -337,6 +372,10 @@ nlu:
       - trimester
       - show all quarters
       - every quarter
+      - all available quarters
+      - use all quarters
+      - for all quarters
+      - across all quarters
       - [Q1](date)
       - [Q2](date)
       - [Q3](date)
@@ -348,9 +387,9 @@ nlu:
       - third quarter
       - fourth quarter
       - [swallowing screening performed](metric)
-      - [NIHSS](metric), please
+      - [NO_THROMBOLYSIS_REASON](metric), please
       - From [1 January 2024]{"entity": "date", "role": "lower"} to [31 March 2024]{"entity": "date", "role": "upper"}
       - group by [stroke type](group_by)
       - [ischaemic](stroke_type)
       - By [month](group_by)
-      - percent
+      - [percent]{"entity": "kpi", "value": "percent"}
