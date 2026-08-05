@@ -71,6 +71,13 @@ nlu:
       - Display mild strokes with NIHSS below [5]{"entity": "nihss", "role": "upper"}
       - Chart severe cases with NIHSS over [20]{"entity": "nihss", "role": "lower"}
       - Show NIHSS improvements above [10]{"entity": "nihss", "role": "lower"} points
+      - Show me a [bar](chart_type) chart of [DTN](metric) grouped by [NIHSS](group_by) score, split into 0-10 and 10-25
+      - Chart [DTN](metric) grouped by [NIHSS](group_by) score, split into 0-5 and 5-21
+      - Give me [DIDO](metric) split by [NIHSS](group_by) severity buckets 0-10 and 10-25
+      - Break down [LOS](metric) by [NIHSS](group_by) score in buckets 0-4, 5-15, and 16-25
+      - Show [DTN](metric) grouped by [age](group_by) in buckets 0-20, 20-40, and 40-60
+      - Show me a [bar](chart_type) chart of [DTN](metric) grouped by [age](group_by) in 10-year buckets
+      - Chart [DIDO](metric) grouped by [age](group_by) in 5-year buckets
       - Compare [DTN](metric) and [DIDO](metric) scores
       - Show [mortality rate](metric) and [readmission rate](metric) together
       - Display [AdmissionNihss](metric) vs [DischargeNihss](metric) scores
@@ -90,8 +97,15 @@ nlu:
       - Test whether my hospital differs from the national average for [DTN](metric)
       - Can you compare [mine](hospital_scope_reference) [DTN](metric) against [Army Alhama de Murcia Hospital](hospital_name) using Mann Whitney
       - Run a Mann Whitney U test comparing [my hospital](hospital_scope_reference) with [Army Alhama de Murcia Hospital](hospital_name) for [DTN](metric)
+      - Can you compare [my](hospital_scope_reference) dtn against [Army Alhama de Murcia Hospital](hospital_name) using a mann whitney u test
+      - Compare [my](hospital_scope_reference) [DIDO](metric) against [Central Hospital](hospital_name) using Mann Whitney
+      - Compare [my](hospital_scope_reference) dtn per quarter with [Army Alhama de Murcia Hospital](hospital_name) using a line chart
+      - Show a [bar](chart_type) chart of [my](hospital_scope_reference) [NIHSS](metric) versus [Memorial Hospital](hospital_name)
       - Perform a Mann Whitney test on [DTN](metric) between [Q1 2023]{"entity": "date", "role": "lower"} and [Q2 2023]{"entity": "date", "role": "upper"}
       - Is there a significant difference in [DTN](metric) between [Q1 2023]{"entity": "date", "role": "lower"} and [Q2 2023]{"entity": "date", "role": "upper"}?
+      - Run a Mann Whitney U test for [DTN](metric) between provider group [289](group_id) and provider group [252](group_id)
+      - Compare [DTN](metric) between provider group [10](group_id) and provider group [25](group_id) using Mann Whitney
+      - Is there a significant difference in [DIDO](metric) between provider group [4](group_id) and provider group [7](group_id)?
       - Compare [Q1 2023]{"entity": "date", "role": "lower"} to [Q2 2023]{"entity": "date", "role": "upper"} against [Q3 2023]{"entity": "date", "role": "lower"} to [Q4 2023]{"entity": "date", "role": "upper"} using Mann Whitney for [DTN](metric)
       - Compare patients aged [30]{"entity": "age", "role": "lower"} to [45]{"entity": "age", "role": "upper"} with patients aged [60]{"entity": "age", "role": "lower"} to [80]{"entity": "age", "role": "upper"} using Mann Whitney
       - Run a Mann Whitney test for [DIDO](metric)
@@ -140,12 +154,16 @@ nlu:
       - Plot [DTN](metric) by [hospital department](group_by)
       - Break down [NIHSS](metric) by [arrival method](group_by)
       - Group [LOS](metric) by [stroke subtype](group_by)
-      - Show [DTN](metric) grouped by sex
-      - Chart [DTN](metric) split by sex
-      - Give me [DTN](metric) by sex
-      - Show me a [line](chart_type) chart of [DTN](metric) grouped by sex
-      - Display [DIDO](metric) broken down by sex
-      - [NIHSS](metric) grouped by gender
+      - Show [DTN](metric) grouped by [sex](group_by)
+      - Chart [DTN](metric) split by [sex](group_by)
+      - Give me [DTN](metric) by [sex](group_by)
+      - Show me a [line](chart_type) chart of [DTN](metric) grouped by [sex](group_by)
+      - Display [DIDO](metric) broken down by [sex](group_by)
+      - [NIHSS](metric) grouped by [gender](group_by)
+      - Show a [line](chart_type) graph of [age](metric) grouped by [sex](group_by)
+      - Chart [DTN](metric) grouped by [age](group_by)
+      - Plot [DIDO](metric) split by [age](group_by)
+      - Show [mortality rate](metric) grouped by patient [age](group_by)
       - Show [DTN](metric) per sex
       - Compare [DTN](metric) across sexes
       - Chart [DTN](metric) for each sex
