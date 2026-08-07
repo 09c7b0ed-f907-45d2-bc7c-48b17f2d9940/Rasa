@@ -69,11 +69,11 @@ nlu:
       - Show NIHSS improvements above [10]{"entity": "nihss", "role": "lower"} points
       - Show me a [bar](chart_type) chart of [DTN](metric) grouped by [NIHSS](group_by) score, split into 0-10 and 10-25
       - Chart [DIDO](metric) grouped by [NIHSS](group_by) score, split into 0-5 and 5-21
-      - Give me [LOS](metric) split by [NIHSS](group_by) severity buckets 0-10 and 10-25
-      - Break down [mortality rate](metric) by [NIHSS](group_by) score in buckets 0-4, 5-15, and 16-25
+      - Give me [DTN](metric) split by [NIHSS](group_by) severity buckets 0-10 and 10-25
+      - Break down [Thombolytics](metric) by [NIHSS](group_by) score in buckets 0-4, 5-15, and 16-25
       - Show [DTN](metric) grouped by [age](group_by) in buckets 0-20, 20-40, and 40-60
       - Show me a [bar](chart_type) chart of [DIDO](metric) grouped by [age](group_by) in 10-year buckets
-      - Chart [LOS](metric) grouped by [age](group_by) in 5-year buckets
+      - Chart [DTN](metric) grouped by [age](group_by) in 5-year buckets
       - Compare [age at stroke onset](metric) and [PERFUSION_DEFICIT_TYPE](metric) scores
       - Show [THROMBOLYSIS](metric) and [thrombolysis only](metric) together
       - Display [AdmissionNihss](metric) vs [DischargeNihss](metric) scores
@@ -93,6 +93,11 @@ nlu:
       - Compare [my](hospital_scope_reference) [DIDO](metric) against [Central Hospital](hospital_name) using Mann Whitney
       - Compare [my](hospital_scope_reference) dtn per quarter with [Army Alhama de Murcia Hospital](hospital_name) using a line chart
       - Show a [bar](chart_type) chart of [my](hospital_scope_reference) [NIHSS](metric) versus [Memorial Hospital](hospital_name)
+      - Perform a Mann Whitney test on [DTN](metric) between [Q1 2023]{"entity": "date", "role": "lower"} and [Q2 2023]{"entity": "date", "role": "upper"}
+      - Is there a significant difference in [DTN](metric) between [Q1 2023]{"entity": "date", "role": "lower"} and [Q2 2023]{"entity": "date", "role": "upper"}?
+      - Run a Mann Whitney U test for [DTN](metric) between provider group [289](group_id) and provider group [252](group_id)
+      - Compare [DTN](metric) between provider group [10](group_id) and provider group [25](group_id) using Mann Whitney
+      - Is there a significant difference in [DIDO](metric) between provider group [4](group_id) and provider group [7](group_id)?
       - Statistically compare [q1 2023](date) to [q2 2023](date) for [DTN](metric)
       - using a man-whitney u test, compare [q1 2023](date) to [q2 2023](date) for [DTN](metric)
       - Compare [arrival pathway](metric) for [Q1 2023]{"entity": "date", "role": "lower"} to [Q2 2023]{"entity": "date", "role": "upper"} using Mann Whitney
@@ -113,7 +118,7 @@ nlu:
       - Perform a Mann Whitney U test comparing patients aged [30]{"entity": "age", "role": "lower"} to [45]{"entity": "age", "role": "upper"} and [60]{"entity": "age", "role": "lower"} to [80]{"entity": "age", "role": "upper"} for [DTN](metric)
       - Run a Mann Whitney U test for [DTN](metric) between provider group [289](group_id) and provider group [252](group_id)
       - Compare [DIDO](metric) between provider group [10](group_id) and provider group [25](group_id) using Mann Whitney
-      - Is there a significant difference in [LOS](metric) between provider group [4](group_id) and provider group [7](group_id)?
+      - Is there a significant difference in [DTN](metric) between provider group [4](group_id) and provider group [7](group_id)?
       - Run a Mann Whitney test for [PERFUSION_CORE](metric)
       - Compare [door-to-needle ≤60 minutes](metric) using a Mann Whitney U test
       - Perform a Mann Whitney test on [primary dtg](metric)
@@ -175,7 +180,7 @@ nlu:
       - Show a [line](chart_type) graph of [age](metric) grouped by [sex](group_by)
       - Chart [DTN](metric) grouped by [age](group_by)
       - Plot [DIDO](metric) split by [age](group_by)
-      - Show [mortality rate](metric) grouped by patient [age](group_by)
+      - Show [Admission Nihss](metric) grouped by patient [age](group_by)
       - I'd like [mechanical thrombectomy](metric) grouped by [EMS prenotification](group_by)
       - Compare [HYPOPERFUSION](metric) across [treatment type](group_by)
       - Show [diastolic pressure](metric) for [ischemic](stroke_type) stroke patients
