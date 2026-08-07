@@ -131,6 +131,19 @@ pipeline:
   - name: FallbackClassifier
     threshold: 0.3
     ambiguity_threshold: 0.1
+
+  # LLM fallback -- only runs when FallbackClassifier just fired above (i.e.
+  # Rasa's own classifier already gave up), not on every message. Asks an LLM
+  # to pick one of the real domain intents; anything that isn't an exact
+  # match to that closed set is discarded and the nlu_fallback prediction
+  # from FallbackClassifier stands. No-ops entirely if LLM_PROVIDER/LLM_MODEL
+  # aren't configured.
+  - name: src.components.llm_intent_fallback.LLMIntentFallback
+    enabled: true
+    llm_confidence: 0.5
+    max_tokens: 20
+    timeout_seconds: 8
+    debug_logging: false
 policies:
   - name: MemoizationPolicy
   - name: RulePolicy
