@@ -37,6 +37,8 @@
 !/src/shared/**
 !/src/__init__.py
 !/src/run_rasa.py
+!/src/thread_index.py
+!/src/thread_index_store.py
 !/tests/**
 
 .generated

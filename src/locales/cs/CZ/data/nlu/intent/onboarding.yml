@@ -1,0 +1,17 @@
+version: "3.1"
+
+nlu:
+  - intent: who_are_you
+    examples: |
+      - Jak mám tohoto bota používat?
+      - Kdo jsi?
+      - Co je tohle?
+      - Co umíš?
+      - Jaký je tvůj účel?
+      - Proč existuješ?
+      - Na co se tě mohu zeptat?
+      - K čemu je tento bot?
+      - Jaká je tvoje funkce?
+      - Jaká je tvoje role?
+      - Co děláš?
+      - Jaká je tvoje práce?

@@ -3,3 +3,5 @@ version: "3.1"
 responses:
   utter_default:
     - text: "Promiň, nerozuměl jsem. Můžeš to prosím říct jinak?"
+  utter_out_of_scope:
+    - text: "Omlouvám se, s tím ti nemohu pomoci. Zeptej se mě prosím na něco souvisejícího s daty RES-Q."

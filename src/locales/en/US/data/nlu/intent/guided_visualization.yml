@@ -30,6 +30,10 @@ nlu:
       - cancel the guided flow
       - cancel guided mode
       - end guided mode
+      - stop
+      - cancel
+      - halt
+      - exit
 
   - intent: provide_guided_hospital_scope
     examples: |
@@ -48,6 +52,15 @@ nlu:
       - [mine](hospital_scope_reference)
       - [ours](hospital_scope_reference)
       - [our hospital](hospital_scope_reference)
+      - [Canada](country_code)
+      - use [Germany](country_code)
+      - [Japan](country_code)
+      - hospital named [Saint](hospital_name)
+      - use [Children](hospital_name)
+      - [just mine](hospital_scope_reference)
+      - [the whole network](hospital_scope_reference)
+      - use group [50](group_id)
+      - [everything](hospital_scope_reference)
 
   - intent: skip_guided_step
     examples: |
@@ -65,3 +78,11 @@ nlu:
       - no filter
       - none
       - leave it blank
+      - don't care
+      - whatever works
+      - I don't have a preference
+      - any is fine
+      - doesn't matter
+      - pass
+      - not applicable
+      - let's move to the next one

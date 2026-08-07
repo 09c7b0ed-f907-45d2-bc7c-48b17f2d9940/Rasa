@@ -5,21 +5,8 @@ nlu:
     examples: |
       - [placeholder] localized in en/us or locale overlays
 
-  - lookup: country_code
-    examples: |
-      - [placeholder] localized in en/us or locale overlays
-
-  - synonym: US
-    examples: |
-      - [placeholder] localized in en/us or locale overlays
-
-  - synonym: ES
-    examples: |
-      - [placeholder] localized in en/us or locale overlays
-
-  - synonym: MX
-    examples: |
-      - [placeholder] localized in en/us or locale overlays
+  # country_code lookup/synonym data is generated from SSOT/CountryType.yml by
+  # OverlayImporter -- see src/components/layered_importer.py.
 
   - regex: limit
     examples: |

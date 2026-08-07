@@ -74,11 +74,13 @@ jobs:
           CHANGED="${{ steps.diff.outputs.files }}"
           CHANGED_LANGS=()
           FALLBACK_REGION="us"
-          # If global-impact files changed, rebuild all languages
+          # If global-impact files changed, rebuild all languages.
+          # Runtime entrypoint/API changes (e.g. thread endpoints) must fan out
+          # to every language image because all variants share the same runtime.
           if [ "${FORCE_ALL}" = "true" ]; then
             IFS=',' read -ra ALL <<< "$LANGS"
             CHANGED_LANGS=("${ALL[@]}")
-          elif echo "$CHANGED" | grep -qE "^(Dockerfile|scripts/|src/components/|src/core/|src/locales/en/)"; then
+          elif echo "$CHANGED" | grep -qE "^(Dockerfile|scripts/|src/components/|src/core/|src/run_rasa\.py|src/thread_index\.py|src/locales/en/)"; then
             IFS=',' read -ra ALL <<< "$LANGS"
             CHANGED_LANGS=("${ALL[@]}")
           else
@@ -174,17 +176,15 @@ jobs:
             DOCKER_OUTPUT_FLAG="--load"
             ATTEST_ARGS=()
           fi
-          # Determine tags based on trigger and branch
+          # Determine tags based on trigger and branch.
+          # Keep a moving channel tag for deployments plus immutable tags for traceability.
           RAW_REF="${TARGET_REF:-${{ github.ref_name }}}"
           SAFE_BRANCH="$(echo "$RAW_REF" | tr '[:upper:]' '[:lower:]' | tr '/ ' '-' | tr -cd 'a-z0-9._-')"
           if [[ -z "$SAFE_BRANCH" ]]; then
             SAFE_BRANCH="manual"
           fi
 
-          if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" ]]; then
-            CHANNEL_TAG="${SAFE_TAG}-${SAFE_BRANCH}-manual"
-            SHA_TAG="${SAFE_TAG}-${SAFE_BRANCH}-${SHORT_SHA}"
-          elif [[ "$SAFE_BRANCH" == "master" ]]; then
+          if [[ "$SAFE_BRANCH" == "master" ]]; then
             CHANNEL_TAG="${SAFE_TAG}-latest"
             SHA_TAG="${SAFE_TAG}-master-${SHORT_SHA}"
           elif [[ "$SAFE_BRANCH" == "dev" ]]; then

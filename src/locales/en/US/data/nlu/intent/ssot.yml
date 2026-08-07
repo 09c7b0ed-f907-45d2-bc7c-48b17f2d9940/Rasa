@@ -73,3 +73,12 @@ nlu:
       - What does [AGE](metric) represent in your data?
       - Explain the metric [DIDO](metric).
       - What is the definition of [ADMISSION_NIHSS](metric)?
+      - Tell me what [NIHSS](metric) means
+      - Give me a definition of [LOS](metric)
+      - I don't understand the metric [mRS](metric)
+      - What's [DischargeNihss](metric)?
+      - Break down [THROMBOLYSIS](metric) for me
+      - Clarify what [GLUCOSE](metric) stands for
+      - Can you define [SYSTOLIC_PRESSURE](metric)?
+      - What kind of metric is [ARRIVAL_MODE](metric)?
+      - Help me understand [PRESTROKE_MRS](metric)

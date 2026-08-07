@@ -3,43 +3,354 @@ version: "3.1"
 nlu:
   - intent: generate_visualization
     examples: |
-      - Ukaž mi [door to needle](metric) a [DIDO](metric)
+      - Ukaž mi skóre [door to needle](metric) a [DIDO](metric)
       - Chci [NIHSS](metric) pro všechny pacienty
       - Dej mi [AdmissionNihss](metric) a [DischargeNihss](metric)
+      - Ukaž mi [sloupcový](chart_type) graf pro [pohlaví](metric)
+      - Graf [pohlaví](metric)
+      - Dej mi graf [biologického pohlaví](metric)
+      - Vizualizuj rozložení [pohlaví](metric)
+      - Znázorni rozdělení podle [pohlaví](metric)
+      - Ukaž počty podle [pohlaví](metric)
+      - Udělej [koláčový](chart_type) graf [pohlaví](metric)
+      - Chci vidět [pohlaví](metric) jako graf
+      - Zobraz [sloupcový](chart_type) graf [biologického pohlaví](metric)
       - Ukaž mi [DTN](metric) pro [mužské](sex) pacienty
-      - Graf [DIDO](metric) u [ženských](sex) pacientek
-      - Dej mi data [NIHSS](metric) pro [muže](sex) a [ženy](sex)
+      - Graf [DIDO](metric) u [ženských](sex) pacientek s mrtvicí
+      - Dej mi data [NIHSS](metric) pro pacienty [muže](sex) a [ženy](sex)
+      - Ukaž mi [door to needle time](metric) pro pacienty ve věku [50]{"entity": "age", "role": "lower"} až [90]{"entity": "age", "role": "upper"} let
+      - Dej mi [door in door out](metric) mezi věkem [30]{"entity": "age", "role": "lower"} a [50]{"entity": "age", "role": "upper"}
+      - Zobraz [AdmissionNihss](metric) pro pacienty ve věku od [60]{"entity": "age", "role": "lower"} do [80]{"entity": "age", "role": "upper"}
+      - Ukaž mi [DTN](metric) pro pacienty starší [50]{"entity": "age", "role": "lower"} let
+      - Dej mi [door in door out time](metric) pro pacienty starší [65]{"entity": "age", "role": "lower"} let
+      - Zobraz data pro pacienty mladší [30]{"entity": "age", "role": "upper"} let
+      - Ukaž pacienty ve věku [18]{"entity": "age", "role": "lower"} let a starší
+      - Graf pro pacienty mladší [90]{"entity": "age", "role": "upper"} let
+      - Graf [DTN](metric) seskupený podle [místa prvního kontaktu](group_by)
+      - Ukaž [DIDO](metric) podle [nemocničního oddělení](group_by)
+      - Dej mi průměrné [NIHSS](metric) seskupené podle [předběžného oznámení záchranné služby](group_by)
+      - Ukaž [DTN](metric) bez pacientů s [ischemickou](stroke_type) mrtvicí
+      - Graf [DIDO](metric) pro [hemoragické](stroke_type) mrtvice
+      - Dej mi skóre [NIHSS](metric) bez pacientů s [TIA](stroke_type)
+      - Ukaž [DTN](metric) mezi [4. březnem 2023]{"entity": "date", "role": "lower"} a [5. červencem 2024]{"entity": "date", "role": "upper"}
+      - Graf [DIDO](metric) od [1. ledna 2022]{"entity": "date", "role": "lower"} do [31. prosince 2022]{"entity": "date", "role": "upper"}
+      - Ukaž data po [2023-01-01]{"entity": "date", "role": "lower"}
+      - Zobraz záznamy před [2024-12-31]{"entity": "date", "role": "upper"}
+      - Dej mi data od [Q1 2023]{"entity": "date", "role": "lower"}
+      - Ukaž nedávná data od [minulého měsíce]{"entity": "date", "role": "lower"}
+      - Ukaž [čárový](chart_type) graf [DTN](metric)
+      - Dej mi [sloupcový](chart_type) graf [DIDO](metric) pro [ženské](sex) pacientky
+      - Zobraz [koláčový](chart_type) graf [NIHSS](metric) seskupený podle [typu mrtvice](group_by)
+      - Ukaž [čárový](chart_type) graf pro [DTN](metric) a [DIDO](metric) pro [mužské](sex) a [ženské](sex) pacienty ve věku od [40]{"entity": "age", "role": "lower"} do [60]{"entity": "age", "role": "upper"}
+      - Dej mi graf [věku](metric) pacientů seskupený podle [místa prvního kontaktu](group_by), bez [ischemických](stroke_type) mrtvic, ve věku od [18]{"entity": "age", "role": "lower"} do [90]{"entity": "age", "role": "upper"}
+      - Můžeš mi ukázat [LOS](metric) pro pacienty s [ischemickou](stroke_type) mrtvicí?
+      - Zobraz skóre [DischargeNihss](metric) seskupené podle [typu léčby](group_by)
+      - Potřebuji [bodový](chart_type) graf [DTN](metric) vs [DIDO](metric)
+      - Ukaž mi [úmrtnost](metric) pro pacienty ve věku [65]{"entity": "age", "role": "lower"} let a starší
+      - Graf [míry rehospitalizace](metric) podle [podtypu mrtvice](group_by) pro [ženské](sex) pacientky
+      - Dej mi skóre [mRS](metric) pro [hemoragické](stroke_type) mrtvice od [2023-01-01]{"entity": "date", "role": "lower"} do [2023-12-31]{"entity": "date", "role": "upper"}
+      - Zobraz [histogram](chart_type) rozložení [věku](metric)
+      - Ukaž [míru trombolýzy](metric) seskupenou podle [způsobu příjezdu](group_by)
+      - Chci vidět zlepšení [NIHSS](metric) mezi [přijetím]{"entity": "nihss", "role": "lower"} a [propuštěním]{"entity": "nihss", "role": "upper"}
+      - Graf výkonnosti [DTN](metric) podle [měsíce](group_by) v [čárovém](chart_type) grafu
+      - Ukaž [míru komplikací](metric) pro [mužské](sex) pacienty s [TIA](stroke_type)
+      - Zobraz časy [door to imaging](metric) pro urgentní případy
+      - Dej mi statistiky [LOS](metric) pro pacienty ve věku od [18]{"entity": "age", "role": "lower"} do [45]{"entity": "age", "role": "upper"}
+      - Ukaž [box plot](chart_type) [DIDO](metric) podle [úrovně závažnosti](group_by)
+      - Graf [funkčního výsledku](metric) pro pacienty s [ischemickou](stroke_type) mrtvicí podle pohlaví
+      - Potřebuji trendy [DTN](metric) za poslední rok
+      - Zobraz míru [dodržování medikace](metric) podle [věkové skupiny](group_by)
+      - Ukaž [dobu reakce záchranné služby](metric) pro [hemoragické](stroke_type) případy
+      - Dej mi [radar chart](chart_type) více [KPI](metric) podle [nemocniční jednotky](group_by)
+      - Graf rozložení [NIHSS](metric) od [Q1 2023]{"entity": "date", "role": "lower"} do [Q4 2023]{"entity": "date", "role": "upper"}
+      - Ukaž skóre NIHSS v rozmezí od [0]{"entity": "nihss", "role": "lower"} do [15]{"entity": "nihss", "role": "upper"}
+      - Zobraz změny NIHSS mezi [5]{"entity": "nihss", "role": "lower"} a [25]{"entity": "nihss", "role": "upper"}
+      - Graf vývoje NIHSS od závažnosti [8]{"entity": "nihss", "role": "lower"} do [20]{"entity": "nihss", "role": "upper"}
+      - Dej mi trendy NIHSS od [12]{"entity": "nihss", "role": "lower"} do [22]{"entity": "nihss", "role": "upper"}
+      - Ukaž pacienty s NIHSS nad [15]{"entity": "nihss", "role": "lower"}
+      - Zobraz mírné mrtvice s NIHSS pod [5]{"entity": "nihss", "role": "upper"}
+      - Graf závažných případů s NIHSS nad [20]{"entity": "nihss", "role": "lower"}
+      - Ukaž zlepšení NIHSS o více než [10]{"entity": "nihss", "role": "lower"} bodů
+      - Porovnej skóre [DTN](metric) a [DIDO](metric)
+      - Ukaž [úmrtnost](metric) a [míru rehospitalizace](metric) společně
+      - Zobraz skóre [AdmissionNihss](metric) vs [DischargeNihss](metric)
+      - Graf výsledků [mužských](sex) a [ženských](sex) pacientů
+      - Porovnej data [ischemické](stroke_type) a [hemoragické](stroke_type) mrtvice
+      - Ukaž časy [DTN](metric), [DIDO](metric) a [door to imaging](metric)
+      - Porovnej [DTN](metric) mé nemocnice s celostátním průměrem ve Velké Británii
+      - Porovnej [DTN](metric) mé nemocnice s celostátním průměrem Velké Británie
+      - Ukaž [čárový](chart_type) graf [DTN](metric) pro mou nemocnici vs celostátní průměr Velké Británie
+      - Spusť Mann Whitney test porovnávající [DTN](metric) mé nemocnice s celostátním průměrem
+      - Porovnej [DTN](metric) mé nemocnice s celostátním průměrem Velké Británie pomocí Mann Whitney
+      - Statisticky porovnej [q1 2023](date) s [q2 2023](date) pro [DTN](metric)
+      - pomocí man-whitney u testu porovnej [q1 2023](date) s [q2 2023](date) pro [DTN](metric)
+      - Porovnej [DTN](metric) za [Q1 2023]{"entity": "date", "role": "lower"} a [Q2 2023]{"entity": "date", "role": "upper"} pomocí Mann Whitney
+      - Ukaž mi [DTN](metric) po [čtvrtletích](group_by) za [poslední 2 roky](date)
+      - Liší se [DTN](metric) mé nemocnice významně od celostátního průměru?
+      - Otestuj, zda se má nemocnice liší od celostátního průměru v [DTN](metric)
+      - Můžeš porovnat [DTN](metric) [mé](hospital_scope_reference) nemocnice s [Army Alhama de Murcia Hospital](hospital_name) pomocí Mann Whitney?
+      - Spusť Mann Whitney U test porovnávající [mou nemocnici](hospital_scope_reference) s [Army Alhama de Murcia Hospital](hospital_name) pro [DTN](metric)
+      - Proveď Mann Whitney test na [DTN](metric) mezi [Q1 2023]{"entity": "date", "role": "lower"} a [Q2 2023]{"entity": "date", "role": "upper"}
+      - Existuje významný rozdíl v [DTN](metric) mezi [Q1 2023]{"entity": "date", "role": "lower"} a [Q2 2023]{"entity": "date", "role": "upper"}?
+      - Porovnej [Q1 2023]{"entity": "date", "role": "lower"} až [Q2 2023]{"entity": "date", "role": "upper"} s [Q3 2023]{"entity": "date", "role": "lower"} až [Q4 2023]{"entity": "date", "role": "upper"} pomocí Mann Whitney pro [DTN](metric)
+      - Porovnej pacienty ve věku od [30]{"entity": "age", "role": "lower"} do [45]{"entity": "age", "role": "upper"} let s pacienty ve věku od [60]{"entity": "age", "role": "lower"} do [80]{"entity": "age", "role": "upper"} let pomocí Mann Whitney
+      - Spusť Mann Whitney test pro [DIDO](metric)
+      - Otestuj [Door to Needle Time](metric) pomocí Mann Whitney
+      - Ukaž [DTN](metric) po [čtvrtletích](group_by) za [poslední 2 roky](date)
+      - Graf [DTN](metric) podle [čtvrtletí](group_by) za [poslední rok](date)
+      - Ukaž [DIDO](metric) po [měsících](group_by) za [posledních 6 měsíců](date)
+      - Dej mi [DTN](metric) po [týdnech](group_by) za [poslední 3 měsíce](date)
+      - Ukaž trendy [DTN](metric) [po měsících](group_by) za [poslední rok](date)
+      - Zobraz [LOS](metric) [po čtvrtletích](group_by) za [poslední 2 roky](date)
+      - Graf [DTN](metric) [po čtvrtletích](group_by) od [2023](date) do [2024](date)
+      - Ukaž mi [NIHSS](metric) [po měsících](group_by) od [ledna 2023](date)
+      - Dej mi výkonnost [DTN](metric) [po čtvrtletích](group_by) za [posledních 12 měsíců](date)
+      - Zobraz data od [Q1 2023]{"entity": "date", "role": "lower"} do [Q2 2023]{"entity": "date", "role": "upper"} vs od [Q3 2023]{"entity": "date", "role": "lower"} do [Q4 2023]{"entity": "date", "role": "upper"}
+      - Porovnej pacienty ve věku od [30]{"entity": "age", "role": "lower"} do [45]{"entity": "age", "role": "upper"} let s pacienty ve věku od [60]{"entity": "age", "role": "lower"} do [80]{"entity": "age", "role": "upper"} let
+      - Ukaž mi [DTN](metric) v roce [2025](date)
+      - Graf [DTN](metric) za [2024](date)
+      - Zobraz [DTN](metric) od [2025](date)
+      - Dej mi data [DIDO](metric) za [2023](date)
+      - Ukaž [DTN](metric) v průběhu [2025](date)
+      - Mohl bys vykreslit [DTN](metric)?
+      - Můžu vidět [DIDO](metric)?
+      - Rád bych se podíval na [AdmissionNihss](metric)
+      - Ukaž mi [LOS](metric)
+      - Vizualizuj [úmrtnost](metric)
+      - Vykresli [míru rehospitalizace](metric)
+      - Udělej graf [NIHSS](metric)
+      - Vytvoř vizualizaci pro [DTN](metric)
+      - Potřebuji prozkoumat [door to needle time](metric)
+      - Jaké je rozložení [věku](metric)?
+      - Jak vypadá [DTN](metric)?
+      - Můžeme se podívat na [DischargeNihss](metric)?
+      - Ukaž trend pro [míru trombolýzy](metric)
+      - Chci přehled [mRS](metric)
+      - Zobraz hodnoty pro [door in door out](metric)
+      - Ukaž [DTN](metric) pro [ženy](sex)
+      - Rád bych viděl [LOS](metric) u [mužů](sex)
+      - Vykresli [úmrtnost](metric) pro [ženské](sex) pacientky
+      - Porovnej [DIDO](metric) pro [mužské](sex) pacienty
+      - Vizualizuj [NIHSS](metric) u [žen](sex)
+      - Ukaž [DTN](metric) pro pacienty mladší [45]{"entity":"age","role":"upper"} let
+      - Vykresli [LOS](metric) pro pacienty starší [75]{"entity":"age","role":"lower"} let
+      - Rád bych viděl [úmrtnost](metric) mezi [55]{"entity":"age","role":"lower"} a [80]{"entity":"age","role":"upper"} lety
+      - Vizualizuj pacienty ve věku [40]{"entity":"age","role":"lower"} let a starší
+      - Ukaž záznamy pro pacienty mladší [30]{"entity":"age","role":"upper"} let
+      - Vykresli [DTN](metric) podle [nemocničního oddělení](group_by)
+      - Rozděl [NIHSS](metric) podle [způsobu příjezdu](group_by)
+      - Seskup [LOS](metric) podle [podtypu mrtvice](group_by)
+      - Ukaž [DTN](metric) seskupené podle pohlaví
+      - Graf [DTN](metric) rozdělený podle pohlaví
+      - Dej mi [DTN](metric) podle pohlaví
+      - Ukaž mi [čárový](chart_type) graf [DTN](metric) seskupený podle pohlaví
+      - Zobraz [DIDO](metric) rozdělené podle pohlaví
+      - [NIHSS](metric) seskupené podle pohlaví
+      - Ukaž [DTN](metric) podle pohlaví
+      - Porovnej [DTN](metric) mezi pohlavími
+      - Graf [DTN](metric) pro každé pohlaví
+      - Ukaž [DIDO](metric) rozdělené podle pohlaví
+      - Rád bych [úmrtnost](metric) seskupenou podle [předběžného oznámení záchranné služby](group_by)
+      - Porovnej [DIDO](metric) mezi [typy léčby](group_by)
+      - Ukaž [DTN](metric) pro pacienty s [ischemickou](stroke_type) mrtvicí
+      - Vykresli [LOS](metric) bez [TIA](stroke_type)
+      - Zobraz [mRS](metric) pro [hemoragické](stroke_type) mrtvice
+      - Vizualizuj [NIHSS](metric) bez [hemoragických](stroke_type) případů
+      - Ukaž pouze pacienty s [ischemickou](stroke_type) mrtvicí
+      - Ukaž [DTN](metric) od [ledna 2024]{"entity":"date","role":"lower"}
+      - Zobraz [LOS](metric) před [červnem 2025]{"entity":"date","role":"upper"}
+      - Vykresli [úmrtnost](metric) od [2022-01-01]{"entity":"date","role":"lower"} do [2022-12-31]{"entity":"date","role":"upper"}
+      - Ukaž data sesbíraná po [minulém roce]{"entity":"date","role":"lower"}
+      - Vizualizuj [NIHSS](metric) během [Q2 2024]{"entity":"date","role":"lower"}
+      - Rád bych [box](chart_type) plot [LOS](metric)
+      - Vytvoř [bodový](chart_type) graf pro [DTN](metric) a [LOS](metric)
+      - Udělej [čárový](chart_type) graf zobrazující [úmrtnost](metric)
+      - Použij [sloupcový](chart_type) graf pro [míru trombolýzy](metric)
+      - Zobraz [věk](metric) jako [histogram](chart_type)
+      - Ukaž [čárový](chart_type) graf [DTN](metric) seskupený podle [nemocničního oddělení](group_by) pro [ženské](sex) pacientky
+      - Vykresli [LOS](metric) pro pacienty s [ischemickou](stroke_type) mrtvicí staršími [70]{"entity":"age","role":"lower"} let
+      - Rád bych [NIHSS](metric) seskupené podle [způsobu příjezdu](group_by) mezi [2023-01-01]{"entity":"date","role":"lower"} a [2023-12-31]{"entity":"date","role":"upper"}
+      - Můžeš vizualizovat [DIDO](metric) pro [mužské](sex) pacienty ve věku od [40]{"entity":"age","role":"lower"} do [65]{"entity":"age","role":"upper"} let?
+      - Ukaž [sloupcový](chart_type) graf [úmrtnosti](metric) podle [podtypu mrtvice](group_by) pro [hemoragické](stroke_type) mrtvice
+      - Ukaž mi [DTN](metric) seskupené podle [typu mrtvice](stroke_type)
+      - Graf [NIHSS](metric) rozdělený podle [typu mrtvice](stroke_type)
+      - [admission nihss](metric) [po čtvrtletích](group_by) podle [typu mrtvice](stroke_type)
+      - Rozděl [DTN](metric) podle [typu mrtvice](stroke_type)
+      - Seskup [LOS](metric) podle [typu mrtvice](stroke_type)
+      - Ukaž [pohlaví](metric) v procentech v [sloupcovém](chart_type) grafu
+      - Dej mi [typ mrtvice](metric) v procentech pomocí [čárového](chart_type) grafu
+      - Zobraz [Hospitalized in](metric) v procentech
+      - Ukaž mi [pohlaví](metric) pacientů v [sloupcovém](chart_type) grafu seskupené podle [čtvrtletí](group_by)
+      - Ukaž mi [typ mrtvice](metric) pacientů v [sloupcovém](chart_type) grafu seskupené podle [čtvrtletí](group_by)
+      - Ukaž mi čárový graf [dtn](metric) seskupený podle [způsobu měření INR](group_by)
+      - Udělej mi sloupcový graf [absolvované fyzioterapie](metric) seskupený podle [typu mrtvice](group_by)
   - intent: update_visualization
     examples: |
       - Změň graf na [sloupcový](chart_type)
-      - Aktualizuj tak, aby zobrazoval pouze [ženské](sex) pacienty
+      - Aktualizuj tak, aby zobrazoval pouze [ženské](sex) pacientky
+      - Filtruj pouze [mužské](sex) pacienty
+      - Filtruj pouze [muže](sex)
+      - Filtruj pouze [ženské](sex) pacientky
       - Změň rozsah dat na [2023]{"entity": "date", "role": "lower"} až [2024]{"entity": "date", "role": "upper"}
       - Přepni na [hemoragický](stroke_type) typ mrtvice
-      - Přidej metriku [DIDO](metric)
-      - Odeber [mužské](sex) pacienty
+      - Seskup data podle [léčebného zařízení](group_by)
+      - Nyní seskup podle [místa prvního kontaktu](group_by)
+      - Seskup podle [místa prvního kontaktu](group_by)
+      - Teď to seskup podle [místa prvního kontaktu](group_by)
+      - Rozděl to podle [místa prvního kontaktu](group_by)
+      - Přidej [DIDO](metric) do aktuální vizualizace
+      - Odeber [mužské](sex) pacienty z grafu
+      - Změň věkové rozmezí na [55]{"entity": "age", "role": "lower"} až [75]{"entity": "age", "role": "upper"}
+      - Změň typ grafu na [koláčový](chart_type)
+      - Filtruj pouze [ischemické](stroke_type) mrtvice
+      - Změň seskupení na [zdroj přijetí](group_by)
+      - Změň KPI na [AdmissionNihss](metric)
+      - Aktualizuj filtr data na posledních [6 měsíců]{"entity": "date", "role": "lower"}
+      - Přepni na vizualizaci typu [bodový](chart_type) graf
+      - Přidej do analýzy pacienty s [TIA](stroke_type)
+      - Ukaž pouze pacienty starší [70]{"entity": "age", "role": "lower"} let
+      - Filtruj data po [2024-01-01]{"entity": "date", "role": "lower"}
+      - udělej z toho místo toho [čárový](chart_type) graf
+      - změň na [sloupcový](chart_type) graf
+      - aktualizuj na [koláčový](chart_type) graf
+      - přepni na [čárový](chart_type) graf
+      - pouze pro pacienty [v roce 2026]{"entity": "date"}
+      - ukaž pouze pacienty [od roku 2023]{"entity": "date"}
+      - pouze data z [2025]{"entity": "date"}
+      - filtruj pacienty mladší [50]{"entity": "age", "role": "upper"} let
+      - filtruj věk pod [65]{"entity": "age", "role": "upper"} let
+      - ukaž pouze pacienty mladší [40]{"entity": "age", "role": "upper"} let
+      - ukaž pacienty mladší [30]{"entity": "age", "role": "upper"} let
+      - omez na pacienty mladší [55]{"entity": "age", "role": "upper"} let
+      - filtruj [tranzitorní ischemické](stroke_type) ataky
+      - ukaž pouze pacienty s [krvácením do mozku](stroke_type)
+      - Zahrň pouze pacienty z [2025](date)
+      - Ukaž pouze záznamy z [2025](date)
+      - ukaž data z [2024](date) a [2025](date)
+      - ukaž data od [2023](date) do [2025](date)
+      - zobraz data za [2023](date) a [2024](date)
+      - zahrň [2024](date) a [2025](date)
+      - Změň to na [čárový](chart_type) graf
+      - Udělej z toho místo toho [sloupcový](chart_type) graf
+      - Použij [bodový](chart_type) graf
+      - Přepni na [box](chart_type) graf
+      - Raději bych viděl [histogram](chart_type)
+      - Seskup to podle [nemocnice](group_by)
+      - Místo toho to seskup podle [pohlaví](group_by)
+      - Rozděl to podle [podtypu mrtvice](group_by)
+      - Můžeš seskupit výsledky podle [způsobu příjezdu](group_by)?
+      - Ukaž stejná data seskupená podle [regionu](group_by)
+      - Zahrň pouze [ženy](sex)
+      - Ukaž pouze [muže](sex)
+      - Omez to na [ženské](sex) pacientky
+      - Vylouč [mužské](sex) pacienty
+      - Filtruj [ženy](sex)
+      - Zahrň pouze [ischemické](stroke_type) mrtvice
+      - Vylouč [TIA](stroke_type)
+      - Odeber [hemoragické](stroke_type) mrtvice
+      - Omez to na pacienty s [hemoragickou](stroke_type) mrtvicí
+      - Ukaž pouze [ischemické](stroke_type) případy
+      - Zahrň pacienty mladší [50]{"entity":"age","role":"upper"} let
+      - Omez to na věk od [40]{"entity":"age","role":"lower"} do [75]{"entity":"age","role":"upper"} let
+      - Odeber pacienty mladší [18]{"entity":"age","role":"lower"} let
+      - Zaměř se na starší pacienty
+      - Ukaž data od [2024]{"entity":"date","role":"lower"}
+      - Omez to na dobu po [lednu 2023]{"entity":"date","role":"lower"}
+      - Zahrň pouze data před [červnem 2025]{"entity":"date","role":"upper"}
+      - Použij data od [2022]{"entity":"date","role":"lower"} do [2023]{"entity":"date","role":"upper"}
+      - Ukaž jen data za letošní rok
+      - Nahraď [DTN](metric) za [DIDO](metric)
+      - Ukaž místo toho [LOS](metric)
+      - Rád bych se místo toho podíval na [úmrtnost](metric)
+      - Použij místo toho [AdmissionNihss](metric)
+      - Změň metriku na [míru trombolýzy](metric)
+      - Změň metriku na [pohlaví](metric)
+      - Přidej [pohlaví](group_by)
+      - Přidej [nemocnici](group_by)
+      - Zahrň [podtyp mrtvice](group_by)
+      - Ponech pouze [ischemické](stroke_type) mrtvice
+      - Odeber filtr věku
+      - Odeber filtr pohlaví
+      - Vymaž filtr data
+      - Odeber seskupení
+      - Už data neseskupuj
+      - Přibliž se na poslední rok
+      - Ukaž delší časové období
+      - Rozšiř rozsah dat
+      - Zúž věkové rozmezí
+      - Rozšiř věkové rozmezí
+      - Porovnej [muže](sex) a [ženy](sex)
+      - Rozděl graf podle [pohlaví](group_by)
+      - Odděl výsledky podle [nemocnice](group_by)
+      - Ukaž každý [podtyp mrtvice](group_by) zvlášť
+      - Porovnej mezi [regiony](group_by)
+      - Vlastně použij [LOS](metric)
+      - Po zvážení z toho udělej [čárový](chart_type) graf
+      - To je dobré, ale seskup to podle [nemocnice](group_by)
+      - Nech všechno ostatní stejné, jen ukaž [ženy](sex)
+      - Nech graf tak, jak je, ale použij [2025]{"entity":"date","role":"lower"}
+      - Změň typ mrtvice na [hemoragický](stroke_type)
+      - Doplň [DIDO](metric) do stávající vizualizace
       - Seskup data podle [typu mrtvice](group_by)
-      - Změň metriku na [AdmissionNihss](metric)
-      - Přepni vizualizaci na [koláčový](chart_type)
-      - Uprav věkové rozmezí na [55]{"entity": "age", "role": "lower"} až [75]{"entity": "age", "role": "upper"}
-      - Filtruj pouze [ischemická](stroke_type) mrtvice
-      - Zobraz data po [2024-01-01]{"entity": "date", "role": "lower"}
-      - Změň seskupení na [měsíc](group_by)
-      - Udělej z toho [bodový](chart_type) graf
-      - Aktualizuj filtr na posledních [6 měsíců]{"entity": "date", "role": "lower"}
+      - Také seskup data podle [pohlaví](group_by)
+      - Seskup podle [čtvrtletí](group_by)
+      - Změň seskupení na [čtvrtletí](group_by)
+      - Nastav KPI na procenta
+      - Změň vizualizaci na [bodový](chart_type) graf
+      - Ukaž [vstupní glykémii](metric)
+      - ukaž mi [discharge nihss](metric) v [sloupcovém grafu](chart_type) seskupeném podle [typu mrtvice](group_by)
+      - udělej mi [ich score](metric), [čárový graf](chart_type) seskupený podle [typu mrtvice](group_by)
   - intent: clarify_visualization
     examples: |
       - [DTN](metric)
       - Použij [DIDO](metric)
       - [NIHSS](metric), prosím
+      - [POHLAVÍ](metric)
+      - [pohlaví](metric)
+      - [biologické pohlaví](metric)
+      - kategorické [pohlaví](metric)
       - Za [poslední měsíc](date)
       - Od [1. ledna 2024]{"entity": "date", "role": "lower"} do [31. března 2024]{"entity": "date", "role": "upper"}
       - [čárový](chart_type)
-      - změň to na [sloupcový](chart_type)
-      - seskup podle [typu mrtvice](group_by)
-      - pro [ženské](sex) pacienty
+      - udělej to jako [sloupcový](chart_type)
+      - pro [ženské](sex) pacientky
       - [ischemická](stroke_type)
-      - metrika je [door to needle](metric)
-      - podle [měsíce](group_by)
-      - časové okno je [Q1 2025](date)
-      - použij [admission nihss](metric)
+      - Metrika je [door to needle](metric)
+      - Časové okno je [Q1 2025](date)
+      - Použij [admission nihss](metric)
       - [tento rok](date)
+      - předchozí kalendářní rok
+      - předchozí rok
+      - kalendářní rok
+      - od ledna do prosince loňského roku
+      - od ledna až do prosince minulého roku
+      - použij celý minulý rok
+      - klouzavě za posledních 12 měsíců
+      - posledních 12 měsíců zpětně
+      - to klouzavé okno, prosím
+      - použij možnost kalendářního roku
+      - použij klouzavou možnost
+      - všechna čtvrtletí
+      - celé období
+      - čtvrtletí
+      - čtvrtletně
+      - trimestr
+      - ukaž všechna čtvrtletí
+      - každé čtvrtletí
+      - [Q1](date)
+      - [Q2](date)
+      - [Q3](date)
+      - [Q4](date)
+      - [Q1 2024](date)
+      - [Q2 2025](date)
+      - první čtvrtletí
+      - druhé čtvrtletí
+      - třetí čtvrtletí
+      - čtvrté čtvrtletí
+      - [proveden screening polykání](metric)
+      - radši [NIHSS](metric)
+      - V rozmezí od [1. ledna 2024]{"entity": "date", "role": "lower"} do [31. března 2024]{"entity": "date", "role": "upper"}
+      - seskup podle [typu mrtvice](group_by)
+      - [ischemický typ](stroke_type)
+      - Podle [měsíce](group_by)
+      - procenta
