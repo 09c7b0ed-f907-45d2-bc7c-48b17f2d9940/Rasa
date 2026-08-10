@@ -248,6 +248,7 @@ DEFAULT_SSOT_NLU_ENTITIES: Dict[str, str] = {
     "group_by": "GroupByType.yml",
     "metric": "MetricType.yml",
     "country_code": "CountryType.yml",
+    "statistical_test_type": "StatisticalTestType.yml",
 }
 
 
