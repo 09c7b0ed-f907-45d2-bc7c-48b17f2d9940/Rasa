@@ -46,6 +46,50 @@ def _env_flag(name: str, default: bool) -> bool:
     return value.lower() in {"1", "true", "yes", "on"}
 
 
+async def _hard_delete_tracker(tracker_store: Any, sender_id: str) -> bool:
+    """Best-effort physical deletion of a tracker: the store's own generic
+    `.delete()` method if it implements one (the interface Rasa's own docs
+    define for custom tracker stores -- see
+    https://rasa.com/docs/reference/integrations/tracker-stores/, "Custom
+    Tracker Store"), else a direct Redis key delete as a fallback, since
+    none of Rasa's *built-in* stores (Redis, SQL, Mongo, Dynamo, InMemory)
+    actually implement `.delete()` as of this Rasa version -- confirmed
+    against both the installed package and current upstream main. Returns
+    whether deletion is known to have succeeded.
+
+    `agent.tracker_store` is never the raw configured store -- Rasa always
+    wraps it (at minimum in `AwaitableTrackerStore`, often also
+    `FailSafeTrackerStore`), and both wrappers hold the real store under the
+    same private `_tracker_store` attribute with no passthrough for
+    attributes like `.red`/`.key_prefix`. Unwrap down to the real store
+    first, or every lookup below silently finds nothing on the wrapper and
+    this always reports failure."""
+    while hasattr(tracker_store, "_tracker_store"):
+        tracker_store = tracker_store._tracker_store
+
+    delete_fn = getattr(tracker_store, "delete", None)
+    if callable(delete_fn):
+        try:
+            result = delete_fn(sender_id)
+            if isawaitable(result):
+                result = await cast(Any, result)
+            if bool(result):
+                return True
+        except Exception:
+            pass
+
+    redis_client = getattr(tracker_store, "red", None) or getattr(tracker_store, "redis", None)
+    if redis_client is not None:
+        try:
+            key_prefix = getattr(tracker_store, "key_prefix", "") or ""
+            deleted = redis_client.delete(f"{key_prefix}{sender_id}")
+            return bool(deleted)
+        except Exception:
+            pass
+
+    return False
+
+
 def _install_custom_routes() -> None:
     original_configure_app = core_run.configure_app
 
@@ -149,50 +193,6 @@ def _install_custom_routes() -> None:
                 },
                 status=200,
             )
-
-        async def _hard_delete_tracker(tracker_store: Any, sender_id: str) -> bool:
-            """Best-effort physical deletion of a tracker: the store's own
-            generic `.delete()` method if it implements one (the interface
-            Rasa's own docs define for custom tracker stores -- see
-            https://rasa.com/docs/reference/integrations/tracker-stores/,
-            "Custom Tracker Store"), else a direct Redis key delete as a
-            fallback, since none of Rasa's *built-in* stores (Redis, SQL,
-            Mongo, Dynamo, InMemory) actually implement `.delete()` as of
-            this Rasa version -- confirmed against both the installed
-            package and current upstream main. Returns whether deletion is
-            known to have succeeded.
-
-            `agent.tracker_store` is never the raw configured store -- Rasa
-            always wraps it (at minimum in `AwaitableTrackerStore`, often
-            also `FailSafeTrackerStore`), and both wrappers hold the real
-            store under the same private `_tracker_store` attribute with no
-            passthrough for attributes like `.red`/`.key_prefix`. Unwrap
-            down to the real store first, or every lookup below silently
-            finds nothing on the wrapper and this always reports failure."""
-            while hasattr(tracker_store, "_tracker_store"):
-                tracker_store = tracker_store._tracker_store
-
-            delete_fn = getattr(tracker_store, "delete", None)
-            if callable(delete_fn):
-                try:
-                    result = delete_fn(sender_id)
-                    if isawaitable(result):
-                        result = await cast(Any, result)
-                    if bool(result):
-                        return True
-                except Exception:
-                    pass
-
-            redis_client = getattr(tracker_store, "red", None) or getattr(tracker_store, "redis", None)
-            if redis_client is not None:
-                try:
-                    key_prefix = getattr(tracker_store, "key_prefix", "") or ""
-                    deleted = redis_client.delete(f"{key_prefix}{sender_id}")
-                    return bool(deleted)
-                except Exception:
-                    pass
-
-            return False
 
         async def delete_thread(request, user_sub: str, thread_id: str):
             """DELETE /threads/<user_sub>/thread/<thread_id> - Delete a thread and its tracker."""

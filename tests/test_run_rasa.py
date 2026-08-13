@@ -107,5 +107,126 @@ class RunRasaTests(unittest.TestCase):
                 run_rasa._resolve_cors()
 
 
+class FakeRedisClient:
+    def __init__(self) -> None:
+        self.deleted_keys: list[str] = []
+        self.delete_return = 1
+
+    def delete(self, key: str) -> int:
+        self.deleted_keys.append(key)
+        return self.delete_return
+
+
+class FakeRealStore:
+    """Stands in for a raw, unwrapped RedisTrackerStore: exposes .red and
+    .key_prefix directly, matching the real class's actual attributes."""
+
+    def __init__(self, redis_client: "FakeRedisClient", key_prefix: str = "tracker:") -> None:
+        self.red = redis_client
+        self.key_prefix = key_prefix
+
+
+class FakeWrapperStore:
+    """Stands in for AwaitableTrackerStore/FailSafeTrackerStore: both hold
+    the real store under the same private `_tracker_store` attribute, with
+    no passthrough of the real store's own attributes."""
+
+    def __init__(self, inner: object) -> None:
+        self._tracker_store = inner
+
+
+class HardDeleteTrackerTests(unittest.IsolatedAsyncioTestCase):
+    async def test_unwraps_nested_wrappers_to_reach_real_store(self) -> None:
+        # Reproduces the actual bug: agent.tracker_store is double-wrapped
+        # (AwaitableTrackerStore around FailSafeTrackerStore around the real
+        # RedisTrackerStore). Before unwrapping, .red/.key_prefix lookups on
+        # the outer wrapper always found nothing and deletion silently
+        # reported failure on every call.
+        redis_client = FakeRedisClient()
+        real_store = FakeRealStore(redis_client)
+        wrapped_twice = FakeWrapperStore(FakeWrapperStore(real_store))
+
+        result = await run_rasa._hard_delete_tracker(wrapped_twice, "user1:thread:1")
+
+        self.assertTrue(result)
+        self.assertEqual(redis_client.deleted_keys, ["tracker:user1:thread:1"])
+
+    async def test_prefers_a_generic_delete_method_over_redis_fallback(self) -> None:
+        redis_client = FakeRedisClient()
+
+        class StoreWithDelete(FakeRealStore):
+            def __init__(self) -> None:
+                super().__init__(redis_client)
+                self.delete_calls: list[str] = []
+
+            async def delete(self, sender_id: str) -> bool:
+                self.delete_calls.append(sender_id)
+                return True
+
+        store = StoreWithDelete()
+        result = await run_rasa._hard_delete_tracker(store, "user1:thread:1")
+
+        self.assertTrue(result)
+        self.assertEqual(store.delete_calls, ["user1:thread:1"])
+        self.assertEqual(redis_client.deleted_keys, [])  # fallback never attempted
+
+    async def test_falls_back_to_redis_when_delete_method_returns_falsy(self) -> None:
+        redis_client = FakeRedisClient()
+
+        class StoreWithNoopDelete(FakeRealStore):
+            def __init__(self) -> None:
+                super().__init__(redis_client)
+
+            def delete(self, sender_id: str) -> bool:
+                return False  # e.g. a custom store reporting "nothing to delete"
+
+        result = await run_rasa._hard_delete_tracker(StoreWithNoopDelete(), "user1:thread:1")
+
+        self.assertTrue(result)
+        self.assertEqual(redis_client.deleted_keys, ["tracker:user1:thread:1"])
+
+    async def test_falls_back_to_redis_when_delete_method_raises(self) -> None:
+        redis_client = FakeRedisClient()
+
+        class StoreWithBrokenDelete(FakeRealStore):
+            def __init__(self) -> None:
+                super().__init__(redis_client)
+
+            def delete(self, sender_id: str) -> bool:
+                raise RuntimeError("boom")
+
+        result = await run_rasa._hard_delete_tracker(StoreWithBrokenDelete(), "user1:thread:1")
+
+        self.assertTrue(result)
+        self.assertEqual(redis_client.deleted_keys, ["tracker:user1:thread:1"])
+
+    async def test_returns_false_when_neither_delete_nor_redis_client_available(self) -> None:
+        class BareStore:
+            pass
+
+        result = await run_rasa._hard_delete_tracker(BareStore(), "user1:thread:1")
+
+        self.assertFalse(result)
+
+    async def test_returns_false_when_redis_delete_raises(self) -> None:
+        class ExplodingRedisClient:
+            def delete(self, key: str) -> int:
+                raise RuntimeError("connection lost")
+
+        store = FakeRealStore(ExplodingRedisClient())
+        result = await run_rasa._hard_delete_tracker(store, "user1:thread:1")
+
+        self.assertFalse(result)
+
+    async def test_returns_false_when_redis_reports_nothing_deleted(self) -> None:
+        redis_client = FakeRedisClient()
+        redis_client.delete_return = 0  # key didn't exist
+        store = FakeRealStore(redis_client)
+
+        result = await run_rasa._hard_delete_tracker(store, "user1:thread:1")
+
+        self.assertFalse(result)
+
+
 if __name__ == "__main__":
     unittest.main()
