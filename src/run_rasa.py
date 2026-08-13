@@ -47,21 +47,40 @@ def _env_flag(name: str, default: bool) -> bool:
 
 
 async def _hard_delete_tracker(tracker_store: Any, sender_id: str) -> bool:
-    """Best-effort physical deletion of a tracker: the store's own generic
-    `.delete()` method if it implements one (the interface Rasa's own docs
-    define for custom tracker stores -- see
+    """Best-effort physical deletion of a tracker.
+
+    First choice is always the store's own generic `.delete()` method, if it
+    implements one -- that's the interface Rasa's own docs define for
+    custom tracker stores (see
     https://rasa.com/docs/reference/integrations/tracker-stores/, "Custom
-    Tracker Store"), else a direct Redis key delete as a fallback, since
-    none of Rasa's *built-in* stores (Redis, SQL, Mongo, Dynamo, InMemory)
-    actually implement `.delete()` as of this Rasa version -- confirmed
-    against both the installed package and current upstream main. Returns
-    whether deletion is known to have succeeded.
+    Tracker Store"), so any future store built to that contract just works
+    here with no changes needed.
+
+    None of Rasa's *built-in* stores implement `.delete()` though (confirmed
+    against both the installed package and current upstream main), so below
+    that is one duck-typed fallback per built-in backend -- detected by
+    attribute shape, not `isinstance`, so this doesn't need to import any of
+    Rasa's internal store classes and keeps working even if their module
+    paths move in a future Rasa version:
+    - Redis (`.red`/`.redis` + `.key_prefix`): DEL the key directly.
+    - SQL (`.session_scope` + `.SQLEvent`, e.g. Postgres/SQLite/Oracle):
+      DELETE FROM events WHERE sender_id = ... via the store's own session.
+    - Mongo (`.conversations`, a pymongo Collection): delete_many by
+      sender_id field.
+    - DynamoDB (`.db` with `.delete_item` + `.table_name`, distinguishing it
+      from Mongo's own unrelated `.db` attribute): delete_item by the
+      sender_id hash key.
+    - InMemory (`.store`, a plain dict): pop the key. Only matters within
+      this one process/worker and this Rasa run (never persisted or shared
+      to begin with), but still worth clearing for consistency.
+    Checked in roughly most-to-least-likely-in-a-real-deployment order.
+    Returns whether deletion is known to have succeeded.
 
     `agent.tracker_store` is never the raw configured store -- Rasa always
     wraps it (at minimum in `AwaitableTrackerStore`, often also
     `FailSafeTrackerStore`), and both wrappers hold the real store under the
-    same private `_tracker_store` attribute with no passthrough for
-    attributes like `.red`/`.key_prefix`. Unwrap down to the real store
+    same private `_tracker_store` attribute with no passthrough for any of
+    the backend-specific attributes above. Unwrap down to the real store
     first, or every lookup below silently finds nothing on the wrapper and
     this always reports failure."""
     while hasattr(tracker_store, "_tracker_store"):
@@ -86,6 +105,47 @@ async def _hard_delete_tracker(tracker_store: Any, sender_id: str) -> bool:
             return bool(deleted)
         except Exception:
             pass
+
+    session_scope = getattr(tracker_store, "session_scope", None)
+    sql_event = getattr(tracker_store, "SQLEvent", None)
+    if callable(session_scope) and sql_event is not None:
+        try:
+            with session_scope() as session:
+                deleted_count = session.query(sql_event).filter(sql_event.sender_id == sender_id).delete()
+                session.commit()
+            return bool(deleted_count)
+        except Exception:
+            pass
+
+    conversations = getattr(tracker_store, "conversations", None)
+    if conversations is not None and callable(getattr(conversations, "delete_many", None)):
+        try:
+            result = conversations.delete_many({"sender_id": sender_id})
+            return bool(getattr(result, "deleted_count", 0))
+        except Exception:
+            pass
+
+    dynamo_table = getattr(tracker_store, "db", None)
+    if (
+        dynamo_table is not None
+        and hasattr(tracker_store, "table_name")
+        and callable(getattr(dynamo_table, "delete_item", None))
+    ):
+        try:
+            dynamo_table.delete_item(Key={"sender_id": sender_id})
+            return True
+        except Exception:
+            pass
+
+    memory_store = getattr(tracker_store, "store", None)
+    if isinstance(memory_store, dict):
+        if sender_id in memory_store:
+            try:
+                del memory_store[sender_id]
+                return True
+            except Exception:
+                pass
+        return False
 
     return False
 
