@@ -46,6 +46,110 @@ def _env_flag(name: str, default: bool) -> bool:
     return value.lower() in {"1", "true", "yes", "on"}
 
 
+async def _hard_delete_tracker(tracker_store: Any, sender_id: str) -> bool:
+    """Best-effort physical deletion of a tracker.
+
+    First choice is always the store's own generic `.delete()` method, if it
+    implements one -- that's the interface Rasa's own docs define for
+    custom tracker stores (see
+    https://rasa.com/docs/reference/integrations/tracker-stores/, "Custom
+    Tracker Store"), so any future store built to that contract just works
+    here with no changes needed.
+
+    None of Rasa's *built-in* stores implement `.delete()` though (confirmed
+    against both the installed package and current upstream main), so below
+    that is one duck-typed fallback per built-in backend -- detected by
+    attribute shape, not `isinstance`, so this doesn't need to import any of
+    Rasa's internal store classes and keeps working even if their module
+    paths move in a future Rasa version:
+    - Redis (`.red`/`.redis` + `.key_prefix`): DEL the key directly.
+    - SQL (`.session_scope` + `.SQLEvent`, e.g. Postgres/SQLite/Oracle):
+      DELETE FROM events WHERE sender_id = ... via the store's own session.
+    - Mongo (`.conversations`, a pymongo Collection): delete_many by
+      sender_id field.
+    - DynamoDB (`.db` with `.delete_item` + `.table_name`, distinguishing it
+      from Mongo's own unrelated `.db` attribute): delete_item by the
+      sender_id hash key.
+    - InMemory (`.store`, a plain dict): pop the key. Only matters within
+      this one process/worker and this Rasa run (never persisted or shared
+      to begin with), but still worth clearing for consistency.
+    Checked in roughly most-to-least-likely-in-a-real-deployment order.
+    Returns whether deletion is known to have succeeded.
+
+    `agent.tracker_store` is never the raw configured store -- Rasa always
+    wraps it (at minimum in `AwaitableTrackerStore`, often also
+    `FailSafeTrackerStore`), and both wrappers hold the real store under the
+    same private `_tracker_store` attribute with no passthrough for any of
+    the backend-specific attributes above. Unwrap down to the real store
+    first, or every lookup below silently finds nothing on the wrapper and
+    this always reports failure."""
+    while hasattr(tracker_store, "_tracker_store"):
+        tracker_store = tracker_store._tracker_store
+
+    delete_fn = getattr(tracker_store, "delete", None)
+    if callable(delete_fn):
+        try:
+            result = delete_fn(sender_id)
+            if isawaitable(result):
+                result = await cast(Any, result)
+            if bool(result):
+                return True
+        except Exception:
+            pass
+
+    redis_client = getattr(tracker_store, "red", None) or getattr(tracker_store, "redis", None)
+    if redis_client is not None:
+        try:
+            key_prefix = getattr(tracker_store, "key_prefix", "") or ""
+            deleted = redis_client.delete(f"{key_prefix}{sender_id}")
+            return bool(deleted)
+        except Exception:
+            pass
+
+    session_scope = getattr(tracker_store, "session_scope", None)
+    sql_event = getattr(tracker_store, "SQLEvent", None)
+    if callable(session_scope) and sql_event is not None:
+        try:
+            with session_scope() as session:
+                deleted_count = session.query(sql_event).filter(sql_event.sender_id == sender_id).delete()
+                session.commit()
+            return bool(deleted_count)
+        except Exception:
+            pass
+
+    conversations = getattr(tracker_store, "conversations", None)
+    if conversations is not None and callable(getattr(conversations, "delete_many", None)):
+        try:
+            result = conversations.delete_many({"sender_id": sender_id})
+            return bool(getattr(result, "deleted_count", 0))
+        except Exception:
+            pass
+
+    dynamo_table = getattr(tracker_store, "db", None)
+    if (
+        dynamo_table is not None
+        and hasattr(tracker_store, "table_name")
+        and callable(getattr(dynamo_table, "delete_item", None))
+    ):
+        try:
+            dynamo_table.delete_item(Key={"sender_id": sender_id})
+            return True
+        except Exception:
+            pass
+
+    memory_store = getattr(tracker_store, "store", None)
+    if isinstance(memory_store, dict):
+        if sender_id in memory_store:
+            try:
+                del memory_store[sender_id]
+                return True
+            except Exception:
+                pass
+        return False
+
+    return False
+
+
 def _install_custom_routes() -> None:
     original_configure_app = core_run.configure_app
 
@@ -172,29 +276,8 @@ def _install_custom_routes() -> None:
             if tracker_store is None:
                 return response.json({"error": "Tracker store not available"}, status=500)
 
-            # Attempt hard-delete of the conversation tracker for this thread.
             conversation_sender_id = f"{user_sub}:thread:{thread_id_int}"
-            physically_deleted = False
-            delete_fn = getattr(tracker_store, "delete", None)
-            if callable(delete_fn):
-                try:
-                    result = delete_fn(conversation_sender_id)
-                    if isawaitable(result):
-                        result = await cast(Any, result)
-                    physically_deleted = bool(result)
-                except Exception:
-                    pass
-
-            if not physically_deleted:
-                # Fallback: if the store is Redis-backed, attempt direct key deletion.
-                redis_client = getattr(tracker_store, "red", None) or getattr(tracker_store, "redis", None)
-                if redis_client is not None:
-                    try:
-                        key_prefix = getattr(tracker_store, "key_prefix", "") or ""
-                        deleted = redis_client.delete(f"{key_prefix}{conversation_sender_id}")
-                        physically_deleted = bool(deleted)
-                    except Exception:
-                        pass
+            physically_deleted = await _hard_delete_tracker(tracker_store, conversation_sender_id)
 
             # Soft-mark as deleted in the index regardless of hard-delete outcome.
             next_payload = apply_index_action(current_payload, thread_id_int, "delete")
@@ -210,11 +293,43 @@ def _install_custom_routes() -> None:
                 status=200,
             )
 
+        async def delete_conversation_tracker(request, conversation_id: str):
+            """DELETE /conversations/<conversation_id>/tracker - hard-delete a
+            tracker directly by sender_id, independent of the thread index
+            (unlike delete_thread above). For callers that intentionally
+            don't register into the same user-facing thread index Webapp's
+            real chat uses (e.g. CVaLab's own direct-to-Rasa debug chat,
+            which deliberately avoids mixing its threads into a real user's
+            actual Webapp thread list) but still need real deletion, not
+            just an orphaned tracker. Same naming convention as the existing
+            GET/PUT /conversations/<conversation_id>/tracker routes."""
+            if not _authorized(request):
+                return response.json({"error": "Unauthorized"}, status=401)
+
+            tracker_store, err = await _get_tracker_store()
+            if err:
+                return err
+            if tracker_store is None:
+                return response.json({"error": "Tracker store not available"}, status=500)
+
+            physically_deleted = await _hard_delete_tracker(tracker_store, conversation_id)
+
+            return response.json(
+                {
+                    "ok": True,
+                    "sender_id": conversation_id,
+                    "physically_deleted": physically_deleted,
+                    "timestamp": datetime.now(timezone.utc).isoformat(),
+                },
+                status=200,
+            )
+
         _safe_add(version, "/version", ["GET"])
         _safe_add(get_threads, "/threads/by-user/<user_sub:str>", ["GET"])
         _safe_add(get_next_thread_id, "/threads/by-user/<user_sub:str>/next-id", ["GET"])
         _safe_add(post_index_event, "/threads/<user_sub:str>/index-event", ["POST"])
         _safe_add(delete_thread, "/threads/<user_sub:str>/thread/<thread_id:str>", ["DELETE"])
+        _safe_add(delete_conversation_tracker, "/conversations/<conversation_id:path>/tracker", ["DELETE"])
 
         return app
 
