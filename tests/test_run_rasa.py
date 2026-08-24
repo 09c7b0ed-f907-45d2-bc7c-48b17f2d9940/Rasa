@@ -219,6 +219,22 @@ class HardDeleteTrackerTests(unittest.IsolatedAsyncioTestCase):
 
         self.assertFalse(result)
 
+    async def test_logs_a_warning_when_a_matched_backend_raises(self) -> None:
+        # Regression guard: a real error from a *matched* backend (not just
+        # "wrong duck-type, try the next one") must be observable, not
+        # silently indistinguishable from "nothing matched" -- see the
+        # _hard_delete_tracker fix that added this logging.
+        class ExplodingRedisClient:
+            def delete(self, key: str) -> int:
+                raise RuntimeError("connection lost")
+
+        store = FakeRealStore(ExplodingRedisClient())
+        with self.assertLogs(run_rasa.logger, level="WARNING") as captured:
+            result = await run_rasa._hard_delete_tracker(store, "user1:thread:1")
+
+        self.assertFalse(result)
+        self.assertTrue(any("Redis DEL raised" in message for message in captured.output))
+
     async def test_returns_false_when_redis_reports_nothing_deleted(self) -> None:
         redis_client = FakeRedisClient()
         redis_client.delete_return = 0  # key didn't exist

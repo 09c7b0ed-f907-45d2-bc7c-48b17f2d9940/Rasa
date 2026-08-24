@@ -1,6 +1,7 @@
 # mypy: ignore_missing_imports = True
 # pyright: reportMissingImports=false, reportMissingModuleSource=false, reportMissingTypeStubs=false
 
+import logging
 import os
 import sys
 import warnings
@@ -28,6 +29,8 @@ from src.thread_index import (  # noqa: E402
     next_thread_id_from_payload,
 )
 from src.thread_index_store import get_index_payload, set_index_payload  # noqa: E402
+
+logger = logging.getLogger(__name__)
 
 
 def _read_env(name: str) -> Optional[str]:
@@ -95,7 +98,12 @@ async def _hard_delete_tracker(tracker_store: Any, sender_id: str) -> bool:
             if bool(result):
                 return True
         except Exception:
-            pass
+            # Caught, not raised, so a store implementing .delete() badly
+            # doesn't block falling through to the duck-typed backend
+            # checks below -- but still logged, since a matched-but-broken
+            # custom store is a real operator-relevant error, not just "not
+            # this backend type" (see the module docstring's distinction).
+            logger.warning("_hard_delete_tracker: custom .delete() raised for sender_id=%s", sender_id, exc_info=True)
 
     redis_client = getattr(tracker_store, "red", None) or getattr(tracker_store, "redis", None)
     if redis_client is not None:
@@ -104,7 +112,7 @@ async def _hard_delete_tracker(tracker_store: Any, sender_id: str) -> bool:
             deleted = redis_client.delete(f"{key_prefix}{sender_id}")
             return bool(deleted)
         except Exception:
-            pass
+            logger.warning("_hard_delete_tracker: Redis DEL raised for sender_id=%s", sender_id, exc_info=True)
 
     session_scope = getattr(tracker_store, "session_scope", None)
     sql_event = getattr(tracker_store, "SQLEvent", None)
@@ -115,7 +123,7 @@ async def _hard_delete_tracker(tracker_store: Any, sender_id: str) -> bool:
                 session.commit()
             return bool(deleted_count)
         except Exception:
-            pass
+            logger.warning("_hard_delete_tracker: SQL delete raised for sender_id=%s", sender_id, exc_info=True)
 
     conversations = getattr(tracker_store, "conversations", None)
     if conversations is not None and callable(getattr(conversations, "delete_many", None)):
@@ -123,7 +131,7 @@ async def _hard_delete_tracker(tracker_store: Any, sender_id: str) -> bool:
             result = conversations.delete_many({"sender_id": sender_id})
             return bool(getattr(result, "deleted_count", 0))
         except Exception:
-            pass
+            logger.warning("_hard_delete_tracker: Mongo delete_many raised for sender_id=%s", sender_id, exc_info=True)
 
     dynamo_table = getattr(tracker_store, "db", None)
     if (
@@ -135,7 +143,7 @@ async def _hard_delete_tracker(tracker_store: Any, sender_id: str) -> bool:
             dynamo_table.delete_item(Key={"sender_id": sender_id})
             return True
         except Exception:
-            pass
+            logger.warning("_hard_delete_tracker: DynamoDB delete_item raised for sender_id=%s", sender_id, exc_info=True)
 
     memory_store = getattr(tracker_store, "store", None)
     if isinstance(memory_store, dict):
@@ -144,7 +152,7 @@ async def _hard_delete_tracker(tracker_store: Any, sender_id: str) -> bool:
                 del memory_store[sender_id]
                 return True
             except Exception:
-                pass
+                logger.warning("_hard_delete_tracker: in-memory delete raised for sender_id=%s", sender_id, exc_info=True)
         return False
 
     return False
