@@ -15,6 +15,7 @@
 !/.devcontainer/devcontainer.json
 !/.devcontainer/docker-compose.yml
 !/.devcontainer/Dockerfile
+!/.devcontainer/.env.example
 
 # Add Docker
 !/.dockerignore
