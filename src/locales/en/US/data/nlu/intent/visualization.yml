@@ -42,6 +42,7 @@ nlu:
       - Chart [stroke mimics diagnosis](metric) by [stroke subtype](group_by) for [female](sex) patients
       - Give me [mRS](metric) scores for [hemorrhagic](stroke_type) strokes from [2023-01-01]{"entity": "date", "role": "lower"} to [2023-12-31]{"entity": "date", "role": "upper"}
       - Display a [histogram](chart_type) of [age](metric) distribution
+      - Show me a [histogram](chart_type) of [discharge Modified Rankin Scale](metric)
       - Show [thrombolysis rate](metric) grouped by [arrival method](group_by)
       - I want to see [time to treatment](metric) improvement between [admission]{"entity": "nihss", "role": "lower"} and [discharge]{"entity": "nihss", "role": "upper"}
       - Chart [stroke unit or intensive care](metric) performance by [month](group_by) in a [line](chart_type) graph
