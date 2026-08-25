@@ -4,7 +4,7 @@ responses:
     - text: "[placeholder] localized in en/us or locale overlays"
       buttons:
         - title: "[placeholder] localized in en/us or locale overlays"
-          payload: "/how_to_use_bot"
+          payload: "/who_are_you"
         - title: "[placeholder] localized in en/us or locale overlays"
           payload: "/request_guided_visualization"
         - title: "[placeholder] localized in en/us or locale overlays"
