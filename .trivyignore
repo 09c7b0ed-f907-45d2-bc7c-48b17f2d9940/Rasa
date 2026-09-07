@@ -34,3 +34,7 @@ CVE-2025-47273
 # by trying it, the container fails to boot. wheel is a build-time tool
 # never exercised at this container's actual runtime.
 CVE-2026-24049
+# aiohttp==3.9.4 -- rasa==3.6.21 constrains to aiohttp<3.10,>=3.9.0, fixes
+# need 3.13.3/3.14.3, both above the pin
+CVE-2025-69223
+CVE-2026-69244
