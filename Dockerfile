@@ -24,6 +24,9 @@ LABEL org.opencontainers.image.created=${RASA_BUILD_DATE}
 
 USER root
 
+# OS packages get security patches independently of the pinned image tag.
+RUN apt-get update && apt-get upgrade -y && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 
 RUN mkdir -p /app/.data && chown -R 1001:1001 /app/.data && chmod 700 /app/.data
