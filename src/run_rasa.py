@@ -1,8 +1,10 @@
 # mypy: ignore_missing_imports = True
 # pyright: reportMissingImports=false, reportMissingModuleSource=false, reportMissingTypeStubs=false
 
+import asyncio
 import logging
 import os
+import re
 import sys
 import warnings
 from datetime import datetime, timezone
@@ -13,6 +15,7 @@ from urllib.parse import urlsplit
 import rasa  # type: ignore
 import rasa.__main__ as rasa_main  # type: ignore
 import rasa.core.run as core_run  # type: ignore
+import requests  # type: ignore
 from sanic import response  # type: ignore
 from sanic_routing.exceptions import RouteExists  # type: ignore
 
@@ -47,6 +50,77 @@ def _env_flag(name: str, default: bool) -> bool:
     if value is None:
         return default
     return value.lower() in {"1", "true", "yes", "on"}
+
+
+# Phase 2 of the cross-service auth redesign: RASA_AUTH_TOKEN (checked by
+# _authorized below, and by Rasa core's own global --auth-token middleware)
+# proves only that *a* trusted service is calling, never *which* user a
+# request is for -- user_sub/sender_id are otherwise just caller-supplied
+# strings, trusted as-is. This verifies the real Keycloak access token
+# Webapp forwards as `Authorization: Bearer <token>` (see
+# Webapp/src/lib/rasaConfig.ts's withUserBearerHeader) via Keycloak's
+# introspection endpoint, and requires the verified subject to match the
+# user_sub/sender_id being acted on. Reuses Webapp's own confidential
+# client credentials (KEYCLOAK_CLIENT_ID/_SECRET) rather than requiring a
+# separate dedicated introspection client -- Keycloak's introspection
+# endpoint only needs a valid confidential client, not a purpose-specific
+# one. Gated behind REQUIRE_USER_TOKEN_VERIFICATION (default off) for a
+# rollout window during which Webapp may not yet forward the header on
+# every deployed instance.
+_KEYCLOAK_ISSUER = _read_env("KEYCLOAK_ISSUER")
+_KEYCLOAK_CLIENT_ID = _read_env("KEYCLOAK_CLIENT_ID")
+_KEYCLOAK_CLIENT_SECRET = _read_env("KEYCLOAK_CLIENT_SECRET")
+_REQUIRE_USER_TOKEN_VERIFICATION = _env_flag("REQUIRE_USER_TOKEN_VERIFICATION", default=False)
+if _REQUIRE_USER_TOKEN_VERIFICATION and not (_KEYCLOAK_ISSUER and _KEYCLOAK_CLIENT_ID and _KEYCLOAK_CLIENT_SECRET):
+    raise RuntimeError(
+        "KEYCLOAK_ISSUER, KEYCLOAK_CLIENT_ID and KEYCLOAK_CLIENT_SECRET are all required when "
+        "REQUIRE_USER_TOKEN_VERIFICATION is enabled."
+    )
+
+_SENDER_THREAD_SUFFIX_RE = re.compile(r"^(.*):thread:(\d+)$")
+
+
+def _sender_sub(sender_id: str) -> str:
+    """Strip the `:thread:<id>` suffix, mirroring rasaSender.ts's parseRasaSenderId."""
+    match = _SENDER_THREAD_SUFFIX_RE.match(sender_id)
+    return match.group(1) if match else sender_id
+
+
+def _introspect_token_sync(token: str) -> Optional[str]:
+    """Verify a bearer token via Keycloak introspection; return the verified sub, or None."""
+    if not (_KEYCLOAK_ISSUER and _KEYCLOAK_CLIENT_ID and _KEYCLOAK_CLIENT_SECRET):
+        return None
+    try:
+        resp = requests.post(
+            f"{_KEYCLOAK_ISSUER.rstrip('/')}/protocol/openid-connect/token/introspect",
+            data={
+                "token": token,
+                "client_id": _KEYCLOAK_CLIENT_ID,
+                "client_secret": _KEYCLOAK_CLIENT_SECRET,
+            },
+            timeout=5,
+        )
+        resp.raise_for_status()
+        payload = resp.json()
+    except Exception:
+        logger.warning("Keycloak token introspection request failed", exc_info=True)
+        return None
+
+    if not payload.get("active"):
+        return None
+    sub = payload.get("sub")
+    return sub if isinstance(sub, str) and sub else None
+
+
+async def _verify_user_token(request) -> Optional[str]:
+    """Extract and verify the Authorization: Bearer token; return the verified sub, or None."""
+    auth_header = request.headers.get("Authorization", "") if hasattr(request, "headers") else ""
+    if not auth_header.startswith("Bearer "):
+        return None
+    token = auth_header[7:].strip()
+    if not token:
+        return None
+    return await asyncio.to_thread(_introspect_token_sync, token)
 
 
 async def _hard_delete_tracker(tracker_store: Any, sender_id: str) -> bool:
@@ -203,9 +277,28 @@ def _install_custom_routes() -> None:
             header_token = auth_header[7:] if auth_header.startswith("Bearer ") else None
             return (query_token or header_token) == expected
 
+        async def _check_user_identity(request, claimed_sub: str):
+            """When REQUIRE_USER_TOKEN_VERIFICATION is on, verify the caller's
+            Bearer token and require it to match claimed_sub. Returns an error
+            response to return immediately, or None if the caller may proceed.
+            """
+            if not _REQUIRE_USER_TOKEN_VERIFICATION:
+                return None
+            verified_sub = await _verify_user_token(request)
+            if not verified_sub:
+                return response.json({"error": "Unauthorized"}, status=401)
+            if verified_sub != claimed_sub:
+                return response.json(
+                    {"error": "Forbidden: token subject does not match the requested user"}, status=403
+                )
+            return None
+
         async def get_threads(request, user_sub: str):
             if not _authorized(request):
                 return response.json({"error": "Unauthorized"}, status=401)
+            identity_err = await _check_user_identity(request, user_sub)
+            if identity_err:
+                return identity_err
 
             payload = get_index_payload(user_sub)
             threads = build_thread_list_from_payload(payload)
@@ -214,6 +307,9 @@ def _install_custom_routes() -> None:
         async def get_next_thread_id(request, user_sub: str):
             if not _authorized(request):
                 return response.json({"error": "Unauthorized"}, status=401)
+            identity_err = await _check_user_identity(request, user_sub)
+            if identity_err:
+                return identity_err
 
             payload = get_index_payload(user_sub)
             return response.json(
@@ -227,6 +323,9 @@ def _install_custom_routes() -> None:
         async def post_index_event(request, user_sub: str):
             if not _authorized(request):
                 return response.json({"error": "Unauthorized"}, status=401)
+            identity_err = await _check_user_identity(request, user_sub)
+            if identity_err:
+                return identity_err
 
             payload = request.json if isinstance(request.json, dict) else None
             if payload is None:
@@ -266,6 +365,9 @@ def _install_custom_routes() -> None:
             """DELETE /threads/<user_sub>/thread/<thread_id> - Delete a thread and its tracker."""
             if not _authorized(request):
                 return response.json({"error": "Unauthorized"}, status=401)
+            identity_err = await _check_user_identity(request, user_sub)
+            if identity_err:
+                return identity_err
 
             try:
                 thread_id_int = int(thread_id)
@@ -313,6 +415,9 @@ def _install_custom_routes() -> None:
             GET/PUT /conversations/<conversation_id>/tracker routes."""
             if not _authorized(request):
                 return response.json({"error": "Unauthorized"}, status=401)
+            identity_err = await _check_user_identity(request, _sender_sub(conversation_id))
+            if identity_err:
+                return identity_err
 
             tracker_store, err = await _get_tracker_store()
             if err:
@@ -331,6 +436,24 @@ def _install_custom_routes() -> None:
                 },
                 status=200,
             )
+
+        @app.on_request
+        async def _verify_webhook_identity(request):
+            # The standard REST webhook is Rasa core's own built-in channel
+            # route, not one of the custom routes above -- this is the only
+            # hook point available to apply the same jobId-era identity check
+            # to it. `sender` in the POST body is otherwise exactly as
+            # caller-supplied/unverified as user_sub is on the custom routes.
+            if request.path != "/webhooks/rest/webhook" or not _REQUIRE_USER_TOKEN_VERIFICATION:
+                return None
+            try:
+                body = request.json if isinstance(request.json, dict) else {}
+            except Exception:
+                body = {}
+            claimed_sender = body.get("sender")
+            if not isinstance(claimed_sender, str) or not claimed_sender:
+                return None  # malformed body -- let the route's own validation reject it
+            return await _check_user_identity(request, _sender_sub(claimed_sender))
 
         _safe_add(version, "/version", ["GET"])
         _safe_add(get_threads, "/threads/by-user/<user_sub:str>", ["GET"])
