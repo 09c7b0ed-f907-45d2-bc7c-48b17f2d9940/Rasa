@@ -47,6 +47,11 @@ RUN apt-get update && apt-get upgrade -y && rm -rf /var/lib/apt/lists/*
 # (confirmed by trying it). wheel is a build-time tool anyway; nothing at
 # this container's actual runtime processes untrusted .whl files, so the
 # residual risk is low. Tracked for suppression via .trivyignore instead.
+#
+# aiohttp is deliberately left at 3.9.4 despite newer CVEs: every available
+# fix (3.13.3+) requires aiohttp>=3.10, which violates rasa's own
+# aiohttp<3.10 pin -- same unfixable category as tensorflow/skops/protobuf
+# above. Tracked via .trivyignore instead.
 RUN pip install --no-cache-dir --upgrade \
 	python-engineio==4.13.2 \
 	python-socketio==5.16.2 \
@@ -54,11 +59,11 @@ RUN pip install --no-cache-dir --upgrade \
 	urllib3==2.7.0 \
 	msgpack==1.2.1 \
 	pyasn1==0.6.4 \
-	Pillow==10.2.0 \
-	PyJWT==2.12.0 \
+	Pillow==12.3.0 \
+	PyJWT==2.13.0 \
 	Werkzeug==3.0.3 \
 	aiohttp==3.9.4 \
-	cryptography==42.0.0 \
+	cryptography==50.0.1 \
 	fonttools==4.43.0 \
 	grpcio==1.56.2
 
