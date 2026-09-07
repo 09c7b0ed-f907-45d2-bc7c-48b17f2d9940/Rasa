@@ -25,14 +25,17 @@ LABEL org.opencontainers.image.created=${RASA_BUILD_DATE}
 USER root
 
 # rasa==3.6.21 pins tensorflow==2.12.0, skops==0.9.0, and protobuf<4.23.4
-# exactly -- none of those three can move without breaking compatibility
-# rasa itself was never tested against. The six below aren't pinned that
-# tightly (rasa only requires python-engineio!=5.0.0,<6,>=4;
-# python-socketio<6,>=4.4; ujson<6.0,>=1.35; msgpack/pyasn1/urllib3 aren't
-# rasa's own constraints at all, just transitive deps) -- bumping them to a
-# fixed release still satisfies every declared constraint, confirmed via a
-# dry-run install against this exact image before adding this step, and via
-# a full rebuild + real server boot afterward.
+# exactly -- none of those three (nor keras, tensorflow's own dependency,
+# locked to it in lockstep) can move without breaking compatibility rasa
+# itself was never tested against. The thirteen below aren't pinned that
+# tightly (rasa requires python-engineio!=5.0.0,<6,>=4;
+# python-socketio<6,>=4.4; ujson<6.0,>=1.35; PyJWT[crypto]<3.0.0,>=2.0.0;
+# aiohttp<3.10,>=3.9.0; cryptography>=41.0.7 -- msgpack/pyasn1/urllib3/
+# Pillow/Werkzeug/fonttools/grpcio aren't rasa's own constraints at all,
+# just transitive deps) -- bumping them to a fixed release still satisfies
+# every declared constraint, confirmed via a dry-run install against this
+# exact image before adding this step, and via a full rebuild + real server
+# boot afterward.
 #
 # wheel's own CVE fix (0.46.2) is deliberately NOT bumped here: it's the
 # first release requiring packaging>=24.0, and rasa's own
@@ -47,7 +50,14 @@ RUN pip install --no-cache-dir --upgrade \
 	ujson==5.12.1 \
 	urllib3==2.7.0 \
 	msgpack==1.2.1 \
-	pyasn1==0.6.4
+	pyasn1==0.6.4 \
+	Pillow==10.2.0 \
+	PyJWT==2.12.0 \
+	Werkzeug==3.0.3 \
+	aiohttp==3.9.4 \
+	cryptography==42.0.0 \
+	fonttools==4.43.0 \
+	grpcio==1.56.2
 
 WORKDIR /app
 
