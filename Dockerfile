@@ -24,6 +24,9 @@ LABEL org.opencontainers.image.created=${RASA_BUILD_DATE}
 
 USER root
 
+# OS packages get security patches independently of the pinned image tag.
+RUN apt-get update && apt-get upgrade -y && rm -rf /var/lib/apt/lists/*
+
 # rasa==3.6.21 pins tensorflow==2.12.0, skops==0.9.0, and protobuf<4.23.4
 # exactly -- none of those three (nor keras, tensorflow's own dependency,
 # locked to it in lockstep) can move without breaking compatibility rasa
