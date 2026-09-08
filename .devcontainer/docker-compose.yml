@@ -13,6 +13,11 @@ services:
     environment:
       LOCK_STORE_URL: redis
       LOCK_STORE_DB: "1"
+      TRACKER_STORE_URL: redis
+      TRACKER_STORE_PORT: "6379"
+      TRACKER_STORE_DB: "0"
+      RASA_TRACKER_STORE_BACKEND: redis
+      ACTION_ENDPOINT_URL: http://host.docker.internal:5055/webhook
     env_file:
       - .env
     extra_hosts:
