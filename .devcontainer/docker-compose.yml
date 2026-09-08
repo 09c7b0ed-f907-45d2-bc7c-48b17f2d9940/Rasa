@@ -10,6 +10,9 @@ services:
       - redis
     ports:
       - "5005:5005"
+    environment:
+      LOCK_STORE_URL: redis
+      LOCK_STORE_DB: "1"
     env_file:
       - .env
     extra_hosts:
@@ -17,7 +20,9 @@ services:
 
   redis:
     image: redis:alpine@sha256:09160599abd229764c0fb44cb6be640294e1d360a54b19985ab4843dcf2d90f1
-    command: ["redis-server", "--save", "20", "1", "--loglevel", "warning"]
+    command: >
+      redis-server --save 20 1 --loglevel warning
+      --requirepass ${REDIS_PASSWORD:?REDIS_PASSWORD must be set}
     # Exposed to the host -- also serves as the shared token vault for
     # Webapp/CVaLab, which run in separate devcontainers.
     ports:
